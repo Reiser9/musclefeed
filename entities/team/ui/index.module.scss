@@ -1,0 +1,41 @@
+.teamItem{
+	display: flex!important;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.teamItemImg{
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	background: #F4F5F6;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.teamItemImg img{
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.teamItemTextInner{
+	width: 100%;
+	padding: 2.4rem;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.teamItemRole, .teamItemDesc{
+	line-height: 1.5;
+}
+
+.teamItemName{
+	text-transform: uppercase;
+	font-size: 2.8rem;
+	line-height: 1.2;
+	font-weight: 600;
+}

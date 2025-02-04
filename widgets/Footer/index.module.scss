@@ -1,0 +1,163 @@
+.footer{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.footerTop{
+	width: 100%;
+	background: #F2F3EE;
+	padding: 9.6rem 0rem 4rem 0;
+}
+
+.footerTopInner{
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 24px;
+}
+
+.footerItem{
+	width: calc(100% / 4 - 72px / 4);
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 24px;
+}
+
+.footerContacts{
+	gap: 40px;
+}
+
+.footerBottom{
+	width: 100%;
+	padding: 0.8rem 0;
+	background: #0F1209;
+}
+
+.footerBottomInner{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.footerCopy, .footerText, .footerLink{
+	font-size: 1.2rem;
+	line-height: 1.5;
+	color: #F2F3EE;
+	font-family: "Roboto", serif;
+}
+
+.footerLinks{
+	display: flex;
+	align-items: center;
+	gap: 24px;
+}
+
+.footerLink{
+	text-decoration: underline;
+}
+
+.footerItemTitle{
+	text-transform: uppercase;
+	font-size: 2.8rem;
+	line-height: 1.2;
+	font-weight: 600;
+}
+
+.footerItemNav{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 16px;
+}
+
+.footerItemNavLink{
+	color: #0F1209;
+	line-height: 1.5;
+}
+
+.footerLogo{
+	width: 100%;
+	display: flex;
+	max-width: 240px;
+}
+
+.footerLogo img{
+	width: 100%;
+}
+
+.footerSocial{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.footerSocialLink{
+	width: 56px;
+	height: 56px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.footerSocialLink.green svg{
+    color: #00A31E;
+}
+
+.footerSocialLink.blue svg{
+    color: #1080E8;
+}
+
+.footerSocial svg{
+	width: 40px;
+	flex-shrink: 0;
+}
+
+.footerContact{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.footerContact svg{
+	width: 32px;
+	flex-shrink: 0;
+	color: #00A31E;
+}
+
+.footerContactWrap{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.footerContactSuptitle{
+	color: #777E90;
+	font-size: 1.4rem;
+	line-height: 1.5;
+}
+
+.footerContactLink{
+	color: #0F1209;
+	line-height: 1.2;
+	font-size: 2.2rem;
+	font-weight: 500;
+}
+
+.footerContactButton{
+	padding: 0 .2rem .4rem .2rem;
+	border-bottom: 1px dashed #777E90;
+	color: #777E90;
+	font-size: 1.4rem;
+	line-height: 1.5;
+}

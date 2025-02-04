@@ -1,0 +1,42 @@
+.button{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 16px;
+    background: #FF6433;
+    color: #fff;
+    padding: 1.6rem 4rem;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.button.green{
+    background: var(--main);
+}
+
+.button.full{
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+}
+
+.button svg{
+    width: 24px;
+    flex-shrink: 0;
+}
+
+.button.disabled{
+    opacity: 0.6;
+    pointer-events: none;
+    filter: grayscale(1);
+}
+
+@media (any-hover: hover) {
+    .button:hover{
+        background: #e04e22;
+    }
+
+    .button.green:hover{
+        background: var(--mainHover);
+    }
+}

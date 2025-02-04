@@ -1,0 +1,42 @@
+.modalAuthForm{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 0rem 3.2rem;
+}
+
+@media (max-width: 768px) {
+	.modalAuthForm{
+		padding: 0;
+	}
+}
+
+.authForm{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 24px;
+	margin-top: 6.4rem;
+}
+
+.modalAuthText{
+	width: 100%;
+	margin-top: 1.6rem;
+}
+
+.modalAuthText button{
+	padding: 0;
+	color: #FF6433;
+	text-decoration: underline;
+}
+
+.recoveryPassword{
+	padding: 1.5rem .4rem 0.8rem .4rem;
+	border-bottom: 1px solid #00A31E;
+	font-size: 1.8rem;
+	line-height: 1.5;
+	font-weight: 500;
+	color: #00A31E;
+	margin: 0 auto;
+}

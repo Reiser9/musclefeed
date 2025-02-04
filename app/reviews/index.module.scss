@@ -1,0 +1,297 @@
+.breadcrumbs{
+	width: 100%;
+	padding: 0.8rem 0;
+}
+
+.breadcrumbsInner{
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px;
+}
+
+.breadcrumbsLink, .breadcrumbsText{
+	display: flex;
+	color: #1F222C;
+	padding: 0.4rem;
+	line-height: 1.5;
+}
+
+.breadcrumbsLink:first-child{
+	padding: 0;
+}
+
+.breadcrumbsLink svg, .breadcrumbsArrow{
+	width: 16px;
+	flex-shrink: 0;
+}
+
+.breadcrumbsArrow{
+	color: #1F222C;
+}
+
+.breadcrumbsText{
+	color: #00A31E;
+}
+
+// Отзывы
+.reviewpage{
+	width: 100%;
+	padding: 0.8rem 0rem 8rem 0;
+}
+
+.reviewpageInner{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.reviewpageTitle{
+	text-transform: uppercase;
+	font-size: 3.2rem;
+	line-height: 1.2;
+	font-weight: 700;
+}
+
+.reviewform{
+	width: 100%;
+	padding: 8rem 0;
+}
+
+.reviewpageTitleInner{
+	width: 100%;
+	margin-top: 8rem;
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 24px;
+}
+
+.reviewformInner{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 24px;
+	justify-content: space-between;
+}
+
+.reviewformImg{
+	width: 100%;
+	max-width: 750px;
+	flex-shrink: 0;
+	display: flex;
+	overflow: hidden;
+	border-radius: 24px;
+}
+
+.reviewformImg img{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.reviewformForm{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 80px;
+}
+
+.reviewformFormWrapper{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.reviewformFormText{
+	font-size: 2.4rem;
+	line-height: 1.5;
+}
+
+.reviewformFormTitle{
+	text-transform: uppercase;
+	font-size: 4rem;
+	line-height: 1.2;
+	font-weight: 700;
+}
+
+.reviewformFormContent{
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 24px;
+}
+
+.reviewformFormInputInner{
+	width: calc(100% / 2 - 24px / 2);
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.reviewformFormInputInner.full{
+	width: 100%;
+}
+
+.reviewformFormInputInner.third{
+	width: calc(100% / 3 - 48px / 3);
+}
+
+.reviewformFormInputText{
+	font-size: 1.4rem;
+	line-height: 1.2;
+}
+
+.reviewformFormInputWrap, .orderPromoInputWrap{
+	width: 100%;
+	position: relative;
+}
+
+.reviewformFormSelectArrow{
+	position: absolute;
+	top: 50%;
+	right: 8px;
+	pointer-events: none;
+	transform: translateY(-50%);
+	color: #1F222C;
+	width: 16px;
+	flex-shrink: 0;
+}
+
+.reviewformFormInputWrap > svg:not(.reviewformFormSelectArrow), 
+.orderPromoInputWrap svg:not(.reviewformFormSelectArrow){
+	color: #00A31E;
+	width: 24px;
+	flex-shrink: 0;
+	position: absolute;
+	top: 16px;
+	left: 16px;
+}
+
+.orderPromoInputWrap > svg:not(.reviewformFormSelectArrow){
+	color: #1F222C;
+}
+
+.reviewformFormInput, .reviewformFormTextarea{
+	width: 100%;
+	padding: 1.6rem 0.8rem 1.6rem 4.8rem;
+	line-height: 1.5;
+	color: #1F222C;
+	border: 1px solid #B1B5C3;
+	border-radius: 16px;
+}
+
+.withIcon .reviewformFormInput{
+	padding: 1.6rem 3.2rem 1.6rem 4.8rem;
+}
+
+.inputButton{
+	padding: 0;
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #1F222C;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	right: 4px;
+}
+
+.reviewformFormTextarea{
+	resize: none;
+	height: 136px;
+}
+
+.reviewformButtons{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 24px;
+}
+
+.reviewformButton{
+	padding: 1.6rem 4rem;
+	border-radius: 16px;
+	color: #fff;
+	background: #FF6433;
+	line-height: 1.5;
+	font-weight: 500;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.reviewformButton svg{
+	width: 24px;
+	flex-shrink: 0;
+}
+
+.reviewformButton:first-child{
+	background: #B1B5C3;
+}
+
+.reviewformAgree{
+	width: 100%;
+	display: flex;
+}
+
+.checkbox{
+	display: none;
+}
+
+.reviewformLabel{
+	color: #1F222C;
+	font-size: 1.4rem;
+	line-height: 1.5;
+	display: flex;
+	position: relative;
+	padding-left: 2.8rem;
+}
+
+.reviewformLabel:before{
+	content: "";
+	display: block;
+	width: 20px;
+	height: 20px;
+	border-radius: 4px;
+	position: absolute;
+	left: 0;
+	top: 1px;
+	border: 1px solid #777E90;
+	transition: .2s linear;
+}
+
+.reviewformLabel:after{
+	content: "";
+	width: 16px;
+	height: 16px;
+	background: url("/img/check.svg") center no-repeat;
+	position: absolute;
+	top: 3px;
+	left: 2px;
+	opacity: 0;
+	transition: .2s linear;
+}
+
+.checkbox:checked + .reviewformLabel:after{
+	opacity: 1;
+}
+
+.checkbox:checked + .reviewformLabel:before{
+	border: 1px solid #00A31E;
+	background: #00A31E;
+}
+
+@media (any-hover: hover) {
+    .breadcrumbsLink:hover{
+		color: #00A31E;
+	}
+}

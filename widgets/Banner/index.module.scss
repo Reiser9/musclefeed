@@ -1,0 +1,91 @@
+.banner{
+	width: 100%;
+	padding: 2.4rem 0;
+}
+
+.bannerInner, .banner2Inner{
+	width: 100%;
+	border-radius: 24px;
+	overflow: hidden;
+	background: #F2F3EE;
+	padding: 9rem 4rem 5.2rem 4rem;
+	position: relative;
+}
+
+.banner2Inner{
+	padding: 4rem;
+}
+
+.bannerFood{
+	width: 100%;
+	max-width: 650px;
+	position: absolute;
+	right: 30px;
+	bottom: -70px;
+	pointer-events: none;
+}
+
+.bannerFood.small{
+	max-width: 500px;
+}
+
+.bannerSign{
+	color: #fff;
+	text-transform: uppercase;
+	padding: 1.6rem;
+	border-radius: 24px;
+	position: absolute;
+	font-size: 2.8rem;
+	line-height: 1.2;
+	font-weight: 600;
+	backdrop-filter: blur(10px);
+}
+
+.bannerSign1{
+	top: 78px;
+	right: 35px;
+	background: rgba(0, 163, 30, .5);
+}
+
+.bannerSign2{
+	bottom: 20px;
+	right: 400px;
+	background: rgba(255, 100, 51, .5);
+}
+
+.bannerContent{
+	width: 100%;
+	max-width: 745px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.bannerTitle{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.bannerTitle span{
+	text-transform: uppercase;
+	font-size: 3.6rem;
+	line-height: 1.2;
+	font-weight: 700;
+}
+
+.bannerTitle .green{
+	color: #00A31E;
+}
+
+.bannerText{
+	margin-top: 0.8rem;
+	font-size: 1.8rem;
+	line-height: 1.5;
+}
+
+.bannerLink{
+	margin-top: 2.4rem;
+}
