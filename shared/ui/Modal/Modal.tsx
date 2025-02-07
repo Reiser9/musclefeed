@@ -11,11 +11,12 @@ type Props = {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
     size?: 'default' | 'big';
+    withClose?: boolean;
     contentClass?: string;
     children: React.ReactNode;
 };
 
-const Modal: React.FC<Props> = ({ value, setValue, size = 'default', contentClass, children }) => {
+const Modal: React.FC<Props> = ({ value, setValue, size = 'default', withClose = true, contentClass, children }) => {
     return (
         <div
             className={cn(styles.modal, {
@@ -25,9 +26,11 @@ const Modal: React.FC<Props> = ({ value, setValue, size = 'default', contentClas
         >
             <div className={cn(styles.modalInner, styles[size])}>
                 <div className={cn(styles.modalContent, contentClass)} onClick={(e) => e.stopPropagation()}>
-                    <button className={styles.modalClose} onClick={() => setValue(false)}>
-                        <Cross />
-                    </button>
+                    {withClose && (
+                        <button className={styles.modalClose} onClick={() => setValue(false)}>
+                            <Cross />
+                        </button>
+                    )}
 
                     {children}
                 </div>

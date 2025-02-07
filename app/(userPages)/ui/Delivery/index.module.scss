@@ -1,0 +1,190 @@
+.map{
+	width: 100%;
+	padding: 8rem 0;
+}
+
+@media (max-width: 1630px) {
+	.map{
+		padding: 7rem 0;
+	}
+}
+@media (max-width: 1270px) {
+	.map{
+		padding: 6rem 0;
+	}
+}
+@media (max-width: 1065px) {
+	.map{
+		padding: 5rem 0;
+	}
+}
+@media (max-width: 768px) {
+	.map{
+		padding: 4rem 0;
+	}
+}
+
+.mapInner{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 24px;
+	justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+	.mapInner{
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
+
+.mapImg{
+	width: 100%;
+	max-width: 756px;
+	aspect-ratio: 1 / 1;
+	overflow: hidden;
+	border-radius: 24px;
+	display: flex;
+	flex-shrink: 0;
+	position: relative;
+}
+
+@media (max-width: 1630px) {
+	.mapImg{
+		max-width: 540px;
+	}
+}
+@media (max-width: 1270px) {
+	.mapImg{
+		max-width: 380px;
+	}
+}
+
+.mapImg img{
+	object-fit: cover;
+}
+
+.mapContent, .mapTextInner{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 80px;
+}
+
+@media (max-width: 1630px) {
+	.mapContent{
+		gap: 40px;
+	}
+}
+
+.mapTextInner{
+	gap: 8px;
+}
+
+.mapTextText{
+	font-size: 2.4rem;
+	line-height: 1.5;
+}
+
+.mapPoints{
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 24px;
+}
+
+@media (max-width: 768px) {
+	.mapPoints{
+		gap: 8px;
+	}
+}
+
+.mapPoint{
+	width: calc(100% / 2 - 24px / 2);
+	padding: 1.6rem;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	background: #FCFCFD;
+	border: 1px solid #E6E8EC;
+	border-radius: 8px;
+}
+
+@media (max-width: 1065px) {
+	.mapPoint{
+		width: 100%;
+	}
+}
+@media (max-width: 768px) {
+	.mapPoint{
+        width: calc(100% / 2 - 8px / 2);
+    }
+}
+@media (max-width: 480px) {
+	.mapPoint{
+        padding: 0.8rem;
+        gap: 8px;
+    }
+}
+
+.mapPointIcon{
+	width: 80px;
+	height: 80px;
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--main);
+}
+
+@media (max-width: 1065px) {
+	.mapPointIcon{
+		width: 60px;
+		height: 60px;
+	}
+}
+@media (max-width: 768px) {
+	.mapPointIcon{
+		width: 50px;
+		height: 50px;
+	}
+}
+@media (max-width: 450px) {
+	.mapPointIcon{
+		width: 32px;
+		height: 32px;
+	}
+}
+
+.mapPointIcon svg{
+	width: 100%;
+	height: 100%;
+	flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+	.mapPointText{
+		font-size: 1.4rem;
+	}
+}
+
+.mapButtons{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 24px;
+}
+
+@media (max-width: 1065px) {
+	.mapButtons{
+		gap: 16px;
+	}
+
+	.mapButtons button{
+		width: 100%;
+		justify-content: center;
+	}
+}

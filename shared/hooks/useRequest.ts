@@ -4,6 +4,7 @@ import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import type { Error } from '@/api/types';
 import axiosInstance from '@/api/axios';
+import useAlert from './useAlert';
 
 type requestProps = {
     url?: string;
@@ -18,6 +19,8 @@ type requestProps = {
 type RequestResult<T> = AxiosResponse<T> | AxiosError<Error>;
 
 const useRequest = () => {
+    const { alertNotify } = useAlert();
+
     const errorController = async (
         response: AxiosResponse | AxiosError<Error>,
         errorMessage = '',
@@ -31,16 +34,18 @@ const useRequest = () => {
             case 500:
                 throw new Error('Сервер временно не работает');
             case 403:
-                alert('Доступ ограничен');
+                alertNotify('Ошибка', 'Доступ ограничен', 'error');
                 throw new Error('Доступ ограничен');
             default:
                 if (customLogic) {
                     customLogic();
                 } else {
-                    alert(
+                    alertNotify(
+                        'Ошибка',
                         errorMessage
                             ? errorMessage
                             : response.response?.data.message || 'Что-то поломалось, скоро починим',
+                        'error',
                     );
                 }
                 throw new Error('Что-то поломалось, скоро починим');

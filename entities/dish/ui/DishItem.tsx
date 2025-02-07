@@ -12,7 +12,7 @@ const DishItem: React.FC<Props> = ({}) => {
     return (
         <div className={styles.foodItem}>
             <div className={styles.foodItemImg}>
-                <img src="img/food.png" alt="food" />
+                <img src="/img/food.png" alt="food" />
             </div>
 
             <div className={styles.foodItemTextInner}>

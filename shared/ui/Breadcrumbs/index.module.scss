@@ -1,0 +1,42 @@
+.breadcrumbs{
+	width: 100%;
+	padding: 0.8rem 0;
+}
+
+.breadcrumbsInner{
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px;
+}
+
+.breadcrumbsLink, .breadcrumbsText{
+	display: flex;
+	color: #1F222C;
+	padding: 0.4rem;
+	line-height: 1.5;
+}
+
+.breadcrumbsLink:first-child{
+	padding: 0;
+}
+
+.breadcrumbsLink svg, .breadcrumbsArrow{
+	width: 16px;
+	flex-shrink: 0;
+}
+
+.breadcrumbsArrow{
+	color: #1F222C;
+}
+
+.breadcrumbsText{
+	color: #00A31E;
+}
+
+@media (any-hover: hover) {
+	.breadcrumbsLink:hover{
+		color: #00A31E;
+	}
+}

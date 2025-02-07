@@ -10,15 +10,26 @@ type Props = {
     disabled?: boolean;
     href?: string;
     full?: boolean;
-    color?: "default" | "green";
+    small?: boolean;
+    color?: 'default' | 'green' | 'grey';
     children: React.ReactNode;
 } & ButtonHTMLAttributes<HTMLButtonElement> &
     AnchorHTMLAttributes<HTMLAnchorElement>;
 
-const Button: React.FC<Props> = ({ disabled = false, full = false, href, color = "default", children, className, ...props }) => {
+const Button: React.FC<Props> = ({
+    disabled = false,
+    full = false,
+    small = false,
+    href,
+    color = 'default',
+    children,
+    className,
+    ...props
+}) => {
     const defaultClasses = cn(styles.button, styles[color], className, {
         [styles.disabled]: disabled,
-        [styles.full]: full
+        [styles.full]: full,
+        [styles.small]: small,
     });
 
     if (disabled) {

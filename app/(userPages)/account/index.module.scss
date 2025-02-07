@@ -1,0 +1,66 @@
+.account{
+	width: 100%;
+	padding: 0.8rem 0rem 8rem 0;
+}
+
+.accountInner{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.cabinetContent{
+	width: 100%;
+	margin-top: 8rem;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 40px;
+}
+
+.cabinetLink{
+	width: calc(100% / 3 - 80px / 3);
+	border-radius: 10px;
+	border: 1px solid #F2F3EE;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background: #fff;
+	padding: 8rem 1.6rem 2.4rem 1.6rem;
+	color: #777E90;
+	text-align: center;
+	line-height: 1.5;
+}
+
+@media (max-width: 1270px) {
+    .cabinetLink{
+		width: calc(100% / 2 - 40px / 2);
+	}
+}
+@media (max-width: 768px) {
+    .cabinetLink{
+		width: 100%;
+	}
+}
+
+.cabinetLink svg{
+	width: 40px;
+	flex-shrink: 0;
+}
+
+.cabinetLink span{
+	width: 100%;
+	text-align: center;
+	font-size: 2.2rem;
+	color: #00A31E;
+	line-height: 1.2;
+	font-weight: 500;
+	margin-top: 1rem;
+}
+
+@media (any-hover: hover) {
+    .cabinetLink:hover{
+		background: #F2F3EE;
+	}
+}

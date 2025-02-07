@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 import styles from './index.module.scss';
 
@@ -8,7 +9,7 @@ const ReviewItem = () => {
     return (
         <div className={styles.reviewsItem}>
             <div className={styles.reviewsItemImg}>
-                <img src="img/review3.png" alt="img" />
+                <Image src="/img/review3.png" alt="img" fill />
             </div>
 
             <div className={styles.reviewsItemContent}>

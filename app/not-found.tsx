@@ -5,7 +5,7 @@ export const metadata: Metadata = {
 };
 
 const NotFound = () => {
-    return <div>Страница не найдена</div>;
+    return <div>404 Страница не найдена</div>;
 };
 
 export default NotFound;

@@ -11,15 +11,15 @@ import { ArrowRight } from '@/shared/icons';
 import { Button } from '@/shared/ui/Button';
 
 type Props = {
-    innerClass?: string
-}
+    innerClass?: string;
+};
 
-const Banner: React.FC<Props> = ({innerClass}) => {
+const Banner: React.FC<Props> = ({ innerClass }) => {
     return (
         <section className={styles.banner}>
             <div className={base.container}>
                 <div className={cn(styles.bannerInner, innerClass)}>
-                    <img src="img/foods.png" alt="img" className={styles.bannerFood} />
+                    <img src="/img/foods.png" alt="img" className={styles.bannerFood} />
                     <p className={cn(styles.bannerSign, styles.bannerSign1)}>Сразу станет ясно!</p>
                     <p className={cn(styles.bannerSign, styles.bannerSign2)}>Пробный заказ за 500 ₽</p>
 
@@ -34,7 +34,7 @@ const Banner: React.FC<Props> = ({innerClass}) => {
                             Меню с КБЖУ: креветки, авокадо, свежие ягоды и другие премиальные продукты.
                         </p>
 
-                        <Button className={styles.bannerLink}>
+                        <Button className={styles.bannerLink} color="green">
                             Сделать пробный заказ
                             <ArrowRight />
                         </Button>

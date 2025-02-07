@@ -7,6 +7,7 @@ import styles from './index.module.scss';
 import base from '@/shared/styles/base.module.scss';
 
 import { Email, Facebook, Instagram, Phone, Telegram, WhatsApp } from '@/shared/icons';
+import Image from 'next/image';
 
 const Footer = () => {
     return (
@@ -16,7 +17,7 @@ const Footer = () => {
                         <div className={styles.footerTopInner}>
                             <div className={cn(styles.footerItem, styles.footerContacts)}>
                                 <div className={styles.footerLogo}>
-                                    <img src="img/logo.png" alt="logo" />
+                                    <Image src="/img/logo.png" alt="logo" fill />
                                 </div>
 
                                 <div className={styles.footerContact}>
@@ -140,11 +141,11 @@ const Footer = () => {
                 </div>
 
                 <div className={styles.footerBottom}>
-                    <div className={styles.container}>
+                    <div className={base.container}>
                         <div className={styles.footerBottomInner}>
-                            <p className={styles.footer__copy}>&copy; 2021 Copyright: MUSCLE-FEED.CO.IL</p>
+                            <p className={styles.footerCopy}>&copy; 2021 Copyright: MUSCLE-FEED.CO.IL</p>
 
-                            <p className={styles.footer__text}>
+                            <p className={styles.footerText}>
                                 Фотографии блюд являются вариантом сервировки блюда. Внешний вид блюда может отличаться
                                 от фотографий на сайте
                             </p>

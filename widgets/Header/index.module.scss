@@ -110,6 +110,12 @@
 	color: #fff;
 }
 
+.headerSocialLink.disabled{
+	opacity: 0.6;
+	pointer-events: none;
+	filter: grayscale(1);
+}
+
 @media (max-width: 768px) {
     .headerSocialLink.mobileOff{
         display: none;
@@ -118,6 +124,11 @@
     .headerSocialLink{
 		width: 40px;
 		height: 40px;
+	}
+}
+@media (max-width: 480px) {
+	.headerSocialLink:first-child, .headerSocialLink:nth-child(2){
+		display: none;
 	}
 }
 

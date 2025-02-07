@@ -1,15 +1,30 @@
+export type UserShortInfo = {
+    id: number;
+    email: string;
+    isVerified: boolean;
+    roles: string[];
+    firstName: string;
+    lastName: string;
+    phone: string;
+};
+
 export type RegisterDTO = {
     email: string;
     password: string;
     language: 'RU' | 'HE';
 };
 
-export type RegisterResponse = {
-    user: {
-        id: number;
-        email: string;
-        isVerified: boolean;
-        roles: string[];
-    };
+export type AuthResponse = {
+    user: UserShortInfo;
     accessToken: string;
 };
+
+export type LoginDTO = {
+    email: string;
+    password: string;
+};
+
+export type ChangePasswordDTO = {
+    oldPassword: string;
+    newPassword: string;
+}

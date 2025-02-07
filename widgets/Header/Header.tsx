@@ -8,14 +8,19 @@ import Image from 'next/image';
 import styles from './index.module.scss';
 import base from '@/shared/styles/base.module.scss';
 
-import { ArrowBottom, Cross, Menu, Phone, Telegram, UserLogin, WhatsApp } from '@/shared/icons';
-import { LoginModal, RecoveryModal, RegisterModal } from '../AuthModal';
+import { ArrowBottom, Cross, Exit, Menu, Phone, Telegram, UserLogin, WhatsApp } from '@/shared/icons';
+import { LoginModal, RecoveryModal, RegisterModal, VerifyModal } from '../AuthModal';
+import { useAppSelector } from '@/shared/hooks/useRedux';
+import { useAuth } from '@/features/user';
 
 const Header = () => {
     const [mobileMenu, setMobileMenu] = React.useState(false);
     const [loginModal, setLoginModal] = React.useState(false);
     const [registerModal, setRegisterModal] = React.useState(false);
     const [recoveryModal, setRecoveryModal] = React.useState(false);
+
+    const { isAuth, isVerified } = useAppSelector((state) => state.app);
+    const { authIsLoading, logout } = useAuth();
 
     return (
         <>
@@ -98,12 +103,31 @@ const Header = () => {
                                     <WhatsApp />
                                 </a>
 
-                                <button
-                                    className={cn(styles.headerSocialLink, styles.orange, styles.mobileOff)}
-                                    onClick={() => setLoginModal(true)}
-                                >
-                                    <UserLogin />
-                                </button>
+                                {!isAuth && (
+                                    <button
+                                        className={cn(styles.headerSocialLink, styles.orange, styles.mobileOff)}
+                                        onClick={() => setLoginModal(true)}
+                                    >
+                                        <UserLogin />
+                                    </button>
+                                )}
+
+                                {isAuth && (
+                                    <>
+                                        <Link href="/account" className={cn(styles.headerSocialLink, styles.orange)}>
+                                            <UserLogin />
+                                        </Link>
+
+                                        <button
+                                            className={cn(styles.headerSocialLink, styles.orange, {
+                                                [styles.disabled]: authIsLoading,
+                                            })}
+                                            onClick={() => logout()}
+                                        >
+                                            <Exit />
+                                        </button>
+                                    </>
+                                )}
 
                                 <button
                                     className={cn(styles.menuButton, styles.headerSocialLink, styles.orange)}
@@ -183,36 +207,42 @@ const Header = () => {
                 </div>
             </div>
 
-            <LoginModal
-                value={loginModal}
-                setValue={setLoginModal}
-                recoveryCallback={() => {
-                    setLoginModal(false);
-                    setRecoveryModal(true);
-                }}
-                registerCallback={() => {
-                    setLoginModal(false);
-                    setRegisterModal(true);
-                }}
-            />
+            {!isAuth && (
+                <>
+                    <LoginModal
+                        value={loginModal}
+                        setValue={setLoginModal}
+                        recoveryCallback={() => {
+                            setLoginModal(false);
+                            setRecoveryModal(true);
+                        }}
+                        registerCallback={() => {
+                            setLoginModal(false);
+                            setRegisterModal(true);
+                        }}
+                    />
 
-            <RegisterModal
-                value={registerModal}
-                setValue={setRegisterModal}
-                loginCallback={() => {
-                    setRegisterModal(false);
-                    setLoginModal(true);
-                }}
-            />
+                    <RegisterModal
+                        value={registerModal}
+                        setValue={setRegisterModal}
+                        loginCallback={() => {
+                            setRegisterModal(false);
+                            setLoginModal(true);
+                        }}
+                    />
 
-            <RecoveryModal
-                value={recoveryModal}
-                setValue={setRecoveryModal}
-                loginCallback={() => {
-                    setRecoveryModal(false);
-                    setLoginModal(true);
-                }}
-            />
+                    <RecoveryModal
+                        value={recoveryModal}
+                        setValue={setRecoveryModal}
+                        loginCallback={() => {
+                            setRecoveryModal(false);
+                            setLoginModal(true);
+                        }}
+                    />
+                </>
+            )}
+
+            {isAuth && !isVerified && <VerifyModal value={true} setValue={() => {}} />}
         </>
     );
 };

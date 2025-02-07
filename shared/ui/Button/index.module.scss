@@ -10,8 +10,16 @@
     font-weight: 500;
 }
 
+.button.small{
+    padding: 1.2rem 2rem;
+}
+
 .button.green{
     background: var(--main);
+}
+
+.button.grey{
+    background: #B1B5C3;
 }
 
 .button.full{
@@ -38,5 +46,9 @@
 
     .button.green:hover{
         background: var(--mainHover);
+    }
+
+    .button.grey:hover{
+        background: #9699a5;
     }
 }

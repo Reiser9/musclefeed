@@ -8,7 +8,7 @@ const TeamItem = () => {
     return (
         <div className={styles.teamItem}>
             <div className={styles.teamItemImg}>
-                <img src="img/team1.png" alt="team" />
+                <img src="/img/team1.png" alt="team" />
             </div>
 
             <div className={styles.teamItemTextInner}>

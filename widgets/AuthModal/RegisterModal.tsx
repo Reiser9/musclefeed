@@ -6,14 +6,15 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import styles from './index.module.scss';
 
 import type { RegisterDTO } from '@/entities/user/auth';
+import { EMAIL, PASSWORD } from '@/shared/consts/VALIDATIONS_FORM';
 import { ArrowRight, Lock, Mail } from '@/shared/icons';
+import { useAuth } from '@/features/user';
 
-import { Modal } from '@/shared/ui/Modal';
 import { Text } from '@/shared/ui/Text';
 import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/Button';
 import { Checkbox } from '@/shared/ui/Checkbox';
-import { useAuth } from '@/features/user';
+import { Modal } from '@/shared/ui/Modal';
 
 type Props = {
     value: boolean;
@@ -46,7 +47,7 @@ const RegisterModal: React.FC<Props> = ({ value, setValue, loginCallback = () =>
 
         setPasswordAgainError('');
 
-        registerRequest({ ...data, language: 'RU' });
+        registerRequest({ ...data, language: 'RU' }, () => setValue(false));
     };
 
     return (
@@ -62,40 +63,18 @@ const RegisterModal: React.FC<Props> = ({ value, setValue, loginCallback = () =>
 
                 <form className={styles.authForm} onSubmit={handleSubmit(onSubmit)}>
                     <Input
-                        {...register('email', {
-                            required: {
-                                value: true,
-                                message: 'Обязательное поле',
-                            },
-                            pattern: {
-                                value: /^\S+@\S+\.\S+$/,
-                                message: 'Введите корректный адрес электронной почты',
-                            },
-                        })}
+                        {...register('email', EMAIL)}
                         error={!!errors.email}
                         errorMessage={errors.email?.message}
                         icon={<Mail />}
                         placeholder="mail@mail.cpm"
                         full
                         title="Ваша почта"
-                        value={watch('email')}
+                        value={watch('email', '')}
                     />
 
                     <Input
-                        {...register('password', {
-                            required: {
-                                value: true,
-                                message: 'Обязательное поле',
-                            },
-                            minLength: {
-                                value: 8,
-                                message: 'Пароль не может быть меньше 8 символов',
-                            },
-                            maxLength: {
-                                value: 32,
-                                message: 'Пароль не может быть больше 32 символов',
-                            },
-                        })}
+                        {...register('password', PASSWORD)}
                         error={!!errors.password}
                         errorMessage={errors.password?.message}
                         icon={<Lock />}
@@ -103,7 +82,7 @@ const RegisterModal: React.FC<Props> = ({ value, setValue, loginCallback = () =>
                         full
                         title="Придумайте пароль"
                         type="password"
-                        value={watch('password')}
+                        value={watch('password', '')}
                     />
 
                     <Input

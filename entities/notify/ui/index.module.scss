@@ -1,0 +1,93 @@
+.notifyItem{
+    width: 100%;
+    padding: 1.2rem 1.2rem 2rem 1.6rem;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #007cee;
+}
+
+.notifyItem svg{
+    color: #007cee;
+}
+
+.notifyItem:before{
+    content: "";
+    display: block;
+    width: 4px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #007cee;
+}
+
+.notifyItemIconWrapper{
+    width: 24px;
+    display: flex;
+    flex-shrink: 0;
+}
+
+.notifyItemIconWrapper svg{
+    width: 100%;
+}
+
+.notifyItemWrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.success{
+    background: #D7E7DA;
+}
+
+.success svg{
+    color: #00A31E;
+}
+
+.notifyItem.success:before{
+    background: #00A31E;
+}
+
+.info{
+    background: #E6F2FE;
+}
+
+.info svg{
+    color: #007cee;
+}
+
+.notifyItem.info:before{
+    background: #007cee;
+}
+
+.error{
+    background: #FEE7EA;
+}
+
+.error svg{
+    color: #F40D29;
+}
+
+.notifyItem.error:before{
+    background: #F40D29;
+}
+
+.warn{
+    background: #FEF9E7;
+}
+
+.warn svg{
+    color: #F4BE0D;
+}
+
+.notifyItem.warn:before{
+    background: #F4BE0D;
+}

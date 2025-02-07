@@ -3,6 +3,12 @@
 	padding: 2.4rem 0;
 }
 
+@media (max-width: 768px) {
+	.banner{
+		padding: 1.6rem 0;
+	}
+}
+
 .bannerInner, .banner2Inner{
 	width: 100%;
 	border-radius: 24px;
@@ -12,8 +18,30 @@
 	position: relative;
 }
 
+@media (max-width: 1630px) {
+	.bannerInner{
+		padding: 5rem 4rem;
+	}
+}
+@media (max-width: 1065px) {
+	.bannerInner{
+		padding: 5rem 3rem 13rem 3rem;
+	}
+}
+@media (max-width: 768px) {
+	.bannerInner{
+		padding: 4rem 1.2rem 24rem 1.2rem;
+	}
+}
+
 .banner2Inner{
 	padding: 4rem;
+}
+
+@media (max-width: 768px) {
+	.banner2Inner {
+        padding: 4rem 2rem 16rem 2rem;
+    }
 }
 
 .bannerFood{
@@ -27,6 +55,29 @@
 
 .bannerFood.small{
 	max-width: 500px;
+}
+
+@media (max-width: 1630px) {
+	.bannerFood {
+        max-width: 450px;
+        right: -55px;
+    }
+}
+@media (max-width: 1065px) {
+	.bannerFood.small {
+        max-width: 380px;
+    }
+}
+@media (max-width: 768px) {
+	.bannerFood {
+        bottom: -130px;
+		right: -25px;
+    }
+}
+@media (max-width: 480px) {
+	.bannerFood {
+        width: auto;
+    }
 }
 
 .bannerSign{
@@ -53,12 +104,63 @@
 	background: rgba(255, 100, 51, .5);
 }
 
+@media (max-width: 1630px) {
+	.bannerSign{
+		font-size: 2rem;
+	}
+
+	.bannerSign2{
+		right: 200px;
+	}
+}
+@media (max-width: 1065px) {
+	.bannerSign1{
+		top: 200px;
+	}
+}
+@media (max-width: 768px) {
+	.bannerSign2{
+		right: 0;
+		bottom: 80px;
+	}
+
+	.bannerSign1{
+		top: auto;
+		right: auto;
+		bottom: 9px;
+		left: 12px;
+	}
+}
+
 .bannerContent{
 	width: 100%;
 	max-width: 745px;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
+}
+
+@media (max-width: 1630px) {
+	.bannerContent {
+        position: relative;
+        z-index: 2;
+        max-width: 640px;
+    }
+}
+@media (max-width: 1270px) {
+	.bannerContent {
+        max-width: 600px;
+    }
+}
+@media (max-width: 1065px) {
+	.bannerContent {
+        max-width: 470px;
+    }
+}
+@media (max-width: 768px) {
+	.bannerContent {
+        position: relative;
+    }
 }
 
 .bannerTitle{
@@ -76,6 +178,26 @@
 	font-weight: 700;
 }
 
+@media (max-width: 1270px) {
+	.bannerTitle span{
+		font-size: 2.4rem;
+	}
+}
+@media (max-width: 768px) {
+	.bannerTitle span{
+		font-size: 3.2rem;
+	}
+
+	.bannerTitle{
+		gap: 0;
+	}
+}
+@media (max-width: 480px) {
+	.bannerTitle span{
+		font-size: 2.8rem;
+	}
+}
+
 .bannerTitle .green{
 	color: #00A31E;
 }
@@ -88,4 +210,14 @@
 
 .bannerLink{
 	margin-top: 2.4rem;
+}
+
+@media (max-width: 768px) {
+	.bannerLink{
+		padding: 1.2rem 4rem;
+	}
+}
+
+.bannerLinkSmall{
+	margin-top: 4rem;
 }

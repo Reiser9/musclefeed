@@ -1,0 +1,212 @@
+.profile{
+    width: 100%;
+    padding: 0.8rem 0rem 8rem 0;
+}
+
+.profileInner{
+    width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.profileContent{
+	width: 100%;
+	display: flex;
+	margin-top: 4rem;
+	gap: 40px;
+}
+
+@media (max-width: 1065px) {
+    .profileContent{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+.profileSidebar{
+	width: 100%;
+	max-width: 496px;
+	flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 40px;
+	padding: 4rem;
+	border-radius: 16px;
+	box-shadow: 0 8px 16px -8px rgba(15, 15, 15, .2);
+}
+
+@media (max-width: 1630px) {
+    .profileSidebar{
+		padding: 2.4rem;
+		max-width: 410px;
+	}
+}
+@media (max-width: 1270px) {
+    .profileSidebar{
+		max-width: 380px;
+	}
+}
+@media (max-width: 1065px) {
+    .profileSidebar{
+		max-width: 100%;
+	}
+}
+@media (max-width: 480px) {
+    .profileSidebar{
+		padding: 2.4rem 0;
+	}
+}
+
+.profileForm, .profileAddresses{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 24px;
+}
+
+.profileAddresses{
+    gap: 20px;
+}
+
+.profileWrapper{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding: 4rem;
+	border-radius: 16px;
+	box-shadow: 0 8px 16px -8px rgba(15, 15, 15, .2);
+	gap: 40px;
+}
+
+@media (max-width: 1630px) {
+    .profileWrapper{
+		padding: 2.4rem;
+	}
+}
+@media (max-width: 480px) {
+    .profileWrapper{
+		padding: 2.4rem 0;
+	}
+}
+
+.profileMain{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 20px;
+}
+
+.profileAddress{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+    .profileAddress{
+		font-size: 1.4rem;
+	}
+}
+
+.profileAddress svg{
+	width: 24px;
+	flex-shrink: 0;
+	color: #00A31E;
+}
+
+.addAddressForm{
+	width: 100%;
+	margin: 2.4rem 0;
+	display: grid;
+    grid-gap: 24px;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.addAddressForm div:first-child, .addAddressForm div:nth-child(2){
+    grid-column: span 3;
+}
+
+.addAddressForm div{
+    grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+    .addAddressForm div, .addAddressForm div:first-child, .addAddressForm div:nth-child(2){
+        grid-column: span 6;
+    }
+}
+
+.profileAddressesInner{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 10px;
+}
+
+.profileAddressItem{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	justify-content: space-between;
+}
+
+.profileAddressName{
+    display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+@media (max-width: 480px) {
+    .profileAddressName{
+        font-size: 1.4rem;
+    }
+}
+
+.profileAddressName:before{
+	content: "";
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: #0F1209;
+	flex-shrink: 0;
+}
+
+.profileAddressButtons{
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.profileAddressButton{
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #00A31E;
+}
+
+.profileAddressButton svg{
+	width: 24px;
+    height: 24px;
+	flex-shrink: 0;
+}
+
+.profileAddressButton.disabled{
+	color: #E6E8EC;
+    pointer-events: none;
+}
+
+.profileAddressButton.danger{
+	color: #F40D29;
+}

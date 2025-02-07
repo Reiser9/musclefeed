@@ -1,0 +1,64 @@
+.sidebar{
+    width: 100%;
+    max-width: 280px;
+    background: #eff9f1;
+    height: 100dvh;
+    padding: 2.4rem 0;
+    overflow-y: auto;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+.sidebarLogoInner{
+    width: 100%;
+    padding: 0rem 2.4rem;
+    display: flex;
+    justify-content: center;
+}
+
+.sidebarLogo{
+    width: 158px;
+    height: 48px;
+    position: relative;
+}
+
+.sidebarLogoInner img{
+    object-fit: cover;
+}
+
+.sidebarNav{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.sidebarNavLink{
+    width: 100%;
+    padding: 1.2rem 1.6rem;
+    color: var(--main);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidebarNavLink svg{
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.sidebarNavLink.active{
+    background: var(--main);
+    color: #fff;
+}
+
+@media (any-hover: hover) {
+    .sidebarNavLink:hover{
+        background: var(--main);
+        color: #fff;
+    }
+}
