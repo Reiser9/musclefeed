@@ -17,13 +17,10 @@ type Props = {
 };
 
 const Modal: React.FC<Props> = ({ value, setValue, size = 'default', withClose = true, contentClass, children }) => {
+    if (!value) return;
+
     return (
-        <div
-            className={cn(styles.modal, {
-                [styles.active]: value,
-            })}
-            onClick={() => setValue(false)}
-        >
+        <div className={styles.modal} onClick={() => setValue(false)}>
             <div className={cn(styles.modalInner, styles[size])}>
                 <div className={cn(styles.modalContent, contentClass)} onClick={(e) => e.stopPropagation()}>
                     {withClose && (

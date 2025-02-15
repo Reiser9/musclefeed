@@ -13,11 +13,11 @@
 	background: #F4F5F6;
 	border-radius: 8px;
 	overflow: hidden;
+	position: relative;
 }
 
 .teamItemImg img{
-	max-width: 100%;
-	max-height: 100%;
+	object-fit: cover;
 }
 
 .teamItemTextInner{
@@ -38,4 +38,37 @@
 	font-size: 2.8rem;
 	line-height: 1.2;
 	font-weight: 600;
+}
+
+// TeamAdmin
+.teamAdmin{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+	padding: 1.2rem;
+	border: 1px solid var(--main);
+}
+
+.teamAdminImg{
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	position: relative;
+}
+
+.teamAdminImg img{
+	object-fit: cover;
+}
+
+.teamAdminDelete{
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	background: #ff000010;
+	border-radius: 8px;
+	color: #ff0000;
 }

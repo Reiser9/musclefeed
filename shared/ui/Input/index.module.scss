@@ -30,11 +30,16 @@
 
 .input{
 	width: 100%;
-	padding: 1.6rem 0.8rem 1.6rem 4.8rem;
+	padding: 1.6rem;
 	line-height: 1.5;
 	color: #1F222C;
 	border: 1px solid #B1B5C3;
 	border-radius: 16px;
+}
+
+textarea.input{
+	resize: none;
+	height: 120px;
 }
 
 .input.withIcon{

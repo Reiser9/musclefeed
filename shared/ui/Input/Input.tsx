@@ -13,10 +13,11 @@ type Props = {
     title?: string;
     icon?: React.ReactNode;
     placeholder?: string;
-    type?: 'text' | 'password';
+    type?: 'text' | 'password' | 'number';
     error?: boolean;
     errorMessage?: string;
     full?: boolean;
+    component?: 'input' | 'textarea';
 };
 
 const Input: React.FC<Props> = ({
@@ -29,6 +30,7 @@ const Input: React.FC<Props> = ({
     error = false,
     errorMessage,
     full = false,
+    component = 'input',
     ...props
 }) => {
     return (
@@ -42,16 +44,24 @@ const Input: React.FC<Props> = ({
             <div className={styles.inputWrapper}>
                 {icon && icon}
 
-                <input
-                    type={type}
-                    className={cn(styles.input, {
-                        [styles.withIcon]: !!icon,
-                    })}
-                    placeholder={placeholder}
-                    value={value}
-                    onChange={(e) => setValue && setValue(e.target.value)}
-                    {...props}
-                />
+                {component === 'input' ? (
+                    <input
+                        type={type}
+                        className={cn(styles.input, { [styles.withIcon]: !!icon })}
+                        placeholder={placeholder}
+                        value={value}
+                        onChange={(e) => setValue && setValue(e.target.value)}
+                        {...props}
+                    />
+                ) : (
+                    <textarea
+                        className={cn(styles.input, styles.textarea, { [styles.withIcon]: !!icon })}
+                        placeholder={placeholder}
+                        value={value}
+                        onChange={(e) => setValue && setValue(e.target.value)}
+                        {...props}
+                    />
+                )}
             </div>
 
             {error && errorMessage && (

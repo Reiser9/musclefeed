@@ -1,0 +1,67 @@
+// Команда
+.team{
+	width: 100%;
+	padding: 8rem 0;
+}
+
+.teamInner{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.teamWrap{
+	width: 100%;
+	position: relative;
+}
+
+.teamContent{
+	width: 100%;
+	margin-top: 4rem;
+}
+
+.sliderArrow{
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	background: #F2F3EE;
+	width: 32px;
+	height: 32px;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	z-index: 5;
+}
+
+.sliderArrow.disabled{
+	opacity: 0.4;
+	background: #e7e7e7;
+	pointer-events: none;
+}
+
+.sliderArrow svg{
+	width: 21px;
+	flex-shrink: 0;
+}
+
+.teamNext{
+	right: -32px;
+}
+
+.teamPrev{
+	left: -32px;
+}
+
+.reviewsTitleWrap{
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.reviewsText{
+	width: 100%;
+	max-width: 760px;
+}

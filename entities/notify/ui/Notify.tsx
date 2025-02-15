@@ -42,9 +42,7 @@ const Notify: React.FC<Props> = ({ data }) => {
     return (
         <div className={cn(styles.notifyItem, styles[type])} onClick={removeOnClick}>
             <div className={styles.notifyItemWrapper}>
-                <Text variant="text" fontWeight={600}>
-                    {title}
-                </Text>
+                <Text fontWeight={600}>{title}</Text>
                 <Text variant="text3">{text}</Text>
             </div>
         </div>

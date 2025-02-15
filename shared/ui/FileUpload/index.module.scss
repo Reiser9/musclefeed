@@ -1,0 +1,43 @@
+.fileupload{
+    width: 100%;
+    max-width: 175px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.fileuploadInput{
+    display: none;
+}
+
+.fileuploadLabel{
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: block;
+    border-radius: 8px;
+    border: 2px dashed var(--main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    color: var(--main);
+}
+
+.fileuploadLabel img{
+    object-fit: cover;
+}
+
+.fileuploadFilename{
+    width: 100%;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+@media (any-hover: hover) {
+    .fileuploadLabel{
+        cursor: pointer;
+    }
+}

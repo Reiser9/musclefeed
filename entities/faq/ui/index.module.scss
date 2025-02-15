@@ -103,3 +103,43 @@
         cursor: pointer;
     }
 }
+
+// FaqAdmin
+.faqAdminItem{
+	width: 100%;
+	padding: 2.4rem;
+	border: 1px solid var(--main);
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.faqAdminItemIcon{
+	width: 80px;
+	height: 80px;
+	flex-shrink: 0;
+	color: var(--main);
+}
+
+.faqAdminItemIcon svg{
+	width: 100%;
+	height: 100%;
+}
+
+.faqAdminDelete{
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	background: #ff000010;
+	border-radius: 8px;
+	color: #ff0000;
+}
+
+.faqAdminItemAnswer{
+	max-height: 100px;
+	overflow: hidden;
+}

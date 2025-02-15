@@ -4,14 +4,17 @@ import React from 'react';
 import Link from 'next/link';
 import cn from 'classnames';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
+import { usePathname, useRouter } from 'next/navigation';
 
 import styles from './index.module.scss';
 import base from '@/shared/styles/base.module.scss';
 
 import { ArrowBottom, Cross, Exit, Menu, Phone, Telegram, UserLogin, WhatsApp } from '@/shared/icons';
 import { LoginModal, RecoveryModal, RegisterModal, VerifyModal } from '../AuthModal';
-import { useAppSelector } from '@/shared/hooks/useRedux';
+import { useAppDispatch, useAppSelector } from '@/shared/hooks/useRedux';
 import { useAuth } from '@/features/user';
+import { setLanguage } from '@/store/slices/app';
 
 const Header = () => {
     const [mobileMenu, setMobileMenu] = React.useState(false);
@@ -19,8 +22,25 @@ const Header = () => {
     const [registerModal, setRegisterModal] = React.useState(false);
     const [recoveryModal, setRecoveryModal] = React.useState(false);
 
+    const dispatch = useAppDispatch();
     const { isAuth, isVerified } = useAppSelector((state) => state.app);
+    const appLanguage = useAppSelector((state) => state.app.language);
     const { authIsLoading, logout } = useAuth();
+    const router = useRouter();
+
+    const t = useTranslations('Header');
+
+    const pathname = usePathname();
+    const locale = React.useMemo(() => (pathname.split('/')[1] === 'he' ? 'he' : 'ru'), [pathname]);
+
+    const changeLanguage = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value as 'ru' | 'he';
+
+        dispatch(setLanguage(value));
+        const newPath = pathname.replace(`/${locale}`, `/${value}`);
+        localStorage.setItem('language', value);
+        router.replace(newPath);
+    };
 
     return (
         <>
@@ -29,9 +49,13 @@ const Header = () => {
                     <div className={base.container}>
                         <div className={styles.headerTopInner}>
                             <div className={styles.headerLang}>
-                                <select className={styles.headerLangSelect}>
+                                <select
+                                    className={styles.headerLangSelect}
+                                    value={appLanguage}
+                                    onChange={changeLanguage}
+                                >
                                     <option value="ru" defaultChecked>
-                                        RU
+                                        Ru
                                     </option>
                                     <option value="he">He</option>
                                 </select>
@@ -50,12 +74,12 @@ const Header = () => {
                 <div className={styles.headerBottom}>
                     <div className={base.container}>
                         <div className={styles.headerBottomInner}>
-                            <Link href="/" className={styles.headerLogo}>
+                            <Link href={`/${locale}`} className={styles.headerLogo}>
                                 <Image src="/img/logo.png" alt="logo" fill />
                             </Link>
 
                             <nav className={styles.headerNav}>
-                                <div className={styles.headerNavParent}>
+                                {/* <div className={styles.headerNavParent}>
                                     <a href="#" className={styles.headerNavLink}>
                                         Рационы
                                         <ArrowBottom />
@@ -75,19 +99,23 @@ const Header = () => {
                                             Рацион для набора массы
                                         </a>
                                     </div>
-                                </div>
+                                </div> */}
 
-                                <Link href="/reviews" className={styles.headerNavLink}>
-                                    Отзывы
+                                <Link href={`/${locale}/menu`} className={styles.headerNavLink}>
+                                    {t('menu')}
                                 </Link>
 
-                                <a href="#" className={styles.headerNavLink}>
-                                    Контакты
-                                </a>
+                                <Link href={`/${locale}/reviews`} className={styles.headerNavLink}>
+                                    {t('reviews')}
+                                </Link>
 
-                                <a href="faq.html" className={styles.headerNavLink}>
-                                    Покупателю
-                                </a>
+                                {/* <a href="#" className={styles.headerNavLink}>
+                                    {t('contacts')}
+                                </a> */}
+
+                                <Link href={`/${locale}/faq`} className={styles.headerNavLink}>
+                                    {t('buyer')}
+                                </Link>
                             </nav>
 
                             <div className={styles.headerSocial}>
@@ -114,7 +142,10 @@ const Header = () => {
 
                                 {isAuth && (
                                     <>
-                                        <Link href="/account" className={cn(styles.headerSocialLink, styles.orange)}>
+                                        <Link
+                                            href={`/${locale}/account`}
+                                            className={cn(styles.headerSocialLink, styles.orange)}
+                                        >
                                             <UserLogin />
                                         </Link>
 
@@ -147,7 +178,7 @@ const Header = () => {
                 })}
             >
                 <div className={styles.menuMobileContent}>
-                    <div className={styles.menuMobileWrap}>
+                    {/* <div className={styles.menuMobileWrap}>
                         <a href="#" className={styles.menuMobileLink}>
                             Рационы
                             <ArrowBottom />
@@ -170,40 +201,23 @@ const Header = () => {
                                 Рацион для набора массы
                             </a>
                         </div>
-                    </div>
+                    </div> */}
 
-                    <a href="#" className={styles.menuMobileLink}>
-                        Отзывы
-                    </a>
+                    <Link href={`/${locale}/menu`} className={styles.menuMobileLink}>
+                        {t('menu')}
+                    </Link>
 
-                    <a href="#" className={styles.menuMobileLink}>
-                        Контакты
-                    </a>
+                    <Link href={`/${locale}/reviews`} className={styles.menuMobileLink}>
+                        {t('reviews')}
+                    </Link>
 
-                    <div className={styles.menuMobileWrap}>
-                        <a href="#" className={styles.menuMobileLink}>
-                            Покупателю
-                            <ArrowBottom />
-                        </a>
+                    {/* <a href="#" className={styles.menuMobileLink}>
+                        {t('contacts')}
+                    </a> */}
 
-                        <div className={styles.menuMobileDropdown}>
-                            <a href="#" className={styles.menuMobileDropdownLink}>
-                                Рацион сбалансированный
-                            </a>
-
-                            <a href="#" className={styles.menuMobileDropdownLink}>
-                                Рацион детокс
-                            </a>
-
-                            <a href="#" className={styles.menuMobileDropdownLink}>
-                                Рацион для похудения
-                            </a>
-
-                            <a href="#" className={styles.menuMobileDropdownLink}>
-                                Рацион для набора массы
-                            </a>
-                        </div>
-                    </div>
+                    <Link href={`/${locale}/faq`} className={styles.menuMobileLink}>
+                        {t('buyer')}
+                    </Link>
                 </div>
             </div>
 

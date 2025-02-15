@@ -2,13 +2,14 @@
 
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 import styles from './index.module.scss';
 
 import type { LoginDTO } from '@/entities/user/auth';
 import { ArrowRight, Lock, Mail } from '@/shared/icons';
 import { useAuth } from '@/features/user';
-import { EMAIL, PASSWORD } from '@/shared/consts/VALIDATIONS_FORM';
+import { useValidationMessages } from '@/shared/consts/VALIDATIONS_FORM';
 
 import { Text } from '@/shared/ui/Text';
 import { Input } from '@/shared/ui/Input';
@@ -31,6 +32,8 @@ const LoginModal: React.FC<Props> = ({ value, setValue, registerCallback = () =>
     } = useForm<LoginDTO>();
 
     const { login, authIsLoading } = useAuth();
+    const t = useTranslations('Login');
+    const { EMAIL, PASSWORD } = useValidationMessages();
 
     const onSubmit: SubmitHandler<LoginDTO> = (data) => {
         login(data, () => setValue(false));
@@ -40,14 +43,14 @@ const LoginModal: React.FC<Props> = ({ value, setValue, registerCallback = () =>
         <Modal value={value} setValue={setValue}>
             <div className={styles.modalAuthForm}>
                 <Text variant="h3" upper>
-                    Войти в личный кабинет
+                    {t('login_title')}
                 </Text>
 
                 <div className={styles.modalAuthText}>
-                    Еще не создали аккаунт? <button onClick={registerCallback}>Регистрация</button>
+                    {t('login_dont_have_account')} <button onClick={registerCallback}>{t('register')}</button>
                 </div>
 
-                <form onClick={handleSubmit(onSubmit)} className={styles.authForm}>
+                <form onSubmit={handleSubmit(onSubmit)} className={styles.authForm}>
                     <Input
                         {...register('email', EMAIL)}
                         error={!!errors.email}
@@ -55,7 +58,7 @@ const LoginModal: React.FC<Props> = ({ value, setValue, registerCallback = () =>
                         icon={<Mail />}
                         placeholder="mail@mail.cpm"
                         full
-                        title="Ваша почта"
+                        title={t('email')}
                         value={watch('email', '')}
                     />
 
@@ -66,19 +69,19 @@ const LoginModal: React.FC<Props> = ({ value, setValue, registerCallback = () =>
                         icon={<Lock />}
                         placeholder="********"
                         full
-                        title="Ваш пароль"
+                        title={t('password')}
                         type="password"
                         value={watch('password', '')}
                     />
 
                     <Button full>
-                        Войти
+                        {t('login')}
                         <ArrowRight />
                     </Button>
                 </form>
 
                 <button className={styles.recoveryPassword} onClick={recoveryCallback} disabled={authIsLoading}>
-                    Забыли пароль?
+                    {t('forgot_password')}
                 </button>
             </div>
         </Modal>

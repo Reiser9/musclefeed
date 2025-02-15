@@ -6,6 +6,7 @@ export type UserShortInfo = {
     firstName: string;
     lastName: string;
     phone: string;
+    allergies: string;
 };
 
 export type RegisterDTO = {
@@ -27,4 +28,4 @@ export type LoginDTO = {
 export type ChangePasswordDTO = {
     oldPassword: string;
     newPassword: string;
-}
+};

@@ -7,11 +7,11 @@ import styles from './index.module.scss';
 type Props = {
     id: string;
     label?: string;
-    value: boolean;
-    setValue: React.Dispatch<SetStateAction<boolean>>;
+    value?: boolean;
+    setValue?: React.Dispatch<SetStateAction<boolean>>;
 };
 
-const Checkbox: React.FC<Props> = ({ id, label, value, setValue }) => {
+const Checkbox: React.FC<Props> = ({ id, label, value, setValue, ...props }) => {
     return (
         <div className={styles.checkboxInner}>
             <input
@@ -19,7 +19,8 @@ const Checkbox: React.FC<Props> = ({ id, label, value, setValue }) => {
                 className={styles.checkbox}
                 id={id}
                 checked={value}
-                onChange={(e) => setValue(e.target.checked)}
+                onChange={(e) => setValue && setValue(e.target.checked)}
+                {...props}
             />
 
             <label htmlFor={id} className={styles.checkboxLabel}>

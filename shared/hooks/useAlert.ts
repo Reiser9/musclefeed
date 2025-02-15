@@ -10,7 +10,7 @@ const useAlert = () => {
 
     const localNotifies = useAppSelector((state) => state.notify.localNotifies);
 
-    const alertNotify = (title: string, text: string, type: TypesLocalNotify = 'success', time: number = 2000) => {
+    const alertNotify = (title: string, text: string, type: TypesLocalNotify = 'success', time: number = 4000) => {
         if (localNotifies.length >= 3) {
             return;
         }

@@ -2,13 +2,13 @@
 
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 import styles from './index.module.scss';
 
 import { ArrowRight, Lock, Mail } from '@/shared/icons';
-
-import { CODE, EMAIL, PASSWORD } from '@/shared/consts/VALIDATIONS_FORM';
 import { useAuth } from '@/features/user';
+import { useValidationMessages } from '@/shared/consts/VALIDATIONS_FORM';
 
 import { Text } from '@/shared/ui/Text';
 import { Input } from '@/shared/ui/Input';
@@ -32,11 +32,14 @@ const RecoveryModal: React.FC<Props> = ({ value, setValue, loginCallback = () =>
     const [email, setEmail] = React.useState('');
     const [verifyCode, setVerifyCode] = React.useState('');
     const { sendRecoveryCode, verifyRecoveryCode, changeRecoveryPassword } = useAuth();
+    const t = useTranslations('Recovery');
+    const { CODE, EMAIL, PASSWORD } = useValidationMessages();
 
     const {
         register,
         handleSubmit,
         watch,
+        reset,
         formState: { errors },
     } = useForm<FormData>();
 
@@ -57,6 +60,8 @@ const RecoveryModal: React.FC<Props> = ({ value, setValue, loginCallback = () =>
                 setValue(false);
                 setEmail('');
                 setVerifyCode('');
+                setStep(1);
+                reset();
             });
         }
     };
@@ -65,11 +70,11 @@ const RecoveryModal: React.FC<Props> = ({ value, setValue, loginCallback = () =>
         <Modal value={value} setValue={setValue}>
             <div className={styles.modalAuthForm}>
                 <Text variant="h3" upper>
-                    Восстановить пароль
+                    {t('recovery_title')}
                 </Text>
 
                 <div className={styles.modalAuthText}>
-                    Вспомнили пароль? <button onClick={loginCallback}>Авторизация</button>
+                    {t('remember_password')} <button onClick={loginCallback}>{t('auth')}</button>
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className={styles.authForm}>
@@ -81,7 +86,7 @@ const RecoveryModal: React.FC<Props> = ({ value, setValue, loginCallback = () =>
                             icon={<Mail />}
                             placeholder="mail@mail.cpm"
                             full
-                            title="Ваша почта"
+                            title={t('email')}
                             value={watch('email', '')}
                         />
                     )}
@@ -94,7 +99,7 @@ const RecoveryModal: React.FC<Props> = ({ value, setValue, loginCallback = () =>
                             icon={<Mail />}
                             placeholder="123456"
                             full
-                            title="Введите код подтверждения"
+                            title={t('enter_code')}
                             value={watch('code', '')}
                         />
                     )}
@@ -108,22 +113,22 @@ const RecoveryModal: React.FC<Props> = ({ value, setValue, loginCallback = () =>
                             placeholder="********"
                             full
                             type="password"
-                            title="Придумайте новый пароль"
+                            title={t('new_password')}
                             value={watch('password', '')}
                         />
                     )}
 
                     <Button full>
-                        {step === 1 && 'Напомнить пароль'}
-                        {step === 2 && 'Подтвердить'}
-                        {step === 3 && 'Изменить пароль'}
+                        {step === 1 && t('remind_password')}
+                        {step === 2 && t('comfirm')}
+                        {step === 3 && t('change_password')}
                         <ArrowRight />
                     </Button>
                 </form>
 
                 {step === 2 && (
                     <button className={styles.recoveryPassword} onClick={() => sendRecoveryCode(email)}>
-                        Выслать код повторно
+                        {t('resend_code')}
                     </button>
                 )}
             </div>

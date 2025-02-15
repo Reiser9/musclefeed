@@ -5,12 +5,14 @@ type AppStateType = {
     authIsLoading: boolean;
     isAuth: boolean;
     isVerified: boolean;
+    language: 'ru' | 'he';
 };
 
 const initialState: AppStateType = {
     authIsLoading: true,
     isAuth: false,
     isVerified: false,
+    language: 'ru',
 };
 
 export const appSlice = createSlice({
@@ -26,9 +28,12 @@ export const appSlice = createSlice({
         setIsVerified: (state, action: PayloadAction<boolean>) => {
             state.isVerified = action.payload;
         },
+        setLanguage: (state, action: PayloadAction<'ru' | 'he'>) => {
+            state.language = action.payload;
+        },
     },
 });
 
-export const { setIsAuth, setIsVerified, setAuthIsLoading } = appSlice.actions;
+export const { setIsAuth, setIsVerified, setAuthIsLoading, setLanguage } = appSlice.actions;
 
 export default appSlice.reducer;

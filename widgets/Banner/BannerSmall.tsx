@@ -2,6 +2,7 @@
 
 import React from 'react';
 import cn from 'classnames';
+import { useTranslations } from 'next-intl';
 
 import styles from './index.module.scss';
 import base from '@/shared/styles/base.module.scss';
@@ -11,6 +12,8 @@ import { ArrowRight } from '@/shared/icons';
 import { Button } from '@/shared/ui/Button';
 
 const BannerSmall = () => {
+    const t = useTranslations('Banner2');
+
     return (
         <section className={styles.banner}>
             <div className={base.container}>
@@ -19,18 +22,16 @@ const BannerSmall = () => {
 
                     <div className={styles.bannerContent}>
                         <h2 className={styles.bannerTitle}>
-                            <span>Заказать еду легко Выбирайте</span>
+                            <span>{t('title1')}</span>
                             <span>
-                                программу <span className={styles.green}>и достигайте цели</span>
+                                {t('title2')} <span className={styles.green}>{t('title3')}</span>
                             </span>
                         </h2>
 
-                        <p className={styles.bannerText}>
-                            Меню с КБЖУ: креветки, авокадо, свежие ягоды и другие премиальные продукты.
-                        </p>
+                        <p className={styles.bannerText}>{t('text')}</p>
 
                         <Button color="green" className={styles.bannerLinkSmall}>
-                            Узнать подробнее
+                            {t('button')}
                             <ArrowRight />
                         </Button>
                     </div>

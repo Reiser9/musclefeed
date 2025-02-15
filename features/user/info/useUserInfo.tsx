@@ -12,7 +12,10 @@ const useUserInfo = () => {
     const getShortInfo = async () => {
         const accessToken = localStorage.getItem('accessToken');
 
-        if (!accessToken) return dispatch(setAuthIsLoading(false));
+        if (!accessToken) {
+            dispatch(setAuthIsLoading(false));
+            return "";
+        }
 
         const response = await request<{ user: UserShortInfo }>({
             url: '/user',
@@ -21,14 +24,16 @@ const useUserInfo = () => {
         }).finally(() => dispatch(setAuthIsLoading(false)));
 
         if (catchRequestError(response)) {
-            return errorController(response);
-        }
-
-        if ('data' in response) {
-            dispatch(setIsVerified(response.data.user.isVerified));
+            errorController(response);
+            return "";
         }
 
         dispatch(setIsAuth(true));
+
+        if ('data' in response) {
+            dispatch(setIsVerified(response.data.user.isVerified));
+            return response.data.user;
+        }
     };
 
     return {

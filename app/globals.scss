@@ -92,7 +92,7 @@ input::-webkit-inner-spin-button{
 	appearance: none;
 }
 
-button, input{
+button, input, textarea{
 	border: none;
 	background: none;
 	outline: none;
@@ -108,6 +108,10 @@ input::placeholder{
 
 input:focus::placeholder{
 	opacity: 0;	
+}
+
+.rtl{
+	// direction: rtl;
 }
 
 @media (any-hover: hover) {

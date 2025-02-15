@@ -1,16 +1,18 @@
 import type { NextConfig } from 'next';
 import path from 'path';
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin("./request.ts");
 
 const nextConfig: NextConfig = {
     sassOptions: {
         includePaths: [path.join(__dirname, 'styles')],
     },
-    reactStrictMode: false,
-    i18n: {
-        locales: ['ru', 'he'],
-        defaultLocale: 'ru',
-        localeDetection: false,
+    images: {
+        domains: ['resez.ru'],
+        unoptimized: true,
     },
+    reactStrictMode: false,
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

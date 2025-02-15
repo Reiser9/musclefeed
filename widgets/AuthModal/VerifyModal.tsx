@@ -2,12 +2,13 @@
 
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 import styles from './index.module.scss';
 
 import { ArrowRight, Mail } from '@/shared/icons';
 import { useAuth } from '@/features/user';
-import { CODE } from '@/shared/consts/VALIDATIONS_FORM';
+import { useValidationMessages } from '@/shared/consts/VALIDATIONS_FORM';
 
 import { Modal } from '@/shared/ui/Modal';
 import { Text } from '@/shared/ui/Text';
@@ -28,6 +29,8 @@ const VerifyModal: React.FC<Props> = ({ value, setValue }) => {
     } = useForm<{ code: string }>();
 
     const { verifyEmail, authIsLoading, logout, resendVerifyCode } = useAuth();
+    const { CODE } = useValidationMessages();
+    const t = useTranslations('Verify');
 
     const onSubmit: SubmitHandler<{ code: string }> = (data) => {
         verifyEmail(data.code);
@@ -37,7 +40,7 @@ const VerifyModal: React.FC<Props> = ({ value, setValue }) => {
         <Modal value={value} setValue={setValue} withClose={false}>
             <div className={styles.modalAuthForm}>
                 <Text variant="h3" upper>
-                    Подтверждение почты
+                    {t('verify_title')}
                 </Text>
 
                 <form className={styles.authForm} onSubmit={handleSubmit(onSubmit)}>
@@ -48,22 +51,22 @@ const VerifyModal: React.FC<Props> = ({ value, setValue }) => {
                         icon={<Mail />}
                         placeholder="123456"
                         full
-                        title="Введите код подтверждения"
-                        value={watch('code')}
+                        title={t('enter_code')}
+                        value={watch('code', '')}
                     />
 
                     <Button full disabled={authIsLoading}>
-                        Подтвердить
+                        {t('confirm')}
                         <ArrowRight />
                     </Button>
                 </form>
 
                 <button className={styles.recoveryPassword} disabled={authIsLoading} onClick={() => resendVerifyCode()}>
-                    Выслать код повторно
+                    {t('resend_code')}
                 </button>
 
                 <button className={styles.recoveryPassword} disabled={authIsLoading} onClick={() => logout()}>
-                    Выйти из аккаунта
+                    {t('quit')}
                 </button>
             </div>
         </Modal>

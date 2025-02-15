@@ -9,14 +9,6 @@
     overflow-x: hidden;
     overflow-y: auto;
     display: block;
-	opacity: 0;
-	transition: opacity .2s linear;
-	pointer-events: none;
-}
-
-.modal.active{
-	opacity: 1;
-	pointer-events: all;
 }
 
 .modalInner{
@@ -77,4 +69,23 @@
 .modalClose svg{
 	width: 24px;
 	flex-shrink: 0;
+}
+
+.modalButtons{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	margin-top: 3.2rem;
+}
+
+.modalButtons:first-child{
+	margin-top: 0;
+}
+
+.modalButtons{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-top: 3.2rem;
 }

@@ -10,7 +10,7 @@ import { ArrowBottom, Error } from '@/shared/icons';
 type Props = {
     value?: string;
     setValue?: React.Dispatch<React.SetStateAction<string>>;
-    options: string[];
+    options: { id: number; name: string }[];
     title?: string;
     icon?: React.ReactNode;
     error?: boolean;
@@ -50,8 +50,10 @@ const Select: React.FC<Props> = ({
                     onChange={(e) => setValue && setValue(e.target.value)}
                     {...props}
                 >
-                    {options.map((elem, key) => (
-                        <option key={key}>{elem}</option>
+                    {options?.map((elem, key) => (
+                        <option key={key} value={elem.id}>
+                            {elem.name}
+                        </option>
                     ))}
                 </select>
             </div>
