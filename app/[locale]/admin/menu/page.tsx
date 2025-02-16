@@ -1,7 +1,8 @@
 'use client';
-import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import React from 'react';
+import cn from 'classnames';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import styles from './index.module.scss';
 
@@ -20,12 +21,12 @@ const AdminMenuPage = () => {
     const [page, setPage] = React.useState(1);
     const [search, setSearch] = React.useState('');
 
-    const queryClient = useQueryClient();
+    // const queryClient = useQueryClient();
     const searchDebounce = useDebounce(search, 500);
 
-    const revalidateRequest = () => {
-        queryClient.invalidateQueries({ queryKey: ['admin_menus'] });
-    };
+    // const revalidateRequest = () => {
+    //     queryClient.invalidateQueries({ queryKey: ['admin_menus'] });
+    // };
 
     const language = useAppSelector((state) => state.app.language);
 
@@ -49,7 +50,7 @@ const AdminMenuPage = () => {
         <div className={styles.adminTeam}>
             <div className={styles.adminTeamWrapper}>
                 <div className={styles.titleWrap}>
-                    <Text>Меню {!!data && !!data.elementsCount && `(${data.elementsCount})`}</Text>
+                    <Text>Меню {!!data && !!data.totalCount && `(${data.totalCount})`}</Text>
 
                     <div className={styles.adminDishSearch}>
                         <Input placeholder="Поиск" value={search} setValue={setSearch} full />
@@ -68,6 +69,22 @@ const AdminMenuPage = () => {
                     </div>
                 ) : (
                     <NotContent text="Нет меню" />
+                )}
+
+                {!!data && data.totalPages > 1 && (
+                    <div className={styles.pagination}>
+                        {[...Array(data.totalPages)].map((_, id) => (
+                            <button
+                                key={id}
+                                className={cn(styles.paginationButton, {
+                                    [styles.active]: id + 1 === data.page,
+                                })}
+                                onClick={() => setPage(id + 1)}
+                            >
+                                {id + 1}
+                            </button>
+                        ))}
+                    </div>
                 )}
             </div>
         </div>

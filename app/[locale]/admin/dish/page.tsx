@@ -49,7 +49,7 @@ const AdminDish = () => {
     return (
         <div className={styles.adminDish}>
             <div className={styles.titleWrapper}>
-                <Text>Блюда {!!data && !!data?.elementsCount && `(${data.elementsCount})`}</Text>
+                <Text>Блюда {!!data && !!data?.totalCount && `(${data?.totalCount})`}</Text>
 
                 <div className={styles.adminDishSearch}>
                     <Input placeholder="Поиск" value={search} setValue={setSearch} full />

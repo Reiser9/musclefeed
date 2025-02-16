@@ -32,7 +32,7 @@ const FaqAdminItem: React.FC<Props> = ({ data, deleteCallback = () => {} }) => {
                 </Link>
 
                 <div className={styles.faqAdminItemAnswer}>
-                    <Text variant="text2">{parse(answer?.ru)}</Text>
+                    {parse(answer?.ru)}
                 </div>
 
                 <Text variant="text2">{faqCategory.name?.ru}</Text>

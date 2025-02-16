@@ -1,18 +1,26 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 import styles from './index.module.scss';
+
+import type { Dish } from '../model';
 import { Swap } from '@/shared/icons';
+
 import { Button } from '@/shared/ui/Button';
 
-type Props = {};
+type Props = {
+    data?: Dish;
+};
 
-const DishItem: React.FC<Props> = ({}) => {
+const DishItem: React.FC<Props> = ({ data }) => {
+    const { picture, name, description, proteins, fats, carbohydrates, calories } = data || {};
+
     return (
         <div className={styles.foodItem}>
             <div className={styles.foodItemImg}>
-                <img src="/img/food.png" alt="food" />
+                <Image src="/img/food.png" alt="food" fill />
             </div>
 
             <div className={styles.foodItemTextInner}>

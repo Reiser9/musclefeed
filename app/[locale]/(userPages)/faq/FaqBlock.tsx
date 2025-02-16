@@ -33,8 +33,8 @@ const FaqBlock = () => {
         isPending: faqsIsPending,
         isError: faqsIsError,
     } = useQuery({
-        queryKey: ['faq'],
-        queryFn: getFaq,
+        queryKey: ['faq', activeCategory],
+        queryFn: () => getFaq(activeCategory),
         enabled: !!activeCategory,
     });
 
@@ -101,11 +101,9 @@ const FaqBlock = () => {
                         <NotContent />
                     ) : !!faqs && !!faqs.length ? (
                         <div className={styles.faqContent}>
-                            {faqs
-                                .filter((elem) => elem.faqCategory.id === activeCategory)
-                                .map((faq) => (
-                                    <FaqItem key={faq.id} data={faq} />
-                                ))}
+                            {faqs.map((faq) => (
+                                <FaqItem key={faq.id} data={faq} />
+                            ))}
                         </div>
                     ) : (
                         <NotContent text="В данной категории вопросов еще нет" />

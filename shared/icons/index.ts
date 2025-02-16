@@ -42,3 +42,4 @@ export { Switch } from './Switch';
 export { Broccoli } from './Broccoli';
 export { Vegetables } from './Vegetables';
 export { Copy } from './Copy';
+export { Order } from './Order';

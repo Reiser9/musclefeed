@@ -2,9 +2,11 @@
 
 import React from 'react';
 import Image from 'next/image';
+import cn from 'classnames';
 
 import styles from './index.module.scss';
-import { ReviewSend } from '../model';
+
+import type { ReviewSend } from '../model';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 
 type Props = {
@@ -12,9 +14,19 @@ type Props = {
 };
 
 const ReviewItem: React.FC<Props> = ({ data }) => {
+    const [seeFull, setSeeFull] = React.useState(false);
+    const [isOverflowing, setIsOverflowing] = React.useState(false);
+    const textRef = React.useRef<HTMLParagraphElement>(null);
+
     const { author, text, picture } = data || {};
 
     const language = useAppSelector((state) => state.app.language);
+
+    React.useEffect(() => {
+        if (textRef.current) {
+            setIsOverflowing(textRef.current.scrollHeight > 120);
+        }
+    }, [text]);
 
     return (
         <div className={styles.reviewsItem}>
@@ -28,9 +40,20 @@ const ReviewItem: React.FC<Props> = ({ data }) => {
                 <p className={styles.reviewsItemName}>{author[language]}</p>
 
                 <div className={styles.reviewsItemTextInner}>
-                    <p className={styles.reviewsItemText}>{text[language]}</p>
+                    <p
+                        className={cn(styles.reviewsItemText, {
+                            [styles.active]: seeFull,
+                        })}
+                        ref={textRef}
+                    >
+                        {text[language]}
+                    </p>
 
-                    <button className={styles.reviewsItemTextFull}>Смотреть весь отзыв</button>
+                    {isOverflowing && (
+                        <button className={styles.reviewsItemTextFull} onClick={() => setSeeFull((prev) => !prev)}>
+                            {seeFull ? 'Свернуть' : 'Смотреть весь отзыв'}
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

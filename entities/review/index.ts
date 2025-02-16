@@ -1,1 +1,1 @@
-export type { ReviewSendDTO, ReviewSend, ReviewPagination } from './model';
+export type { ReviewSendDTO, ReviewSend, ReviewPagination, Review, ReviewDTO } from './model';

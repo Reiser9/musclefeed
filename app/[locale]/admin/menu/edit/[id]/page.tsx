@@ -1,34 +1,87 @@
 'use client';
 
 import React from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { DatePicker } from 'antd';
-import { Dayjs } from 'dayjs';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import dayjs, { Dayjs } from 'dayjs';
 
-import styles from '../index.module.scss';
+import styles from '../../index.module.scss';
 
 import type { MenuDay, MenuDTO } from '@/entities/menu';
+import { useMenu } from '@/features/menu';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 import { Foods, Plus } from '@/shared/icons';
-import { useMenu } from '@/features/menu';
 import { useAdminDish } from '@/features/admin';
-import DayItem from '../ui/DayItem';
+import DayItem from '../../ui/DayItem';
 
-import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/Button';
 import { Text } from '@/shared/ui/Text';
-import { Checkbox } from '@/shared/ui/Checkbox';
+import { Input } from '@/shared/ui/Input';
+import { NotContent } from '@/shared/ui/NotContent';
 import { Select } from '@/shared/ui/Select';
 import { Preloader } from '@/shared/ui/Preloader';
-import { NotContent } from '@/shared/ui/NotContent';
+import { Checkbox } from '@/shared/ui/Checkbox';
 
-const AdminMenuCreate = () => {
+const AdminMenuEdit = () => {
+    const { id } = useParams();
     const [cycleDate, setCycleDate] = React.useState<Dayjs | null>(null);
+    const [publish, setPublish] = React.useState(false);
 
-    // Дни меню
     const [days, setDays] = React.useState<MenuDay[]>([{ number: 1, dishes: [] }]);
+
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm<MenuDTO>();
+
+    const { updateMenu, getMenuById, getTypesmenu } = useMenu();
+    const { getDishTypes, getDishsPagination } = useAdminDish();
+    const language = useAppSelector((state) => state.app.language);
+    const router = useRouter();
+
+    const {
+        data: menu,
+        isPending: menuIsPending,
+        isError: menuIsError,
+    } = useQuery({
+        queryKey: ['menu_by_id', id],
+        queryFn: () => getMenuById(String(id)),
+        enabled: !!id,
+    });
+
+    const { adminName, calories, cycleStartDate, description, isPublished, name, order, days: menuDays } = menu || {};
+
+    const { data, isPending, isError } = useQuery({
+        queryKey: ['typesmenu'],
+        queryFn: getTypesmenu,
+    });
+
+    const { data: dishTypes } = useQuery({
+        queryKey: ['dish_types'],
+        queryFn: getDishTypes,
+    });
+
+    const { data: dish } = useQuery({
+        queryKey: ['dish'],
+        queryFn: () => getDishsPagination(1, 1500, ''),
+    });
+
+    const onSubmit: SubmitHandler<MenuDTO> = (data) => {
+        if (!cycleDate) return;
+
+        const daysWithoutNulls = days.map((day) => ({
+            ...day,
+            dishes: day.dishes.filter((dish) => dish.dishId !== null),
+        }));
+
+        const menuData = { ...data, cycleStartDate: cycleDate?.toDate(), days: daysWithoutNulls, isPublished: publish };
+
+        updateMenu(String(id), menuData, () => router.replace(`/${language}/admin/menu`));
+    };
 
     const addDay = () => {
         if (days.length >= 50) return;
@@ -86,55 +139,48 @@ const AdminMenuCreate = () => {
         );
     };
 
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm<MenuDTO>();
+    React.useEffect(() => {
+        if (cycleStartDate) {
+            setCycleDate(dayjs(cycleStartDate));
+        }
+    }, [cycleStartDate]);
 
-    const { createMenu, getTypesmenu } = useMenu();
-    const { getDishTypes, getDishsPagination } = useAdminDish();
-    const language = useAppSelector((state) => state.app.language);
-    const router = useRouter();
+    React.useEffect(() => {
+        setPublish(!!isPublished);
+    }, [isPublished]);
 
-    const { data, isPending, isError } = useQuery({
-        queryKey: ['typesmenu'],
-        queryFn: getTypesmenu,
-    });
+    React.useEffect(() => {
+        if (menuDays && !!menuDays.length) {
+            const formatted = menuDays.map((item) => ({
+                number: item.number,
+                dishes: item.dishes.map((dish) => ({
+                    dishTypeId: dish.dishType.id.toString(),
+                    dishId: dish.dish.id.toString(),
+                    isPrimary: dish.isPrimary,
+                })),
+            }));
 
-    const { data: dishTypes } = useQuery({
-        queryKey: ['dish_types'],
-        queryFn: getDishTypes,
-    });
+            setDays(formatted);
+        }
+    }, [menuDays]);
 
-    const { data: dish } = useQuery({
-        queryKey: ['dish'],
-        queryFn: () => getDishsPagination(1, 1500, ''),
-    });
+    if (menuIsPending) {
+        return <Preloader page />;
+    }
 
-    const onSubmit: SubmitHandler<MenuDTO> = (data) => {
-        if (!cycleDate) return;
-
-        const daysWithoutNulls = days.map((day) => ({
-            ...day,
-            dishes: day.dishes.filter((dish) => dish.dishId !== null),
-        }));
-
-        const menuData = { ...data, cycleStartDate: cycleDate?.toDate(), days: daysWithoutNulls };
-
-        createMenu(menuData, () => router.replace(`/${language}/admin/menu`));
-    };
+    if (menuIsError) {
+        return <NotContent />;
+    }
 
     return (
         <div className={styles.adminTeam}>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.createMenuForm}>
                 <div className={styles.menuFormFull}>
-                    <Text>Создание меню</Text>
+                    <Text>Редактирование меню</Text>
                 </div>
 
                 <div className={styles.menuFormFull}>
-                    <Checkbox id="create_menu_publish" label="Опубликовать" {...register('isPublished')} />
+                    <Checkbox id="create_menu_publish" label="Опубликовать" value={publish} setValue={setPublish} />
                 </div>
 
                 <div className={styles.menuFormItem}>
@@ -165,7 +211,7 @@ const AdminMenuCreate = () => {
                         errorMessage={errors.adminName?.message}
                         full
                         title={'Название для админа'}
-                        value={watch('adminName', '')}
+                        value={watch('adminName', adminName)}
                     />
                 </div>
 
@@ -176,7 +222,7 @@ const AdminMenuCreate = () => {
                         errorMessage={errors.nameRu?.message}
                         full
                         title={'Название ru'}
-                        value={watch('nameRu', '')}
+                        value={watch('nameRu', name?.ru)}
                     />
                 </div>
 
@@ -187,7 +233,7 @@ const AdminMenuCreate = () => {
                         errorMessage={errors.nameHe?.message}
                         full
                         title={'Название he'}
-                        value={watch('nameHe', '')}
+                        value={watch('nameHe', name?.he)}
                     />
                 </div>
 
@@ -198,7 +244,7 @@ const AdminMenuCreate = () => {
                         errorMessage={errors.descriptionRu?.message}
                         full
                         title={'Описание ru'}
-                        value={watch('descriptionRu', '')}
+                        value={watch('descriptionRu', description?.ru)}
                         component="textarea"
                     />
                 </div>
@@ -210,7 +256,7 @@ const AdminMenuCreate = () => {
                         errorMessage={errors.descriptionHe?.message}
                         full
                         title={'Описание he'}
-                        value={watch('descriptionHe', '')}
+                        value={watch('descriptionHe', description?.he)}
                         component="textarea"
                     />
                 </div>
@@ -222,7 +268,7 @@ const AdminMenuCreate = () => {
                         errorMessage={errors.calories?.message}
                         full
                         title={'Калории'}
-                        value={watch('calories', '')}
+                        value={watch('calories', String(calories))}
                         type="number"
                     />
                 </div>
@@ -234,7 +280,7 @@ const AdminMenuCreate = () => {
                         errorMessage={errors.order?.message}
                         full
                         title={'Порядок'}
-                        value={watch('order', '')}
+                        value={watch('order', String(order))}
                         type="number"
                     />
                 </div>
@@ -276,10 +322,10 @@ const AdminMenuCreate = () => {
                     </span>
                 </div>
 
-                <Button full>Создать</Button>
+                <Button full>Сохранить</Button>
             </form>
         </div>
     );
 };
 
-export default AdminMenuCreate;
+export default AdminMenuEdit;

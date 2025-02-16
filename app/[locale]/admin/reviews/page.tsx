@@ -1,14 +1,12 @@
 'use client';
 
 import React from 'react';
+import cn from 'classnames';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import styles from './index.module.scss';
 
-import { useTeam } from '@/features/team';
-import { useAdminTeam } from '@/features/admin';
 import { useAppSelector } from '@/shared/hooks/useRedux';
-import { TeamAdminItem } from '@/entities/team/ui';
 
 import { Preloader } from '@/shared/ui/Preloader';
 import { Button } from '@/shared/ui/Button';
@@ -22,15 +20,15 @@ const AdminReviews = () => {
     const queryClient = useQueryClient();
 
     const revalidateRequest = () => {
-        queryClient.invalidateQueries({ queryKey: ['team'] });
+        queryClient.invalidateQueries({ queryKey: ['admin_reviews'] });
     };
 
     const language = useAppSelector((state) => state.app.language);
 
-    const { getAdminReviews } = useReviews();
+    const { getAdminReviews, deleteReview } = useReviews();
 
     const { data, isPending, isError } = useQuery({
-        queryKey: ['admin_reviews'],
+        queryKey: ['admin_reviews', page],
         queryFn: () => getAdminReviews(page),
     });
 
@@ -46,25 +44,41 @@ const AdminReviews = () => {
         <div className={styles.adminTeam}>
             <div className={styles.adminTeamWrapper}>
                 <div className={styles.titleWrap}>
-                    <Text>Отзывы {!!data && !!data.length && `(${data.length})`}</Text>
+                    <Text>Отзывы {!!data && !!data.totalCount && `(${data.totalCount})`}</Text>
 
                     <Button href={`/${language}/admin/reviews/create`} small>
                         Создать
                     </Button>
                 </div>
 
-                {!!data && !!data.length ? (
+                {!!data && !!data?.reviews.length ? (
                     <div className={styles.adminTeamItems}>
-                        {data?.map((review) => (
+                        {data?.reviews.map((review) => (
                             <ReviewsAdminItem
                                 key={review.id}
                                 data={review}
-                                deleteCallback={() => deleteMember(review.id, revalidateRequest)}
+                                deleteCallback={() => deleteReview(review.id, revalidateRequest)}
                             />
                         ))}
                     </div>
                 ) : (
                     <NotContent text="Нет отзывов" />
+                )}
+
+                {!!data && data.totalPages > 1 && (
+                    <div className={styles.pagination}>
+                        {[...Array(data.totalPages)].map((_, id) => (
+                            <button
+                                key={id}
+                                className={cn(styles.paginationButton, {
+                                    [styles.active]: id + 1 === data.page,
+                                })}
+                                onClick={() => setPage(id + 1)}
+                            >
+                                {id + 1}
+                            </button>
+                        ))}
+                    </div>
                 )}
             </div>
         </div>

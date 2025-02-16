@@ -8,12 +8,11 @@ import styles from './index.module.scss';
 import base from '@/shared/styles/base.module.scss';
 
 import { AuthWrapper } from '@/shared/wrappers/InitialWrapper';
-import { ArrowRightShort, Home, Safe } from '@/shared/icons';
+import { ArrowRightShort, Home, Safe, Order } from '@/shared/icons';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 
 import { BreadcrumbLink, Breadcrumbs, BreadcrumbText } from '@/shared/ui/Breadcrumbs';
 import { Text } from '@/shared/ui/Text';
-import { Order } from '@/shared/icons/Order';
 
 const Account = () => {
     const language = useAppSelector((state) => state.app.language);

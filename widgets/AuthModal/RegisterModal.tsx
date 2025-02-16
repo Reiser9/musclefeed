@@ -10,13 +10,13 @@ import type { RegisterDTO } from '@/entities/user/auth';
 import { ArrowRight, Lock, Mail } from '@/shared/icons';
 import { useAuth } from '@/features/user';
 import { useValidationMessages } from '@/shared/consts/VALIDATIONS_FORM';
+import { useAppSelector } from '@/shared/hooks/useRedux';
 
 import { Text } from '@/shared/ui/Text';
 import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/Button';
 import { Checkbox } from '@/shared/ui/Checkbox';
 import { Modal } from '@/shared/ui/Modal';
-import { useAppSelector } from '@/shared/hooks/useRedux';
 
 type Props = {
     value: boolean;

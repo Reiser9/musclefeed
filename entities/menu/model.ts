@@ -32,14 +32,12 @@ export type MenuType = {
 };
 
 export type MenuDay = {
-    number: number | string;
-    dishes: [
-        {
-            dishTypeId: string;
-            dishId: string;
-            isPrimary: boolean;
-        },
-    ];
+    number: number;
+    dishes: {
+        dishTypeId: string;
+        dishId: string | null;
+        isPrimary: boolean;
+    }[];
 };
 
 export type MenuDTO = {
@@ -67,10 +65,10 @@ export type Menu = {
     isPublished: boolean;
     createdAt: Date;
     updatedAt: Date;
+    daysCount: number;
     menuType: {
         id: number;
         name: LanguageField;
-        daysCount: number;
     };
 };
 

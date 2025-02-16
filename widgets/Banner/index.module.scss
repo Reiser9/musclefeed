@@ -47,10 +47,15 @@
 .bannerFood{
 	width: 100%;
 	max-width: 650px;
+	aspect-ratio: 1 / 1;
 	position: absolute;
 	right: 30px;
 	bottom: -70px;
 	pointer-events: none;
+}
+
+.bannerFood img{
+	object-fit: contain;
 }
 
 .bannerFood.small{
@@ -74,10 +79,10 @@
 		right: -25px;
     }
 }
-@media (max-width: 480px) {
+@media (max-width: 390px) {
 	.bannerFood {
-        width: auto;
-    }
+		bottom: -90px;
+	}
 }
 
 .bannerSign{

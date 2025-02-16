@@ -7,9 +7,9 @@ import { useAppSelector } from '@/shared/hooks/useRedux';
 import styles from './index.module.scss';
 import base from '@/shared/styles/base.module.scss';
 
+import type { ChangePasswordDTO } from '@/entities/user/auth';
 import { ArrowRight, ArrowRightShort, Home, Password } from '@/shared/icons';
 import { AuthWrapper } from '@/shared/wrappers/InitialWrapper';
-import type { ChangePasswordDTO } from '@/entities/user/auth';
 import { useAuth } from '@/features/user';
 import { useValidationMessages } from '@/shared/consts/VALIDATIONS_FORM';
 

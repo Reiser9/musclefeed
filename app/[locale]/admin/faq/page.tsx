@@ -27,7 +27,7 @@ const AdminFaq = () => {
 
     const { data, isPending, isError } = useQuery({
         queryKey: ['faq'],
-        queryFn: getFaq,
+        queryFn: () => getFaq(),
     });
 
     if (isPending) {

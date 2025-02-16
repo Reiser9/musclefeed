@@ -91,6 +91,7 @@ const AdminTeamCreate = () => {
                     full
                     title={'Описание ru'}
                     value={watch('descriptionRu', '')}
+                    component="textarea"
                 />
 
                 <Input
@@ -100,6 +101,7 @@ const AdminTeamCreate = () => {
                     full
                     title={'Описание he'}
                     value={watch('descriptionHe', '')}
+                    component="textarea"
                 />
 
                 <Button full>Создать</Button>

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import cn from 'classnames';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
 import styles from './index.module.scss';
@@ -18,7 +19,9 @@ const BannerSmall = () => {
         <section className={styles.banner}>
             <div className={base.container}>
                 <div className={styles.banner2Inner}>
-                    <img src="/img/foods.png" alt="img" className={cn(styles.bannerFood, styles.small)} />
+                    <div className={cn(styles.bannerFood, styles.small)}>
+                        <Image src="/img/foods.png" alt="img" fill />
+                    </div>
 
                     <div className={styles.bannerContent}>
                         <h2 className={styles.bannerTitle}>

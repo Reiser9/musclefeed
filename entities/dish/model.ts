@@ -46,7 +46,7 @@ export type Dish = {
 };
 
 export type Pagination = {
-    elementsCount: number;
+    totalCount: number;
     page: number;
     totalPages: number;
     isLast: boolean;

@@ -6,9 +6,9 @@ import useRequest from '@/shared/hooks/useRequest';
 const useFaq = () => {
     const { request, catchRequestError, errorController } = useRequest();
 
-    const getFaq = async () => {
+    const getFaq = async (faqCategoryId?: number | string) => {
         const response = await request<{ faq: FaqItem[] }>({
-            url: '/faq',
+            url: `/faq?faq_category_id=${faqCategoryId}`,
             method: 'GET',
         });
 

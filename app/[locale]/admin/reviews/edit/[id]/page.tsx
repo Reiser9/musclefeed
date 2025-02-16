@@ -2,22 +2,27 @@
 
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 
-import styles from '../index.module.scss';
+import styles from '../../index.module.scss';
 
 import type { ReviewDTO } from '@/entities/review';
-import { useAppSelector } from '@/shared/hooks/useRedux';
 import { useReviews } from '@/features/reviews';
+import { useAppSelector } from '@/shared/hooks/useRedux';
 
 import { FileUpload } from '@/shared/ui/FileUpload';
 import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/Button';
 import { Text } from '@/shared/ui/Text';
 import { Checkbox } from '@/shared/ui/Checkbox';
+import { Preloader } from '@/shared/ui/Preloader';
+import { NotContent } from '@/shared/ui/NotContent';
 
-const AdminCreateReview = () => {
+const AdminReviewEdit = () => {
+    const { id } = useParams();
     const [picture, setPicture] = React.useState('');
+    const [publish, setPublish] = React.useState(false);
 
     const {
         register,
@@ -26,20 +31,46 @@ const AdminCreateReview = () => {
         formState: { errors },
     } = useForm<ReviewDTO>();
 
-    const { createReview } = useReviews();
+    const { updateReview, getReviewById } = useReviews();
     const language = useAppSelector((state) => state.app.language);
     const router = useRouter();
 
-    const onSubmit: SubmitHandler<ReviewDTO> = (data) => {
-        const reviewData = { ...data, picture };
+    const { data, isPending, isError } = useQuery({
+        queryKey: ['review_by_id', id],
+        queryFn: () => getReviewById(String(id)),
+        enabled: !!id,
+    });
 
-        createReview(reviewData, () => router.replace(`/${language}/admin/reviews`));
+    const onSubmit: SubmitHandler<ReviewDTO> = (data) => {
+        const dishData = { ...data, picture, isPublished: publish };
+
+        updateReview(String(id), dishData, () => router.replace(`/${language}/admin/reviews`));
     };
+
+    const { author, isPublished, picture: reviewPicture, text } = data || {};
+
+    React.useEffect(() => {
+        if (reviewPicture) {
+            setPicture(reviewPicture);
+        }
+    }, [reviewPicture]);
+
+    React.useEffect(() => {
+        setPublish(!!isPublished);
+    }, [isPublished]);
+
+    if (isPending) {
+        return <Preloader page />;
+    }
+
+    if (isError) {
+        return <NotContent />;
+    }
 
     return (
         <div className={styles.adminTeam}>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.createForm}>
-                <Text>Создание отзыва</Text>
+                <Text>Редактирование отзыва</Text>
 
                 <FileUpload
                     title="Изображение"
@@ -49,7 +80,7 @@ const AdminCreateReview = () => {
                     isAdmin={true}
                 />
 
-                <Checkbox id="create_review_publish" label="Опубликовать" {...register('isPublished')} />
+                <Checkbox id="create_review_publish" label="Опубликовать" value={publish} setValue={setPublish} />
 
                 <Input
                     {...register('authorRu')}
@@ -57,7 +88,7 @@ const AdminCreateReview = () => {
                     errorMessage={errors.authorRu?.message}
                     full
                     title={'Автор ru'}
-                    value={watch('authorRu', '')}
+                    value={watch('authorRu', author?.ru)}
                 />
 
                 <Input
@@ -66,7 +97,7 @@ const AdminCreateReview = () => {
                     errorMessage={errors.authorHe?.message}
                     full
                     title={'Автор he'}
-                    value={watch('authorHe', '')}
+                    value={watch('authorHe', author?.he)}
                 />
 
                 <Input
@@ -75,8 +106,7 @@ const AdminCreateReview = () => {
                     errorMessage={errors.textRu?.message}
                     full
                     title={'Текст ru'}
-                    value={watch('textRu', '')}
-                    component="textarea"
+                    value={watch('textRu', text?.ru)}
                 />
 
                 <Input
@@ -85,14 +115,13 @@ const AdminCreateReview = () => {
                     errorMessage={errors.textHe?.message}
                     full
                     title={'Текст he'}
-                    value={watch('textHe', '')}
-                    component="textarea"
+                    value={watch('textHe', text?.he)}
                 />
 
-                <Button full>Создать</Button>
+                <Button full>Сохранить</Button>
             </form>
         </div>
     );
 };
 
-export default AdminCreateReview;
+export default AdminReviewEdit;

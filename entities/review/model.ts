@@ -16,5 +16,24 @@ export type ReviewSend = {
 };
 
 export type ReviewPagination = Pagination & {
-    reviews: ReviewSend[];
+    reviews: Review[];
+};
+
+export type ReviewDTO = {
+    picture: string;
+    authorRu: string;
+    authorHe: string;
+    textRu: string;
+    textHe: string;
+    isPublished: boolean;
+};
+
+export type Review = {
+    id: number;
+    picture: string;
+    author: LanguageField;
+    text: LanguageField;
+    isPublished: boolean;
+    createdAt: Date;
+    updatedAt: Date;
 };

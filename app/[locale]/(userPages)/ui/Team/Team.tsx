@@ -42,11 +42,11 @@ const Team = () => {
             <div className={base.container}>
                 <div className={styles.teamInner}>
                     <div className={styles.reviewsTitleWrap}>
-                        <Text variant='h1' upper className={styles.reviewsTitle}>{t('team_title')}</Text>
+                        <Text variant="h1" upper className={styles.reviewsTitle}>
+                            {t('team_title')}
+                        </Text>
 
-                        <p className={styles.reviewsText}>
-                            {t('team_text')}
-                        </p>
+                        <p className={styles.reviewsText}>{t('team_text')}</p>
                     </div>
 
                     <div className={styles.teamWrap}>

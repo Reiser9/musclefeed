@@ -21,7 +21,9 @@ const Delivery = () => {
                 <div className={styles.mapInner}>
                     <div className={styles.mapContent}>
                         <div className={styles.mapTextInner}>
-                            <Text variant='h1' upper>{t('delivery_title')}</Text>
+                            <Text variant="h1" upper>
+                                {t('delivery_title')}
+                            </Text>
 
                             <p className={styles.mapTextText}>{t('delivery_text')}</p>
                         </div>

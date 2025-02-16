@@ -10,17 +10,23 @@ import base from '@/shared/styles/base.module.scss';
 import { ArrowRight, Broccoli, Foods, Moped, Switch, Vegetables } from '@/shared/icons';
 
 import { Button } from '@/shared/ui/Button';
+import Image from 'next/image';
 
 const MainBlock = () => {
-    const t = useTranslations("MainBlock");
+    const t = useTranslations('MainBlock');
 
     return (
         <main className={styles.main}>
             <div className={base.container}>
                 <div className={styles.mainWrapper}>
                     <div className={styles.mainInner}>
-                        <img src="/img/main-bg.png" alt="bg" className={styles.mainBg} />
-                        <img src="/img/main-food.png" alt="food" className={styles.mainImg} />
+                        <div className={styles.mainBg}>
+                            <Image src="/img/main-bg.png" alt="bg" fill />
+                        </div>
+
+                        <div className={styles.mainImg}>
+                            <Image src="/img/main-food.png" alt="food" fill />
+                        </div>
 
                         <div className={styles.mainContent}>
                             <h1 className={styles.mainTitleInner}>
@@ -30,9 +36,7 @@ const MainBlock = () => {
                             </h1>
 
                             <div className={styles.mainTextInner}>
-                                <p className={styles.mainText}>
-                                    {t('text')}
-                                </p>
+                                <p className={styles.mainText}>{t('text')}</p>
 
                                 <p className={styles.mainSubtext}>{t('subtext')}</p>
                             </div>

@@ -43,7 +43,7 @@ const AdminEditDish = () => {
         isPending: dishIsPending,
         isError: dishIsError,
     } = useQuery({
-        queryKey: ['team_by_id', id],
+        queryKey: ['dish_by_id', id],
         queryFn: () => getDishById(String(id)),
         enabled: !!id,
     });

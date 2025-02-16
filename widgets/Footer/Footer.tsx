@@ -11,7 +11,7 @@ import base from '@/shared/styles/base.module.scss';
 import { Email, Facebook, Instagram, Phone, Telegram, WhatsApp } from '@/shared/icons';
 
 const Footer = () => {
-    const t = useTranslations("Footer");
+    const t = useTranslations('Footer');
 
     return (
         <footer className={styles.footer}>
@@ -148,9 +148,7 @@ const Footer = () => {
                     <div className={styles.footerBottomInner}>
                         <p className={styles.footerCopy}>&copy; {t('copy')}</p>
 
-                        <p className={styles.footerText}>
-                            {t('photo')}
-                        </p>
+                        <p className={styles.footerText}>{t('photo')}</p>
 
                         <div className={styles.footerLinks}>
                             <a href="#" className={styles.footerLink}>

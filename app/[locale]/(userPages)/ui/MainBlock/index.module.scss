@@ -49,6 +49,10 @@
 	user-select: none;
 }
 
+.mainBg img{
+	object-fit: cover;
+}
+
 .mainMan{
 	position: absolute;
 	pointer-events: none;
@@ -68,6 +72,11 @@
 	top: -180px;
 	width: 100%;
 	max-width: 800px;
+	aspect-ratio: 1 / 1.15;
+}
+
+.mainImg img{
+	object-fit: contain;
 }
 
 @media (max-width: 1630px) {
@@ -91,15 +100,14 @@
 }
 @media (max-width: 768px) {
 	.mainImg{
-		top: 305px;
+		top: 365px;
 		right: -55px;
 	}
 }
 @media (max-width: 450px) {
 	.mainImg {
-        top: 355px;
+        top: 385px;
         right: -40px;
-		width: auto;
     }
 }
 

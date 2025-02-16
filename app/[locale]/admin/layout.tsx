@@ -10,7 +10,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <PrivateWrapper haveRole="ADMIN">
+        <PrivateWrapper haveRole="MODERATOR">
             <div className={styles.adminWrapper}>
                 <AdminSidebar />
 

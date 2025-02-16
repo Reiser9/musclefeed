@@ -2,6 +2,7 @@
 
 import React from 'react';
 import cn from 'classnames';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
 import styles from './index.module.scss';
@@ -22,7 +23,10 @@ const Banner: React.FC<Props> = ({ innerClass }) => {
         <section className={styles.banner}>
             <div className={base.container}>
                 <div className={cn(styles.bannerInner, innerClass)}>
-                    <img src="/img/foods.png" alt="img" className={styles.bannerFood} />
+                    <div className={styles.bannerFood}>
+                        <Image src="/img/foods.png" alt="img" fill />
+                    </div>
+
                     <p className={cn(styles.bannerSign, styles.bannerSign1)}>{t('abs_text1')}</p>
                     <p className={cn(styles.bannerSign, styles.bannerSign2)}>{t('abs_text2')}</p>
 
