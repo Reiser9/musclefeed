@@ -35,6 +35,12 @@
 	user-select: none;
 }
 
+@media (max-width: 450px) {
+	.complexItem{
+		padding: 1.6rem;
+	}
+}
+
 .complexItem:nth-child(2n + 1){
 	background: #F0FAF2;
 }
@@ -67,11 +73,23 @@
 	margin: 1.6rem 0 .4rem 0;
 }
 
+@media (max-width: 450px) {
+	.complexTextText{
+		max-width: 210px;
+	}
+}
+
 .complexTextPrice{
 	color: #00A31E;
 	font-size: 3.2rem;
 	font-weight: 700;
 	margin-top: auto;
+}
+
+@media (max-width: 768px) {
+	.complexTextPrice{
+		font-size: 2.4rem;
+	}
 }
 
 .complexItemImg{
@@ -84,20 +102,23 @@
 	height: 90%;
 }
 
+@media (max-width: 768px) {
+	.complexItemImg{
+		right: -90px;
+		max-width: 170px;
+	}
+}
+
 .complexItemImg img{
 	object-fit: contain;
 }
 
 .complexWrp{
 	width: 100%;
-	display: none;
+	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
 	margin-top: 6.4rem;
-}
-
-.complexWrp.active{
-	display: flex;
 }
 
 .foodWrap, .foodMenu{
@@ -304,6 +325,14 @@
 	gap: 16px;
 }
 
+@media (max-width: 768px) {
+	.foodFormItem{
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 24px;
+	}
+}
+
 .foodFormItemName{
 	width: 100%;
 	max-width: 290px;
@@ -318,6 +347,17 @@
 	font-size: 2.2rem;
 	line-height: 1.2;
 	font-weight: 500;
+}
+
+@media (max-width: 1630px) {
+	.foodFormItemName{
+		max-width: 230px;
+	}
+}
+@media (max-width: 1065px) {
+	.foodFormItemNameText{
+		font-size: 1.8rem;
+	}
 }
 
 .foodFormButton{
@@ -335,11 +375,43 @@
 	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 }
 
+.foodFormItemContent.one{
+	grid-template-columns: 1fr;
+}
+
+@media (max-width: 1630px) {
+	.foodFormItemContent{
+		grid-template-columns:repeat(auto-fit, minmax(110px, 1fr));
+		grid-gap: 12px;
+	}
+}
+@media (max-width: 1270px) {
+	.foodFormItemContent{
+		grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+	}
+}
+@media (max-width: 1065px) {
+	.foodFormItemContent.big{
+		grid-template-columns: 1fr;
+	}
+}
+
 .foodFormItemDate{
 	width: 100%;
 	display: flex;
 	align-items: center;
 	gap: 16px;
+}
+
+@media (max-width: 768px) {
+	.foodFormItemDate{
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
+
+.foodFormItemDateButtonInner{
+	position: relative;
 }
 
 .foodFormItemDateButton{
@@ -357,15 +429,50 @@
 	min-width: 399px;
 }
 
+@media (max-width: 1630px) {
+	.foodFormItemDateButton{
+		min-width: 293px;
+	}
+}
+@media (max-width: 1270px) {
+	.foodFormItemDateButton{
+		min-width: 245px;
+	}
+}
+@media (max-width: 768px) {
+	.foodFormItemDateButton{
+		min-width: unset;
+		padding: 0.8rem 1.2rem;
+		width: 100%;
+	}
+}
+
 .foodFormItemDateButton svg{
 	width: 24px;
 	flex-shrink: 0;
+}
+
+@media (max-width: 1630px) {
+	.foodFormItemDateButton{
+		font-size: 1.6rem;
+	}
 }
 
 .foodFormDateText{
 	font-size: 2.2rem;
 	line-height: 1.2;
 	font-weight: 500;
+}
+
+@media (max-width: 1630px) {
+	.foodFormDateText{
+		font-size: 1.8rem;
+	}
+}
+@media (max-width: 1065px) {
+	.foodFormDateText{
+		font-size: 1.6rem;
+	}
 }
 
 .foodFormChoose{
@@ -382,6 +489,17 @@
 	border: 1px solid #B1B5C3;
 	border-radius: 16px;
 	position: relative;
+}
+
+@media (max-width: 1630px) {
+	.foodFormChoose{
+		font-size: 1.6rem;
+	}
+}
+@media (max-width: 768px) {
+	.foodFormChoose{
+		padding: 0.8rem;
+	}
 }
 
 .foodSign{
@@ -418,4 +536,531 @@
 .foodFormChoose.active{
 	border: 1px solid #00A31E;
 	color: #00A31E;
+}
+
+.modalDeliveryTextInner{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 16px;
+	margin-top: 2rem;
+}
+
+.modalDeliveryText{
+	line-height: 1.5;
+}
+
+.sliderArrow{
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	background: #F2F3EE;
+	width: 32px;
+	height: 32px;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	z-index: 5;
+}
+
+.sliderArrow.disabled{
+	opacity: 0.4;
+	background: #e7e7e7;
+	pointer-events: none;
+}
+
+.sliderArrow svg{
+	width: 21px;
+	flex-shrink: 0;
+}
+
+.foodNext{
+	right: -32px;
+}
+
+.foodPrev{
+	left: -32px;
+}
+
+@media (max-width: 768px) {
+	.foodNext{
+		right: -8px;
+	}
+	
+	.foodPrev{
+		left: -8px;
+	}
+}
+@media (max-width: 480px) {
+	.sliderArrow{
+		display: none;
+	}
+}
+
+.swapModalContent{
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 24px;
+	margin-top: 3.2rem;
+}
+
+@media (max-width: 1065px) {
+	.swapModalContent{
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+@media (max-width: 768px) {
+	.swapModalContent{
+		grid-template-columns: 1fr;
+	}
+}
+
+// Корзина
+.cart{
+	width: 100%;
+	background: #F4F5F6;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 7;
+	transition: transform .2s ease-in-out, opacity .2s ease-in-out;
+	opacity: 0;
+	pointer-events: none;
+	transform: translateY(200px);
+	opacity: 0;
+}
+
+.cart.active{
+	pointer-events: all;
+	transform: translateY(0);
+	opacity: 1;
+}
+
+.cartInner{
+	width: 100%;
+	padding: 3.2rem 4rem;
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 24px;
+	flex-wrap: wrap;
+}
+
+@media (max-width: 1065px) {
+	.cartInner{
+		padding: 2.4rem 0;
+		justify-content: flex-end;
+	}
+}
+
+.cartTitleInner{
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+@media (max-width: 1065px) {
+	.cartTitleInner{
+		display: none;
+	}
+}
+
+.cartTitle{
+	color: #FF6433;
+	font-size: 2.4rem;
+	line-height: 1.2;
+	font-weight: 600;
+	width: 100%;
+	max-width: 400px;
+	text-transform: uppercase;
+}
+
+.cartText{
+	font-size: 2.2rem;
+	line-height: 1.2;
+	font-weight: 500;
+}
+
+.cartText span{
+	color: #00A31E;
+}
+
+.cartPriceInner{
+	display: flex;
+	align-items: flex-end;
+	gap: 24px;
+}
+
+@media (max-width: 1270px) {
+	.cartPriceInner{
+		flex-direction: column;
+	}
+}
+@media (max-width: 1065px) {
+	.cartPriceInner{
+		gap: 16px;
+	}
+}
+
+.cartPriceWrap{
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}
+
+.cartPriceOld{
+	color: #777E90;
+	text-decoration: line-through;
+	font-size: 2.2rem;
+	line-height: 1.2;
+	font-weight: 500;
+}
+
+.cartPrice{
+	padding-right: 2.2rem;
+	font-size: 2.4rem;
+	font-weight: 600;
+	line-height: 1.2;
+}
+
+// Модалка заказа
+.calcText{
+	width: 100%;
+    max-width: 760px;
+    margin-top: 0.8rem;
+    font-size: 1.8rem;
+    line-height: 1.5;
+}
+
+.calcForm{
+	width: 100%;
+	margin: 4rem 0;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 40px;
+}
+
+.calcFormItem{
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+	gap: 24px;
+}
+
+.calcFormItemTitle{
+	width: 100%;
+	max-width: 240px;
+	flex-shrink: 0;
+	font-size: 2.2rem;
+	line-height: 1.2;
+	font-weight: 500;
+}
+
+.calcFormItemContent{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.orderItems{
+	width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 4rem;
+}
+
+.orderItem{
+	width: calc(100% / 2 - 24px / 2);
+}
+
+@media (max-width: 768px) {
+	.orderItem{
+		width: 100%;
+	}
+}
+
+.orderItemName{
+	color: #777E90;
+	font-size: 1.8rem;
+	line-height: 1.5;
+}
+
+.orderItemTitle{
+	font-size: 2.2rem;
+	font-weight: 500;
+	line-height: 1.2;
+}
+
+@media (max-width: 1065px) {
+	.orderItemTitle{
+		font-size: 1.8rem;
+	}
+
+	.orderItemName{
+		font-size: 1.6rem;
+	}
+}
+
+.orderItemTitle span:last-child{
+	color: #00A31E;
+}
+
+.orderItemSubtext{
+	color: #00A31E;
+	line-height: 1.5;
+}
+
+.orderAllergy{
+	width: 100%;
+	margin-top: 2.4rem;
+	display: flex;
+	align-items: flex-start;
+	gap: 24px;
+}
+
+.orderAllergyBlock{
+	width: 100%;
+	max-width: 450px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.orderAllergyText{
+	font-size: 1.4rem;
+	line-height: 1.5;
+}
+
+.orderAllergySwitch{
+	width: 53px;
+	height: 28px;
+	border-radius: 50px;
+	background: #B1B5C3;
+	position: relative;
+	transition: background .2s linear;
+	flex-shrink: 0;
+}
+
+.orderAllergySwitchCircle{
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	background: #fff;
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	transition: left .2s linear;
+}
+
+.orderAllergySwitch.active .orderAllergySwitchCircle{
+	left: 27px;
+}
+
+.orderAllergySwitch.active{
+	background: #00A31E;
+}
+
+.orderAllergyForm, .orderFinalForm{
+	width: 100%;
+	margin: 4rem 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 24px;
+}
+
+.orderFinalForm{
+	margin: 6.4rem 0rem 4rem 0;
+}
+
+.orderBlock{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 40px;
+	margin: 8rem 0 4rem 0;
+}
+
+.orderPromo{
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.orderPromoTitleInner{
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.promoSubtitle{
+	color: #F40D29;
+	font-size: 1.4rem;
+	line-height: 1.5;
+}
+
+.orderPromoWrap{
+	width: 100%;
+	max-width: 360px;
+}
+
+.calcResult{
+	margin-top: auto;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+}
+
+.calcResultCount{
+	font-size: 2.8rem;
+	line-height: 1.2;
+	font-weight: 600;
+}
+
+@media (max-width: 1065px) {
+	.calcResult{
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.calcResult button{
+		width: 100%;
+		justify-content: center;
+	}
+
+	.calcResultCount{
+		font-size: 2.2rem;
+	}
+}
+
+.calcFormItemElem{
+	width: calc(100% / 4 - 48px / 4);
+}
+
+.calcFormItemElem.medium{
+	width: calc(100% / 3 - 32px / 3);
+}
+
+.calcFormItemElem.big{
+	width: calc(100% / 2 - 16px / 2);
+}
+
+@media (max-width: 1065px) {
+	.calcFormItem{
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.calcFormItemElem{
+		width: calc(100% / 3 - 32px / 3);
+	}
+}
+@media (max-width: 768px) {
+	.calcFormItemElem{
+		width: calc(100% / 2 - 8px /  2);
+	}
+
+	.calcFormItemContent{
+		gap: 8px;
+	}
+
+	.calcFormItemElem.medium, .calcFormItemElem.big{
+		width: 100%;
+	}
+}
+
+.calcFormItemButton{
+	border-radius: 16px;
+	border: 1px solid #B1B5C3;
+	padding: 1.5rem;
+	font-size: 1.8rem;
+	line-height: 1.4;
+	font-weight: 500;
+	color: #B1B5C3;
+}
+
+.calcFormItemButton.active{
+	color: #00A31E;
+	border: 1px solid #00A31E;
+}
+
+.calcFormItemInput{
+	padding: 1.5rem 0.8rem 1.5rem 1.6rem;
+	border-radius: 16px;
+	border: 1px solid #B1B5C3;
+	line-height: 1.5;
+}
+
+.modalCalendarInner{
+	width: 100%;
+	margin: 4rem 0;
+	padding: 0rem 6.4rem;
+}
+
+.modalCalendar{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0;
+	z-index: -1;
+}
+
+.orderInputsAllergi{
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 24px;
+}
+
+.orderInputsAllergiItem{
+	width: calc(100% / 2 - 24px / 2);
+}
+
+.orderInputsAllergiItemFull{
+	width: 100%;
+}
+
+.calcWrp{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.modalBack{
+	width: 32px;
+	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+}
+
+.modalBack svg{
+	width: 24px;
+	height: 24px;
+	flex-shrink: 0;
+}
+
+@media (any-hover: hover) {
+	.orderAllergyBlock, .orderAllergySwitch{
+		cursor: pointer;
+	}
 }

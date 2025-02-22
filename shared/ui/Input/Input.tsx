@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { InputHTMLAttributes, TextareaHTMLAttributes } from 'react';
 import cn from 'classnames';
 
 import styles from './index.module.scss';
@@ -17,8 +17,9 @@ type Props = {
     error?: boolean;
     errorMessage?: string;
     full?: boolean;
+    disabled?: boolean;
     component?: 'input' | 'textarea';
-};
+} & (InputHTMLAttributes<HTMLInputElement> | InputHTMLAttributes<HTMLTextAreaElement>);
 
 const Input: React.FC<Props> = ({
     value,
@@ -30,6 +31,7 @@ const Input: React.FC<Props> = ({
     error = false,
     errorMessage,
     full = false,
+    disabled = false,
     component = 'input',
     ...props
 }) => {
@@ -41,7 +43,11 @@ const Input: React.FC<Props> = ({
         >
             {title && <p className={styles.inputTitle}>{title}</p>}
 
-            <div className={styles.inputWrapper}>
+            <div
+                className={cn(styles.inputWrapper, {
+                    [styles.disabled]: disabled,
+                })}
+            >
                 {icon && icon}
 
                 {component === 'input' ? (
@@ -50,16 +56,18 @@ const Input: React.FC<Props> = ({
                         className={cn(styles.input, { [styles.withIcon]: !!icon })}
                         placeholder={placeholder}
                         value={value}
-                        onChange={(e) => setValue && setValue(e.target.value)}
-                        {...props}
+                        onChange={(e) => setValue && !disabled && setValue(e.target.value)}
+                        {...(props as TextareaHTMLAttributes<HTMLInputElement>)}
                     />
                 ) : (
                     <textarea
-                        className={cn(styles.input, styles.textarea, { [styles.withIcon]: !!icon })}
+                        className={cn(styles.input, styles.textarea, {
+                            [styles.withIcon]: !!icon,
+                        })}
                         placeholder={placeholder}
                         value={value}
-                        onChange={(e) => setValue && setValue(e.target.value)}
-                        {...props}
+                        onChange={(e) => setValue && !disabled && setValue(e.target.value)}
+                        {...(props as TextareaHTMLAttributes<HTMLTextAreaElement>)}
                     />
                 )}
             </div>

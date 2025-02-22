@@ -1,0 +1,119 @@
+.dishListWrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.dishListContent{
+    position: relative;
+}
+
+.printButton{
+    padding: 1.2rem 2.4rem;
+    background: var(--main);
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    color: #fff;
+    border-radius: 50px;
+}
+
+.dishListItem{
+    width: 100%;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.dishListItem:last-child{
+    direction: rtl;
+}
+
+.dishListItemNumber{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 4rem;
+    font-weight: 600;
+}
+
+.dishListItemContent{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 650px;
+    gap: 40px;
+}
+
+.dishListItemLogo{
+    width: 200px;
+    height: 60px;
+    position: relative;
+}
+
+.dishListItemLogo img{
+    object-fit: contain;
+}
+
+.dishListItemTexts{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.dishListItemTitle{
+    text-align: center;
+    font-size: 2.8rem;
+    font-weight: 600;
+}
+
+.dishListItemText{
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.dishListPoints{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.dishListPoint{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.dishListPointItems{
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.dishListPointItem{
+    width: calc(100% / 4 - 72px / 4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.dishListPointItem p{
+    font-weight: 600;
+}
+
+.dishListPointItem p:last-child{
+    font-weight: 400;
+}

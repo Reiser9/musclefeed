@@ -2,22 +2,46 @@
 
 import React from 'react';
 import cn from 'classnames';
-import Image from 'next/image';
+import { useTranslations } from 'next-intl';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import styles from './index.module.scss';
 import base from '@/shared/styles/base.module.scss';
 
 import { AuthWrapper } from '@/shared/wrappers/InitialWrapper';
-import { ArrowRightShort, Calendar, Fire, Home } from '@/shared/icons';
+import { ArrowRightShort, Home } from '@/shared/icons';
 import { useAppSelector } from '@/shared/hooks/useRedux';
+import { OrderItem } from '@/entities/order/ui';
+import { useOrder } from '@/features/order';
 
 import { BreadcrumbLink, Breadcrumbs, BreadcrumbText } from '@/shared/ui/Breadcrumbs';
 import { Text } from '@/shared/ui/Text';
 import { BackLink } from '@/shared/ui/BackLink';
-import { Button } from '@/shared/ui/Button';
+import { Preloader } from '@/shared/ui/Preloader';
+import { NotContent } from '@/shared/ui/NotContent';
 
 const AccountOrders = () => {
+    const [page, setPage] = React.useState(1);
+    const [status, setStatus] = React.useState('all');
+
+    const t = useTranslations('Orders');
     const language = useAppSelector((state) => state.app.language);
+
+    const { getUserOrders } = useOrder();
+
+    const { data, isPending, isError } = useQuery({
+        queryKey: ['admin_menus', page, 10, status],
+        queryFn: () => getUserOrders(page, 10, status),
+        placeholderData: keepPreviousData,
+    });
+
+    if (isPending) {
+        return <Preloader page />;
+    }
+
+    if (isError) {
+        return <NotContent />;
+    }
 
     return (
         <AuthWrapper>
@@ -28,95 +52,97 @@ const AccountOrders = () => {
 
                 <ArrowRightShort />
 
-                <BreadcrumbLink href={`/${language}/account`}>Личный кабинет</BreadcrumbLink>
+                <BreadcrumbLink href={`/${language}/account`}>{t('account')}</BreadcrumbLink>
 
                 <ArrowRightShort />
 
-                <BreadcrumbText>Заказы</BreadcrumbText>
+                <BreadcrumbText>{t('title')}</BreadcrumbText>
             </Breadcrumbs>
 
             <div className={styles.orders}>
                 <div className={base.container}>
                     <div className={styles.ordersInner}>
                         <Text variant="h2" upper>
-                            Ваши заказы
+                            {t('title2')}
                         </Text>
 
-                        <BackLink href={`/${language}/account`} text="Назад в Личный кабинет" />
+                        <BackLink href={`/${language}/account`} text={t('back_text')} />
 
                         <div className={styles.ordersContent}>
                             <div className={styles.ordersSidebar}>
-                                <button className={cn(styles.ordersTab, styles.active)}>Все заказы</button>
+                                <button
+                                    className={cn(styles.ordersTab, {
+                                        [styles.active]: status === 'all',
+                                    })}
+                                    onClick={() => setStatus('all')}
+                                >
+                                    {t('all_orders')}
+                                </button>
 
-                                <button className={styles.ordersTab}>Активные</button>
+                                <button
+                                    className={cn(styles.ordersTab, {
+                                        [styles.active]: status === 'active',
+                                    })}
+                                    onClick={() => setStatus('active')}
+                                >
+                                    {t('active_orders')}
+                                </button>
 
-                                <button className={styles.ordersTab}>Замороженные</button>
+                                <button
+                                    className={cn(styles.ordersTab, {
+                                        [styles.active]: status === 'frozen',
+                                    })}
+                                    onClick={() => setStatus('frozen')}
+                                >
+                                    {t('freeze_orders')}
+                                </button>
 
-                                <button className={styles.ordersTab}>Не оплаченные</button>
+                                <button
+                                    className={cn(styles.ordersTab, {
+                                        [styles.active]: status === 'unpaid',
+                                    })}
+                                    onClick={() => setStatus('unpaid')}
+                                >
+                                    {t('nopay_orders')}
+                                </button>
 
-                                <button className={styles.ordersTab}>Завершенные</button>
+                                <button
+                                    className={cn(styles.ordersTab, {
+                                        [styles.active]: status === 'completed',
+                                    })}
+                                    onClick={() => setStatus('completed')}
+                                >
+                                    {t('ended_orders')}
+                                </button>
                             </div>
 
                             <div className={styles.ordersList}>
-                                <div className={styles.ordersItem}>
-                                    <div className={styles.ordersItemImg}>
-                                        <Image src="/img/review1.png" alt="order" fill />
-
-                                        <p className={styles.ordersItemSign}>
-                                            <Calendar />
-                                            Осталось 3 дня
-                                        </p>
-                                    </div>
-
-                                    <div className={styles.ordersItemContent}>
-                                        <div className={styles.ordersItemTextInner}>
-                                            <Text variant="h3" upper>
-                                                Правильное питание
-                                            </Text>
-
-                                            <p className={styles.ordersItemDesc}>
-                                                Сбалансированная программа питания, рассчитанная на калории, белки, жиры
-                                                и углеводы. Идеально подойдет для вашей цели
-                                            </p>
-                                        </div>
-
-                                        <div className={styles.ordersItemPoints}>
-                                            <p className={styles.ordersItemPoint}>
-                                                <Fire className={styles.ordersItemPointRed} />
-                                                Ккал 2000
-                                            </p>
-
-                                            <p className={styles.ordersItemPoint}>
-                                                <Calendar />
-                                                24 дня
-                                            </p>
-                                        </div>
-
-                                        <Button full small>
-                                            Подробнее о меню
-                                        </Button>
-
-                                        <Button full small color="green">
-                                            Замена блюд
-                                        </Button>
-
-                                        <div className={styles.ordersItemFreeze}>
-                                            <div className={styles.ordersItemFreezeSwitch}>
-                                                <div className={styles.ordersItemFreezeCircle}></div>
-                                            </div>
-
-                                            <div className={styles.ordersItemFreezeTextInner}>
-                                                <p className={styles.ordersItemFreezeTitle}>Заморозить</p>
-
-                                                <p className={styles.ordersItemFreezeText}>
-                                                    Мы приостановим доставку вам еды до тех пор пока вы не активируете
-                                                    рацион
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {isPending ? (
+                                    <Preloader small page />
+                                ) : isError ? (
+                                    <NotContent />
+                                ) : !!data && !!data.orders.length ? (
+                                    <OrderItem />
+                                ) : (
+                                    <NotContent text="У вас еще нет заказов" />
+                                )}
                             </div>
+
+                            {!!data && data.totalPages > 1 && (
+                                <div className={styles.pagination}>
+                                    {[...Array(data.totalPages)].map((_, id) => (
+                                        <button
+                                            key={id}
+                                            className={cn(styles.paginationButton, {
+                                                [styles.active]: id + 1 === data.page,
+                                            })}
+                                            onClick={() => setPage(id + 1)}
+                                        >
+                                            {id + 1}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

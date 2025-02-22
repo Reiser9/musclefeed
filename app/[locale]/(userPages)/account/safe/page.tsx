@@ -3,6 +3,7 @@
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAppSelector } from '@/shared/hooks/useRedux';
+import { useTranslations } from 'next-intl';
 
 import styles from './index.module.scss';
 import base from '@/shared/styles/base.module.scss';
@@ -26,6 +27,7 @@ const AccountSafe = () => {
     const { PASSWORD } = useValidationMessages();
 
     const language = useAppSelector((state) => state.app.language);
+    const t = useTranslations("Safe");
 
     const {
         register,
@@ -61,26 +63,26 @@ const AccountSafe = () => {
 
                 <ArrowRightShort />
 
-                <BreadcrumbLink href={`/${language}/account`}>Личный кабинет</BreadcrumbLink>
+                <BreadcrumbLink href={`/${language}/account`}>{t('account')}</BreadcrumbLink>
 
                 <ArrowRightShort />
 
-                <BreadcrumbText>Безопасность</BreadcrumbText>
+                <BreadcrumbText>{t('title')}</BreadcrumbText>
             </Breadcrumbs>
 
             <div className={styles.safe}>
                 <div className={base.container}>
                     <div className={styles.safeInner}>
                         <Text variant="h2" upper>
-                            Безопасность
+                            {t('title')}
                         </Text>
 
-                        <BackLink href={`/${language}/account`} text="Назад в Личный кабинет"></BackLink>
+                        <BackLink href={`/${language}/account`} text={t('back_text')}></BackLink>
 
                         <div className={styles.safeContent}>
                             <form onSubmit={handleSubmit(onSubmit)} className={styles.safeSidebar}>
                                 <Text variant="h4" upper color="main">
-                                    Сменить пароль
+                                    {t('change_title')}
                                 </Text>
 
                                 <div className={styles.safeForm}>
@@ -88,7 +90,7 @@ const AccountSafe = () => {
                                         {...register('oldPassword', PASSWORD)}
                                         error={!!errors.oldPassword}
                                         errorMessage={errors.oldPassword?.message}
-                                        title="Ваш старый пароль"
+                                        title={t('old_password')}
                                         placeholder="********"
                                         type="password"
                                         icon={<Password />}
@@ -100,7 +102,7 @@ const AccountSafe = () => {
                                         {...register('newPassword', PASSWORD)}
                                         error={!!errors.newPassword}
                                         errorMessage={errors.newPassword?.message}
-                                        title="Новый пароль"
+                                        title={t('new_password')}
                                         placeholder="********"
                                         type="password"
                                         icon={<Password />}
@@ -109,7 +111,7 @@ const AccountSafe = () => {
                                     />
 
                                     <Input
-                                        title="Повторите новый пароль"
+                                        title={t('repeat_new_password')}
                                         placeholder="********"
                                         type="password"
                                         icon={<Password />}
@@ -122,7 +124,7 @@ const AccountSafe = () => {
                                 </div>
 
                                 <Button full>
-                                    Сохранить изменения
+                                    {t('save')}
                                     <ArrowRight />
                                 </Button>
                             </form>

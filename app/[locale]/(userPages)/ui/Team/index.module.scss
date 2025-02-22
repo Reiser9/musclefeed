@@ -55,6 +55,21 @@
 	left: -32px;
 }
 
+@media (max-width: 768px) {
+	.teamNext{
+		right: -8px;
+	}
+	
+	.teamPrev{
+		left: -8px;
+	}
+}
+@media (max-width: 480px) {
+	.sliderArrow{
+		display: none;
+	}
+}
+
 .reviewsTitleWrap{
 	display: flex;
 	flex-direction: column;

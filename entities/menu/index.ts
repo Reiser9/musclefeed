@@ -1,1 +1,12 @@
-export type { MenuType, MenuTypeDTO, Menu, MenuDTO, MenuDay, MenuPagination } from './model';
+export type {
+    MenuType,
+    MenuTypeDTO,
+    Menu,
+    MenuDTO,
+    MenuDay,
+    MenuPagination,
+    MenuUser,
+    PriceItem,
+    PriceItemDTO,
+    MenuUserPagination,
+} from './model';

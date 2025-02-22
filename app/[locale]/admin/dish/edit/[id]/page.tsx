@@ -25,7 +25,7 @@ const AdminEditDish = () => {
     const { id } = useParams();
     const [picture, setPicture] = React.useState('');
     const [publish, setPublish] = React.useState(false);
-    const [dishTypeId, setDishTypeId] = React.useState<string>('');
+    const [dishTypeId, setDishTypeId] = React.useState('');
 
     const {
         register,

@@ -13,6 +13,7 @@ type requestProps = {
     data?: object;
     headers?: object;
     baseURL?: string;
+    isBlob?: boolean;
     callback?: () => void;
 };
 
@@ -36,6 +37,8 @@ const useRequest = () => {
             case 403:
                 alertNotify('Ошибка', 'Доступ ограничен', 'error');
                 throw new Error('Доступ ограничен');
+            case 401:
+                throw new Error('Пользователь неавторизован');
             default:
                 if (customLogic) {
                     customLogic();
@@ -67,6 +70,7 @@ const useRequest = () => {
         data = {},
         headers = {},
         baseURL = '',
+        isBlob = false,
     }: requestProps): Promise<RequestResult<T>> => {
         const accessToken = isAuth ? localStorage.getItem('accessToken') : null;
 
@@ -83,6 +87,7 @@ const useRequest = () => {
                 headers: reqHeaders,
                 data,
                 ...(baseURL && { baseURL }),
+                ...(isBlob && { responseType: 'blob' }),
             });
 
             return response;

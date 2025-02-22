@@ -1,3 +1,10 @@
+export type UserShortInfoDTO = {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    allergies: string;
+};
+
 export type UserShortInfo = {
     id: number;
     email: string;

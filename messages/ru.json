@@ -137,5 +137,49 @@
         "our_email": "Наша почта",
         "our_phone": "Наш телефон",
         "request_call": "Заказать звонок"
+    },
+    "Profile": {
+        "account": "Личный кабинет",
+        "profile": "Профиль",
+        "title": "Ваш профиль",
+        "back_text": "Назад в Личный кабинет",
+        "contact_title": "Контактные данные",
+        "addresses_title": "Адреса доставки",
+        "input_name": "Как вас зовут",
+        "input_surname": "Ваша фамилия",
+        "input_allerg": "Аллергии",
+        "input_phone": "Ваш телефон",
+        "input_email": "Ваша почта",
+        "save": "Сохранить изменения",
+        "create_address": "Добавить адрес",
+        "save_address": "Сохранить новый адрес",
+        "main_address": "Основной адрес",
+        "other_address": "Другие адреса",
+        "city": "Город",
+        "street": "Улица",
+        "home": "Дом",
+        "floor": "Этаж",
+        "apartment": "Квартира"
+    },
+    "Safe": {
+        "account": "Личный кабинет",
+        "title": "Безопасность",
+        "back_text": "Назад в Личный кабинет",
+        "change_title": "Сменить пароль",
+        "old_password": "Ваш старый пароль",
+        "new_password": "Новый пароль",
+        "repeat_new_password": "Повторите новый пароль",
+        "save": "Сохранить изменения"
+    },
+    "Orders": {
+        "account": "Личный кабинет",
+        "title": "Заказы",
+        "title2": "Ваши заказы",
+        "back_text": "Назад в Личный кабинет",
+        "all_orders": "Все заказы",
+        "active_orders": "Активные",
+        "freeze_orders": "Замороженные",
+        "nopay_orders": "Не оплаченные",
+        "ended_orders": "Завершенные"
     }
 }

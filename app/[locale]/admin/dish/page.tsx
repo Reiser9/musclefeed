@@ -34,7 +34,7 @@ const AdminDish = () => {
 
     const { data, isPending, isError } = useQuery({
         queryKey: ['admin_dishs', page, searchDebounce],
-        queryFn: () => getDishsPagination(page, 10, searchDebounce),
+        queryFn: () => getDishsPagination(page, 12, searchDebounce),
         placeholderData: keepPreviousData,
     });
 

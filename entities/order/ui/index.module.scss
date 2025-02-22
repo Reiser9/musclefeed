@@ -1,0 +1,14 @@
+.orderAdminItem{
+    width: 100%;
+    padding: 1.2rem;
+    border: 1px solid var(--main);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.orderAdminItemNumber{
+    font-size: 1.8rem;
+    font-weight: 600;
+}

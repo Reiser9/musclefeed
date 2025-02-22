@@ -22,6 +22,7 @@
 .inputWrapper > svg{
 	color: #00A31E;
 	width: 24px;
+	height: 24px;
 	flex-shrink: 0;
 	position: absolute;
 	top: 16px;
@@ -40,6 +41,15 @@
 textarea.input{
 	resize: none;
 	height: 120px;
+}
+
+.disabled .input{
+	pointer-events: none;
+}
+
+.disabled svg, .disabled .input{
+	opacity: 0.65;
+	filter: grayscale(1);
 }
 
 .input.withIcon{

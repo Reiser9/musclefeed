@@ -93,6 +93,24 @@ const AdminSidebar = () => {
                 >
                     Отзывы
                 </Link>
+
+                <Link
+                    href={`/${locale}/admin/cities`}
+                    className={cn(styles.sidebarNavLink, {
+                        [styles.active]: pathname.includes(`/${locale}/admin/cities`),
+                    })}
+                >
+                    Города
+                </Link>
+
+                <Link
+                    href={`/${locale}/admin/users`}
+                    className={cn(styles.sidebarNavLink, {
+                        [styles.active]: pathname.includes(`/${locale}/admin/users`),
+                    })}
+                >
+                    Пользователи
+                </Link>
             </nav>
         </aside>
     );

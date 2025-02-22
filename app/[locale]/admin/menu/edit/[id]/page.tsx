@@ -1,15 +1,16 @@
 'use client';
 
 import React from 'react';
+import dayjs from 'dayjs';
 import { useParams, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { DatePicker } from 'antd';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import dayjs, { Dayjs } from 'dayjs';
 
 import styles from '../../index.module.scss';
 
 import type { MenuDay, MenuDTO } from '@/entities/menu';
+import type { PriceItemDTO } from '@/entities/menu/model';
 import { useMenu } from '@/features/menu';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 import { Foods, Plus } from '@/shared/icons';
@@ -23,12 +24,24 @@ import { NotContent } from '@/shared/ui/NotContent';
 import { Select } from '@/shared/ui/Select';
 import { Preloader } from '@/shared/ui/Preloader';
 import { Checkbox } from '@/shared/ui/Checkbox';
+import PriceItem from '../../ui/PriceItem';
+
+const emptyPriceElem = {
+    price: '',
+    daysCount: '',
+    totalPriceRu: '',
+    totalPriceHe: '',
+    pricePerDayRu: '',
+    pricePerDayHe: '',
+};
 
 const AdminMenuEdit = () => {
     const { id } = useParams();
-    const [cycleDate, setCycleDate] = React.useState<Dayjs | null>(null);
+    const [cycleDate, setCycleDate] = React.useState('');
     const [publish, setPublish] = React.useState(false);
+    const [menuTypeSelect, setMenuTypeSelect] = React.useState('');
 
+    const [prices, setPrices] = React.useState<PriceItemDTO[]>([emptyPriceElem]);
     const [days, setDays] = React.useState<MenuDay[]>([{ number: 1, dishes: [] }]);
 
     const {
@@ -53,16 +66,30 @@ const AdminMenuEdit = () => {
         enabled: !!id,
     });
 
-    const { adminName, calories, cycleStartDate, description, isPublished, name, order, days: menuDays } = menu || {};
+    const {
+        adminName,
+        calories,
+        cycleStartDate,
+        description,
+        isPublished,
+        name,
+        order,
+        days: menuDays,
+        menuTypeId,
+        mealsCount,
+        prices: menuPrices,
+    } = menu || {};
 
     const { data, isPending, isError } = useQuery({
         queryKey: ['typesmenu'],
         queryFn: getTypesmenu,
+        staleTime: 1000 * 60 * 5,
     });
 
     const { data: dishTypes } = useQuery({
         queryKey: ['dish_types'],
         queryFn: getDishTypes,
+        staleTime: 1000 * 60 * 60,
     });
 
     const { data: dish } = useQuery({
@@ -78,24 +105,49 @@ const AdminMenuEdit = () => {
             dishes: day.dishes.filter((dish) => dish.dishId !== null),
         }));
 
-        const menuData = { ...data, cycleStartDate: cycleDate?.toDate(), days: daysWithoutNulls, isPublished: publish };
+        const menuData = {
+            ...data,
+            cycleStartDate: cycleDate,
+            days: daysWithoutNulls,
+            isPublished: publish,
+            menuTypeId: +menuTypeSelect,
+            prices,
+        };
 
         updateMenu(String(id), menuData, () => router.replace(`/${language}/admin/menu`));
     };
 
-    const addDay = () => {
+    const addPrice = React.useCallback(() => {
+        if (prices.length >= 50) return;
+        setPrices((prev) => [...prev, emptyPriceElem]);
+    }, [prices]);
+
+    const removePrice = React.useCallback(
+        (index: number) => {
+            if (prices.length <= 1) return;
+            setPrices((prev) => prev.filter((_, i) => i !== index));
+        },
+        [prices],
+    );
+
+    const updatePrice = React.useCallback((index: number, key: keyof PriceItemDTO, value: string) => {
+        setPrices((prev) => prev.map((item, i) => (i === index ? { ...item, [key]: value } : item)));
+    }, []);
+
+    const addDay = React.useCallback(() => {
         if (days.length >= 50) return;
-
         setDays((prev) => [...prev, { number: prev.length + 1, dishes: [] }]);
-    };
+    }, [days]);
 
-    const removeDay = (index: number) => {
-        if (days.length <= 1) return;
+    const removeDay = React.useCallback(
+        (index: number) => {
+            if (days.length <= 1) return;
+            setDays((prev) => prev.filter((_, i) => i !== index));
+        },
+        [days],
+    );
 
-        setDays((prev) => prev.filter((_, i) => i !== index));
-    };
-
-    const addDish = (dayIndex: number, dishTypeId: number, dishId: number, isPrimary: boolean) => {
+    const addDish = React.useCallback((dayIndex: number, dishTypeId: number, dishId: number, isPrimary: boolean) => {
         setDays((prev) =>
             prev.map((day, index) =>
                 index === dayIndex
@@ -111,7 +163,7 @@ const AdminMenuEdit = () => {
                     : day,
             ),
         );
-    };
+    }, []);
 
     const addReplacementPlaceholder = (dayIndex: number, dishTypeId: number) => {
         setDays((prev) =>
@@ -126,22 +178,24 @@ const AdminMenuEdit = () => {
         );
     };
 
-    const removeDish = (dayIndex: number, dishId: number) => {
+    const removeDish = React.useCallback((dayIndex: number, dishId: number) => {
         setDays((prev) =>
             prev.map((day, index) =>
                 index === dayIndex
                     ? {
                           ...day,
-                          dishes: day.dishes.filter((d) => d.dishId !== String(dishId)),
+                          dishes: day.dishes.some((d) => d.dishId == String(dishId))
+                              ? day.dishes.filter((d) => d.dishId != String(dishId))
+                              : day.dishes,
                       }
                     : day,
             ),
         );
-    };
+    }, []);
 
     React.useEffect(() => {
         if (cycleStartDate) {
-            setCycleDate(dayjs(cycleStartDate));
+            setCycleDate(dayjs(cycleStartDate).format('YYYY-MM-DD'));
         }
     }, [cycleStartDate]);
 
@@ -151,18 +205,21 @@ const AdminMenuEdit = () => {
 
     React.useEffect(() => {
         if (menuDays && !!menuDays.length) {
-            const formatted = menuDays.map((item) => ({
-                number: item.number,
-                dishes: item.dishes.map((dish) => ({
-                    dishTypeId: dish.dishType.id.toString(),
-                    dishId: dish.dish.id.toString(),
-                    isPrimary: dish.isPrimary,
-                })),
-            }));
-
-            setDays(formatted);
+            setDays(menuDays);
         }
     }, [menuDays]);
+
+    React.useEffect(() => {
+        if (menuTypeId) {
+            setMenuTypeSelect(String(menuTypeId));
+        }
+    }, [menuTypeId]);
+
+    React.useEffect(() => {
+        if (menuPrices) {
+            setPrices(menuPrices);
+        }
+    }, [menuPrices]);
 
     if (menuIsPending) {
         return <Preloader page />;
@@ -190,7 +247,8 @@ const AdminMenuEdit = () => {
                         <NotContent text="Произошла ошибка при загрузке типов меню" />
                     ) : !!data && !!data.length ? (
                         <Select
-                            {...register('menuTypeId')}
+                            value={menuTypeSelect}
+                            setValue={setMenuTypeSelect}
                             options={data?.map((elem) => ({
                                 id: elem.id,
                                 name: elem.name[language],
@@ -263,6 +321,28 @@ const AdminMenuEdit = () => {
 
                 <div className={styles.menuFormItem}>
                     <Input
+                        {...register('mealsCountRu')}
+                        error={!!errors.mealsCountRu}
+                        errorMessage={errors.mealsCountRu?.message}
+                        full
+                        title={'Количество приемов пищи ru'}
+                        value={watch('mealsCountRu', mealsCount?.ru)}
+                    />
+                </div>
+
+                <div className={styles.menuFormItem}>
+                    <Input
+                        {...register('mealsCountHe')}
+                        error={!!errors.mealsCountHe}
+                        errorMessage={errors.mealsCountHe?.message}
+                        full
+                        title={'Количество приемов пищи he'}
+                        value={watch('mealsCountHe', mealsCount?.he)}
+                    />
+                </div>
+
+                <div className={styles.menuFormItem}>
+                    <Input
                         {...register('calories')}
                         error={!!errors.calories}
                         errorMessage={errors.calories?.message}
@@ -292,14 +372,34 @@ const AdminMenuEdit = () => {
                         <DatePicker
                             className={styles.datePicker}
                             format="DD.MM.YYYY"
-                            value={cycleDate}
-                            onChange={setCycleDate}
+                            value={cycleDate ? dayjs(cycleDate) : null}
+                            onChange={(date) => setCycleDate(date.format('YYYY-MM-DD'))}
                         />
                     </div>
                 </div>
 
+                <div className={styles.menuFormPrices}>
+                    <Text variant="text2">Всего цен: {prices.length}</Text>
+
+                    {prices.map((price, index) => (
+                        <PriceItem
+                            key={index}
+                            data={price}
+                            number={index + 1}
+                            removePrice={() => removePrice(index)}
+                            updatePrice={updatePrice}
+                            index={index}
+                        />
+                    ))}
+
+                    <span className={styles.menuFormDayAdd} onClick={addPrice}>
+                        <Plus />
+                        Добавить
+                    </span>
+                </div>
+
                 <div className={styles.menuFormDays}>
-                    <Text variant="text2">Всего дней: 1</Text>
+                    <Text variant="text2">Всего дней: {days.length}</Text>
 
                     {days.map((day, index) => (
                         <DayItem

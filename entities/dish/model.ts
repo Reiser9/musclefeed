@@ -1,9 +1,8 @@
+import { LanguageField } from '../language';
+
 export type DishType = {
     id: number;
-    name: {
-        ru: string;
-        he: string;
-    };
+    name: LanguageField;
 };
 
 export type DishDTO = {
@@ -34,14 +33,8 @@ export type Dish = {
     fats: number | string;
     carbohydrates: number | string;
     isPublished: boolean;
-    name: {
-        ru: string;
-        he: string;
-    };
-    description: {
-        ru: string;
-        he: string;
-    };
+    name: LanguageField;
+    description: LanguageField;
     benefit: string;
 };
 

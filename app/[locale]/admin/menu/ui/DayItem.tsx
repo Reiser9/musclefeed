@@ -37,8 +37,6 @@ const DayItem: React.FC<DayProps> = ({
 }) => {
     const [show, setShow] = React.useState(true);
 
-    console.log(dayObject);
-
     return (
         <div className={styles.menuFormDayWrapper}>
             <div
@@ -59,9 +57,6 @@ const DayItem: React.FC<DayProps> = ({
                             const replacements = dayObject.dishes.filter(
                                 (d) => d.dishTypeId == String(type.id) && !d.isPrimary,
                             );
-
-                            console.log("Маин", mainDish);
-                            console.log("Не Маин", replacements);
 
                             return (
                                 <div key={type.id} className={styles.menuFormItemDish}>
@@ -84,11 +79,14 @@ const DayItem: React.FC<DayProps> = ({
                                         }
                                         onChange={(value) => addDish(day - 1, type.id, +value, true)}
                                         value={mainDish?.dishId ? +mainDish?.dishId : null}
+                                        filterOption={(input, option) =>
+                                            !!option && option.label.toLowerCase().includes(input.toLowerCase())
+                                        }
                                     />
 
-                                    <Text variant="text3">Замены</Text>
+                                    <Text variant="text3">Замены ({replacements.length})</Text>
 
-                                    {replacements.map((replacement, idx) => {console.log(replacement); return(
+                                    {replacements.map((replacement, idx) => (
                                         <div key={idx} className={styles.menuFormItemDishReplacement}>
                                             <SelectAnt
                                                 className={styles.menuFormItemDishSelect}
@@ -123,6 +121,9 @@ const DayItem: React.FC<DayProps> = ({
                                                     );
                                                 }}
                                                 value={replacement.dishId ? +replacement.dishId : null}
+                                                filterOption={(input, option) =>
+                                                    !!option && option.label.toLowerCase().includes(input.toLowerCase())
+                                                }
                                             />
                                             <span
                                                 className={styles.menuFormDeleteSwap}
@@ -133,7 +134,7 @@ const DayItem: React.FC<DayProps> = ({
                                                 <Delete />
                                             </span>
                                         </div>
-                                    )})}
+                                    ))}
 
                                     <span
                                         className={styles.menuFormDayAdd}
@@ -154,4 +155,4 @@ const DayItem: React.FC<DayProps> = ({
     );
 };
 
-export default DayItem;
+export default React.memo(DayItem);

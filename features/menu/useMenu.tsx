@@ -1,6 +1,7 @@
 'use client';
 
-import type { Menu, MenuDTO, MenuPagination, MenuType, MenuTypeDTO } from '@/entities/menu';
+import { Dish, DishPagination } from '@/entities/dish';
+import type { Menu, MenuDTO, MenuPagination, MenuType, MenuTypeDTO, MenuUserPagination } from '@/entities/menu';
 import useRequest from '@/shared/hooks/useRequest';
 
 const useMenu = () => {
@@ -22,21 +23,58 @@ const useMenu = () => {
         }
     };
 
-    // const getMenuUser = async (menuTypeId: string | number) => {
-    //     const response = await request<{ menus: Menu[] }>({
-    //         url: `/menu?menu_type_id=${menuTypeId}`,
-    //         method: 'GET',
-    //     });
+    const getMenuUser = async (menuTypeId: string | number | null) => {
+        const response = await request<MenuUserPagination>({
+            url: `/menu?page=${1}&limit=10&menu_type_id=${menuTypeId}`,
+            method: 'GET',
+        });
 
-    //     if (catchRequestError(response)) {
-    //         errorController(response);
-    //         return '';
-    //     }
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
 
-    //     if ('data' in response) {
-    //         return response.data.menus;
-    //     }
-    // };
+        if ('data' in response) {
+            return response.data;
+        }
+    };
+
+    const getMenuDishesUser = async (menuId: number | string | null, date: string | null) => {
+        const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0];
+        const response = await request<DishPagination>({
+            url: `/menu/${menuId}?date=${date ? date : tomorrow}`,
+            method: 'GET',
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        if ('data' in response) {
+            return response.data;
+        }
+    };
+
+    const getSwapMenuDishesUser = async (
+        menuId: number | string | null,
+        date: string | null,
+        dishTypeId: number | string | null,
+    ) => {
+        const response = await request<{ dishes: Dish[] }>({
+            url: `/menu/${menuId}/replacement?date=${date}&dish_type_id=${dishTypeId}`,
+            method: 'GET',
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        if ('data' in response) {
+            return response.data.dishes;
+        }
+    };
 
     const getTypesmenu = async () => {
         const response = await request<{ menuTypes: MenuType[] }>({
@@ -204,7 +242,7 @@ const useMenu = () => {
         }
     };
 
-    const deleteMenu = async (menuId: string | number) => {
+    const deleteMenu = async (menuId: string | number, successCallback = () => {}) => {
         const response = await request<{ menu: Menu }>({
             url: `/admin/menu/${menuId}`,
             method: 'DELETE',
@@ -216,6 +254,8 @@ const useMenu = () => {
             return '';
         }
 
+        successCallback();
+
         if ('data' in response) {
             return response.data.menu;
         }
@@ -223,7 +263,9 @@ const useMenu = () => {
 
     return {
         getTypesmenuUser,
-        // getMenuUser,
+        getMenuUser,
+        getMenuDishesUser,
+        getSwapMenuDishesUser,
         getTypesmenu,
         createTypemenu,
         updateTypemenu,

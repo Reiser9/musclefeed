@@ -137,5 +137,49 @@
         "our_email": "הדואר שלנו",
         "our_phone": "הטלפון שלנו",
         "request_call": "הזמנת שיחה"
+    },
+    "Profile": {
+        "account": "חשבון אישי",
+        "profile": "פרופיל",
+        "title": "הפרופיל שלך",
+        "back_text": "חזרה לחשבון האישי",
+        "contact_title": "פרטי קשר",
+        "addresses_title": "כתובות משלוח",
+        "input_name": "איך קוראים לך",
+        "input_surname": "שם המשפחה שלך",
+        "input_allerg": "אלרגיות",
+        "input_phone": "הטלפון שלך",
+        "input_email": "הדואר שלך",
+        "save": "שמור שינויים",
+        "create_address": "הוסף כתובת",
+        "save_address": "שמור כתובת חדשה",
+        "main_address": "כתובת ראשית",
+        "other_address": "כתובות אחרות",
+        "city": "עיר",
+        "street": "רחוב",
+        "home": "בית",
+        "floor": "קומה",
+        "apartment": "דירה"
+    },
+    "Safe": {
+        "account": "חשבון אישי",
+        "title": "אבטחה",
+        "back_text": "חזרה לחשבון האישי",
+        "change_title": "שנה סיסמה",
+        "old_password": "הסיסמה הישנה שלך",
+        "new_password": "סיסמה חדשה",
+        "repeat_new_password": "חזור על הסיסמה החדשה",
+        "save": "שמור שינויים"
+    },
+    "Orders": {
+        "account": "חשבון אישי",
+        "title": "הזמנות",
+        "title2": "ההזמנות שלך",
+        "back_text": "חזרה לחשבון האישי",
+        "all_orders": "כל ההזמנות",
+        "active_orders": "פעיל",
+        "freeze_orders": "קפוא",
+        "nopay_orders": "לא בתשלום",
+        "ended_orders": "הושלם"
     }
 }

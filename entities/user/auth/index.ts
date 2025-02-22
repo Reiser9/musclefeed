@@ -1,1 +1,1 @@
-export type { RegisterDTO, AuthResponse, LoginDTO, UserShortInfo, ChangePasswordDTO } from './model';
+export type { RegisterDTO, AuthResponse, LoginDTO, UserShortInfo, ChangePasswordDTO, UserShortInfoDTO } from './model';

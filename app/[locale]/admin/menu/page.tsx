@@ -2,7 +2,7 @@
 
 import React from 'react';
 import cn from 'classnames';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import styles from './index.module.scss';
 
@@ -21,16 +21,16 @@ const AdminMenuPage = () => {
     const [page, setPage] = React.useState(1);
     const [search, setSearch] = React.useState('');
 
-    // const queryClient = useQueryClient();
+    const queryClient = useQueryClient();
     const searchDebounce = useDebounce(search, 500);
 
-    // const revalidateRequest = () => {
-    //     queryClient.invalidateQueries({ queryKey: ['admin_menus'] });
-    // };
+    const revalidateRequest = () => {
+        queryClient.invalidateQueries({ queryKey: ['admin_menus'] });
+    };
 
     const language = useAppSelector((state) => state.app.language);
 
-    const { getMenus } = useMenu();
+    const { getMenus, deleteMenu } = useMenu();
 
     const { data, isPending, isError } = useQuery({
         queryKey: ['admin_menus', page, searchDebounce],
@@ -64,7 +64,11 @@ const AdminMenuPage = () => {
                 {!!data && !!data?.menus.length ? (
                     <div className={styles.adminTeamItems}>
                         {data?.menus.map((menu) => (
-                            <MenuAdminItem key={menu.id} data={menu} />
+                            <MenuAdminItem
+                                key={menu.id}
+                                data={menu}
+                                deleteCallback={() => deleteMenu(menu.id, revalidateRequest)}
+                            />
                         ))}
                     </div>
                 ) : (
