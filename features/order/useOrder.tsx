@@ -36,6 +36,7 @@ const useOrder = () => {
             url: `/order`,
             method: 'POST',
             data,
+            isAuth: true
         });
 
         if (catchRequestError(response)) {

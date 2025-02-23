@@ -196,13 +196,17 @@ const AdminOrderCreate = () => {
                     type="number"
                 />
 
-                <DatePicker
-                    value={startDate ? dayjs(startDate) : null}
-                    onChange={(date) => setStartDate(date.format('YYYY-MM-DD'))}
-                    className={styles.orderDate}
-                    format="DD.MM.YYYY"
-                    disabledDate={disabledDate}
-                />
+                <div className={styles.skippedButtonsWrap}>
+                    <Text variant="text3">Дата начала заказа</Text>
+
+                    <DatePicker
+                        value={startDate ? dayjs(startDate) : null}
+                        onChange={(date) => setStartDate(date.format('YYYY-MM-DD'))}
+                        className={styles.orderDate}
+                        format="DD.MM.YYYY"
+                        disabledDate={disabledDate}
+                    />
+                </div>
 
                 <div className={styles.skippedButtonsWrap}>
                     <Text variant="text3">Пропускаемые дни</Text>

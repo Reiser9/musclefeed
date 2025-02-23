@@ -2,8 +2,9 @@
 
 import React from 'react';
 import cn from 'classnames';
+import dayjs from 'dayjs';
+import { useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
-import { Dayjs } from 'dayjs';
 
 import styles from './index.module.scss';
 
@@ -16,6 +17,7 @@ import { useOrder } from '@/features/order';
 import { useUserInfo } from '@/features/user';
 import { getDayDeclension } from '@/shared/utils/getDayDeclension';
 import { getScheduleLabel } from '@/shared/utils/getSheduleLabel';
+import { useCities } from '@/features/city';
 
 import { Button } from '@/shared/ui/Button';
 import { Modal } from '@/shared/ui/Modal';
@@ -24,8 +26,6 @@ import { NotContent } from '@/shared/ui/NotContent';
 import { Preloader } from '@/shared/ui/Preloader';
 import { Input } from '@/shared/ui/Input';
 import { Select } from '@/shared/ui/Select';
-import { useCities } from '@/features/city';
-import { useTranslations } from 'next-intl';
 
 type Props = {
     value: boolean;
@@ -34,7 +34,7 @@ type Props = {
     currentMenu: MenuUser | null;
     activePrice: PriceItem;
     disabledDays: number[];
-    dateDelivery: Dayjs | null;
+    dateDelivery: string;
     resetOrder: () => void;
 };
 
@@ -119,8 +119,6 @@ const OrderModal: React.FC<Props> = ({
     const createOrderHandler = () => {
         if (!paymentMethodId || !dateDelivery || !currentMenu) return;
 
-        const deliveryDate = dateDelivery?.toISOString().split('T')[0];
-
         let address;
 
         if (isAuth) {
@@ -151,7 +149,7 @@ const OrderModal: React.FC<Props> = ({
             comment,
             allergies: isAuth ? allergies ?? '' : userAllergies ?? '',
             paymentMethodId: `${paymentMethodId}`,
-            startDate: deliveryDate,
+            startDate: dateDelivery,
             daysCount: `${activePrice.daysCount}`,
             menuId: `${currentMenu.id}`,
             skippedWeekdays: disabledDays,
@@ -257,7 +255,7 @@ const OrderModal: React.FC<Props> = ({
 
                         <p className={styles.orderItemTitle}>
                             Начало доставки:{' '}
-                            <span className={styles.orderDilivery}>{dateDelivery?.format('DD.MM.YYYY')}</span>
+                            <span className={styles.orderDilivery}>{dayjs(dateDelivery).format('DD.MM.YYYY')}</span>
                         </p>
                     </div>
 

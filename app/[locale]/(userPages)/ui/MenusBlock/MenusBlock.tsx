@@ -78,7 +78,7 @@ const MenusBlock = () => {
     // Пропускаемые дни
     const [disabledDays, setDisabledDays] = React.useState<number[]>([6, 7]);
     // Дата начала доставки
-    const [dateDelivery, setDateDelivery] = React.useState<Dayjs | null>(null);
+    const [dateDelivery, setDateDelivery] = React.useState('');
     const [dateDeliveryPicker, setDateDeliveryPicker] = React.useState(false);
     const [deliveryModal, setDeliveryModal] = React.useState(false);
 
@@ -133,7 +133,7 @@ const MenusBlock = () => {
 
     const resetOrder = () => {
         setActiveMenuId(null);
-        setDateDelivery(null);
+        setDateDelivery('');
         setDisabledDays([6, 7]);
         setSelectedDay(tomorrow);
     };
@@ -386,10 +386,8 @@ const MenusBlock = () => {
                                                     className={styles.modalCalendar}
                                                     disabledDate={disabledDate}
                                                     format={'DD.MM.YYYY'}
-                                                    value={dateDelivery}
-                                                    onChange={(date) =>
-                                                        setDateDelivery(date ? dayjs(date.format('YYYY-MM-DD')) : null)
-                                                    }
+                                                    value={dateDelivery ? dayjs(dateDelivery) : null}
+                                                    onChange={(date) => setDateDelivery(date.format('YYYY-MM-DD'))}
                                                     open={dateDeliveryPicker}
                                                     onOpenChange={(isOpen) => setDateDeliveryPicker(isOpen)}
                                                 />
@@ -399,7 +397,7 @@ const MenusBlock = () => {
                                                 <p className={styles.foodFormDateText}>
                                                     Мы привезем еду:{' '}
                                                     <span className={styles.orderDate}>
-                                                        {dateDelivery.format('DD.MM.YYYY')}
+                                                        {dayjs(dateDelivery).format('DD.MM.YYYY')}
                                                     </span>
                                                 </p>
                                             )}
