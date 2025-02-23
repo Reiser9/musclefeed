@@ -178,6 +178,16 @@ const AdminCreatePage = () => {
                 />
 
                 <Input
+                    {...register('price')}
+                    error={!!errors.price}
+                    errorMessage={errors.price?.message}
+                    full
+                    title={'Цена'}
+                    value={watch('price', '')}
+                    type="number"
+                />
+
+                <Input
                     {...register('benefit')}
                     error={!!errors.benefit}
                     errorMessage={errors.benefit?.message}

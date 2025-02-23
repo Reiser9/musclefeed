@@ -30,7 +30,7 @@ const FaqBlock = () => {
 
     const {
         data: faqs,
-        isPending: faqsIsPending,
+        isLoading: faqsIsPending,
         isError: faqsIsError,
     } = useQuery({
         queryKey: ['faq', activeCategory],

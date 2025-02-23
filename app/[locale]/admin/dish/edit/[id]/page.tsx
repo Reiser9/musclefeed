@@ -72,6 +72,7 @@ const AdminEditDish = () => {
         picture: dishPicture,
         proteins,
         weight,
+        price,
     } = dish || {};
 
     React.useEffect(() => {
@@ -227,6 +228,16 @@ const AdminEditDish = () => {
                     full
                     title={'Углеводы'}
                     value={watch('carbohydrates', String(carbohydrates))}
+                    type="number"
+                />
+
+                <Input
+                    {...register('price')}
+                    error={!!errors.price}
+                    errorMessage={errors.price?.message}
+                    full
+                    title={'Цена'}
+                    value={watch('price', String(price))}
                     type="number"
                 />
 
