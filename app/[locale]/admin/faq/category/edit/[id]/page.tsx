@@ -25,9 +25,11 @@ const AdminFaqCategoryEdit = () => {
     const language = useAppSelector((state) => state.app.language);
 
     const { data, isPending, isError } = useQuery({
-        queryKey: ['team_by_id', id],
+        queryKey: ['faq_category_by_id', id],
         queryFn: () => getFaqCategoryById(String(id)),
         enabled: !!id,
+        gcTime: 0,
+        refetchOnMount: true
     });
 
     const {

@@ -39,6 +39,8 @@ const AdminTypeMenuEdit = () => {
         queryKey: ['menutype_by_id', id],
         queryFn: () => getTypemenuById(String(id)),
         enabled: !!id,
+        gcTime: 0,
+        refetchOnMount: true
     });
 
     const onSubmit: SubmitHandler<MenuTypeDTO> = (data) => {

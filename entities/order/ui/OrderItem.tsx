@@ -7,73 +7,85 @@ import styles from './index.module.scss';
 
 import type { Order } from '../model';
 import { Calendar, Fire } from '@/shared/icons';
+import { useAppSelector } from '@/shared/hooks/useRedux';
 
 import { Text } from '@/shared/ui/Text';
 import { Button } from '@/shared/ui/Button';
+import dayjs from 'dayjs';
 
 type Props = {
-    data?: Order;
+    data: Order;
+    freezeCallback: () => void;
 };
 
-const OrderItem: React.FC<Props> = ({ data }) => {
-    const {} = data || {};
+const OrderItem: React.FC<Props> = ({ data, freezeCallback = () => {} }) => {
+    const language = useAppSelector((state) => state.app.language);
+
+    const { daysLeft, daysCount, menu, id, isIndividual, startDate } = data || {};
 
     return (
         <div className={styles.ordersItem}>
             <div className={styles.ordersItemImg}>
-                <Image src="/img/review1.png" alt="order" fill />
+                <Image
+                    src={isIndividual ? '/img/review1.png' : menu.backgroundPicture || '/img/review1.png'}
+                    alt="order"
+                    fill
+                />
 
-                <p className={styles.ordersItemSign}>
-                    <Calendar />
-                    Осталось 3 дня
-                </p>
+                {!isIndividual && (
+                    <p className={styles.ordersItemSign}>
+                        <Calendar />
+                        Осталось дней: {daysLeft}
+                    </p>
+                )}
             </div>
 
             <div className={styles.ordersItemContent}>
                 <div className={styles.ordersItemTextInner}>
                     <Text variant="h3" upper>
-                        Правильное питание
+                        {isIndividual ? 'Персональный заказ' : menu?.name[language]}
                     </Text>
 
-                    <p className={styles.ordersItemDesc}>
-                        Сбалансированная программа питания, рассчитанная на калории, белки, жиры и углеводы. Идеально
-                        подойдет для вашей цели
-                    </p>
+                    {!isIndividual && <p className={styles.ordersItemDesc}>{menu?.description[language]}</p>}
                 </div>
 
                 <div className={styles.ordersItemPoints}>
-                    <p className={styles.ordersItemPoint}>
-                        <Fire className={styles.ordersItemPointRed} />
-                        Ккал 2000
-                    </p>
+                    {!isIndividual && (
+                        <p className="ordersItemPoint">
+                            <Fire className={styles.ordersItemPointRed} />
+                            Ккал {menu?.calories}
+                        </p>
+                    )}
 
-                    <p className={styles.ordersItemPoint}>
+                    <p className="ordersItemPoint">
                         <Calendar />
-                        24 дня
+                        {isIndividual ? dayjs(startDate).format('DD.MM.YYYY') : `${daysCount} дня`}
                     </p>
                 </div>
 
-                <Button full small>
+                <Button full small href={`/${language}/account/orders/${id}`}>
                     Подробнее о меню
                 </Button>
 
-                <Button full small color="green">
+                <Button full small color="green" href={`/${language}/account/orders/${id}/swaps`}>
                     Замена блюд
                 </Button>
 
-                <div className={styles.ordersItemFreeze}>
-                    <div className={styles.ordersItemFreezeSwitch}>
-                        <div className={styles.ordersItemFreezeCircle}></div>
-                    </div>
+                {!isIndividual && (
+                    <div className={styles.ordersItemFreeze} onClick={freezeCallback}>
+                        <div className={styles.ordersItemFreezeSwitch}>
+                            <div className={styles.ordersItemFreezeCircle}></div>
+                        </div>
 
-                    <div className={styles.ordersItemFreezeTextInner}>
-                        <p className={styles.ordersItemFreezeTitle}>Заморозить</p>
+                        <div className={styles.ordersItemFreezeTextInner}>
+                            <p className={styles.ordersItemFreezeTitle}>Заморозить</p>
 
-                        <p className={styles.ordersItemFreezeText}>
-                            Мы приостановим доставку вам еды до тех пор пока вы не активируете рацион
-                        </p>
+                            <p className={styles.ordersItemFreezeText}>
+                                Мы приостановим доставку вам еды до тех пор пока вы не активируете рацион
+                            </p>
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );

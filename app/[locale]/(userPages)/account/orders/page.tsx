@@ -19,21 +19,36 @@ import { Text } from '@/shared/ui/Text';
 import { BackLink } from '@/shared/ui/BackLink';
 import { Preloader } from '@/shared/ui/Preloader';
 import { NotContent } from '@/shared/ui/NotContent';
+import { Button } from '@/shared/ui/Button';
+import { Modal } from '@/shared/ui/Modal';
+import { Input } from '@/shared/ui/Input';
 
 const AccountOrders = () => {
     const [page, setPage] = React.useState(1);
     const [status, setStatus] = React.useState('all');
+    const [changeModal, setChangeModal] = React.useState(false);
+    const [comment, setComment] = React.useState('');
+    const [orderId, setOrderId] = React.useState<number | null>(null);
 
     const t = useTranslations('Orders');
     const language = useAppSelector((state) => state.app.language);
 
-    const { getUserOrders } = useOrder();
+    const { getUserOrders, createOrderRequest } = useOrder();
 
     const { data, isPending, isError } = useQuery({
         queryKey: ['admin_menus', page, 10, status],
         queryFn: () => getUserOrders(page, 10, status),
         placeholderData: keepPreviousData,
     });
+
+    const createRequestHandler = () => {
+        if (!orderId) return;
+
+        createOrderRequest(orderId, 'FREEZE', comment, () => {
+            setComment('');
+            setChangeModal(false);
+        });
+    };
 
     if (isPending) {
         return <Preloader page />;
@@ -122,9 +137,20 @@ const AccountOrders = () => {
                                 ) : isError ? (
                                     <NotContent />
                                 ) : !!data && !!data.orders.length ? (
-                                    <OrderItem />
+                                    data.orders.map((data) => (
+                                        <OrderItem
+                                            key={data.id}
+                                            data={data}
+                                            freezeCallback={() => {
+                                                setOrderId(data.id);
+                                                setChangeModal(true);
+                                            }}
+                                        />
+                                    ))
                                 ) : (
-                                    <NotContent text="У вас еще нет заказов" />
+                                    <NotContent text="У вас еще нет заказов">
+                                        <Button href="/">Сделать заказ</Button>
+                                    </NotContent>
                                 )}
                             </div>
 
@@ -147,6 +173,20 @@ const AccountOrders = () => {
                     </div>
                 </div>
             </div>
+
+            <Modal value={changeModal} setValue={setChangeModal}>
+                <Text upper fontWeight={600}>
+                    Запрос изменения заказа
+                </Text>
+
+                <div className={styles.changeModal}>
+                    <Input value={comment} setValue={setComment} component="textarea" full title="Комментарий" />
+
+                    <Button full small onClick={createRequestHandler}>
+                        Отправить
+                    </Button>
+                </div>
+            </Modal>
         </AuthWrapper>
     );
 };

@@ -38,7 +38,6 @@ const Header = () => {
 
         dispatch(setLanguage(value));
         const newPath = pathname.replace(`/${locale}`, `/${value}`);
-        localStorage.setItem('language', value);
         router.replace(newPath);
     };
 
@@ -54,9 +53,7 @@ const Header = () => {
                                     value={appLanguage}
                                     onChange={changeLanguage}
                                 >
-                                    <option value="ru" defaultChecked>
-                                        Ru
-                                    </option>
+                                    <option value="ru">Ru</option>
                                     <option value="he">He</option>
                                 </select>
 
@@ -74,7 +71,11 @@ const Header = () => {
                 <div className={styles.headerBottom}>
                     <div className={base.container}>
                         <div className={styles.headerBottomInner}>
-                            <Link href={`/${locale}`} className={styles.headerLogo}>
+                            <Link
+                                href={`/${locale}`}
+                                className={styles.headerLogo}
+                                onClick={() => setMobileMenu(false)}
+                            >
                                 <Image src="/img/logo.png" alt="logo" fill />
                             </Link>
 
@@ -145,6 +146,7 @@ const Header = () => {
                                         <Link
                                             href={`/${locale}/account`}
                                             className={cn(styles.headerSocialLink, styles.orange)}
+                                            onClick={() => setMobileMenu(false)}
                                         >
                                             <UserLogin />
                                         </Link>
@@ -203,11 +205,19 @@ const Header = () => {
                         </div>
                     </div> */}
 
-                    <Link href={`/${locale}/menu`} className={styles.menuMobileLink}>
+                    <Link
+                        href={`/${locale}/menu`}
+                        className={styles.menuMobileLink}
+                        onClick={() => setMobileMenu(false)}
+                    >
                         {t('menu')}
                     </Link>
 
-                    <Link href={`/${locale}/reviews`} className={styles.menuMobileLink}>
+                    <Link
+                        href={`/${locale}/reviews`}
+                        className={styles.menuMobileLink}
+                        onClick={() => setMobileMenu(false)}
+                    >
                         {t('reviews')}
                     </Link>
 
@@ -215,7 +225,11 @@ const Header = () => {
                         {t('contacts')}
                     </a> */}
 
-                    <Link href={`/${locale}/faq`} className={styles.menuMobileLink}>
+                    <Link
+                        href={`/${locale}/faq`}
+                        className={styles.menuMobileLink}
+                        onClick={() => setMobileMenu(false)}
+                    >
                         {t('buyer')}
                     </Link>
                 </div>

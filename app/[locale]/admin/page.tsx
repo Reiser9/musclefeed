@@ -2,10 +2,7 @@
 
 import React from 'react';
 import cn from 'classnames';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { DatePicker } from 'antd';
-import { useRouter } from 'next/navigation';
-import dayjs, { Dayjs } from 'dayjs';
+import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import styles from './index.module.scss';
 
@@ -18,21 +15,19 @@ import { Button } from '@/shared/ui/Button';
 import { Text } from '@/shared/ui/Text';
 import { NotContent } from '@/shared/ui/NotContent';
 
-const { RangePicker } = DatePicker;
-
 const AdminMain = () => {
     const [status, setStatus] = React.useState('all');
     const [page, setPage] = React.useState(1);
 
-    const [routeStartDate, setRouteStartDate] = React.useState<Dayjs | null>(null);
-    const [routeEndDate, setRouteEndDate] = React.useState<Dayjs | null>(null);
-
-    const [dishListDate, setDishListDate] = React.useState('');
-
+    const queryClient = useQueryClient();
     const language = useAppSelector((state) => state.app.language);
-    const router = useRouter();
 
-    const { getAdminOrders, getOrderStats, createOrderRoute } = useOrder();
+    const revalidateRequests = () => {
+        queryClient.invalidateQueries({ queryKey: ['admin_orders'] });
+        queryClient.invalidateQueries({ queryKey: ['admin_orders_stats'] });
+    };
+
+    const { getAdminOrders, getOrderStats, deleteOrder } = useOrder();
 
     const { data, isPending, isError } = useQuery({
         queryKey: ['admin_orders', page, 12, status],
@@ -44,21 +39,6 @@ const AdminMain = () => {
         queryKey: ['admin_orders_stats'],
         queryFn: getOrderStats,
     });
-
-    const handleRouteList = () => {
-        if (!routeStartDate || !routeEndDate) return;
-
-        const dateStart = routeStartDate.toISOString().split('T')[0];
-        const dateEnd = routeEndDate.toISOString().split('T')[0];
-
-        createOrderRoute(dateStart, dateEnd);
-    };
-
-    const handleDishList = () => {
-        if (!dishListDate) return;
-
-        router.push(`/${language}/dish-list?date=${dishListDate}`);
-    };
 
     const {
         activeCount,
@@ -82,39 +62,6 @@ const AdminMain = () => {
     return (
         <div className={styles.adminTeam}>
             <div className={styles.adminTeamWrapper}>
-                <div className={styles.adminOrdersRoute}>
-                    <RangePicker
-                        className={styles.adminOrdersRoutePicker}
-                        value={[routeStartDate, routeEndDate]}
-                        onChange={(dates) => {
-                            if (!dates) {
-                                setRouteStartDate(null);
-                                setRouteEndDate(null);
-                                return;
-                            }
-
-                            setRouteStartDate(dates[0]);
-                            setRouteEndDate(dates[1]);
-                        }}
-                    />
-
-                    <Button disabled={!routeStartDate || !routeEndDate} onClick={handleRouteList}>
-                        Сформировать
-                    </Button>
-                </div>
-
-                <div className={styles.adminOrdersRoute}>
-                    <DatePicker
-                        className={styles.adminOrdersRoutePicker}
-                        value={dishListDate ? dayjs(dishListDate) : null}
-                        onChange={(date) => setDishListDate(date.format('YYYY-MM-DD'))}
-                    />
-
-                    <Button disabled={!dishListDate} onClick={handleDishList}>
-                        Печать
-                    </Button>
-                </div>
-
                 <div className={styles.adminOrdersTabs}>
                     <button
                         className={cn(styles.adminOrdersTab, {
@@ -199,8 +146,12 @@ const AdminMain = () => {
 
                 {!!data && !!data.orders.length ? (
                     <div className={styles.adminTeamItems}>
-                        {data?.orders.map((team) => (
-                            <OrderAdminItem key={team.id} data={team} />
+                        {data?.orders.map((order) => (
+                            <OrderAdminItem
+                                key={order.id}
+                                data={order}
+                                deleteCallback={() => deleteOrder(order.id, revalidateRequests)}
+                            />
                         ))}
                     </div>
                 ) : (

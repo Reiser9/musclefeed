@@ -2,28 +2,46 @@
 
 import React from 'react';
 import cn from 'classnames';
-
-import { Button } from '@/shared/ui/Button';
-import { ArrowRight } from '@/shared/icons';
+import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 
 import styles from './index.module.scss';
+
+import type { MenuUser } from '@/entities/menu';
+import { useMenu } from '@/features/menu';
+import { useAppSelector } from '@/shared/hooks/useRedux';
+
 import { Modal } from '@/shared/ui/Modal';
 import { Text } from '@/shared/ui/Text';
+import { Preloader } from '@/shared/ui/Preloader';
+import { NotContent } from '@/shared/ui/NotContent';
+import { Button } from '@/shared/ui/Button';
 
 type Props = {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
     calories: number;
     setCalories: React.Dispatch<React.SetStateAction<number>>;
+    chooseProgram: (value: MenuUser) => void;
 };
 
-const CalcCaloriesForm: React.FC<Props> = ({ value, setValue, calories, setCalories }) => {
+const CalcCaloriesForm: React.FC<Props> = ({ value, setValue, calories, setCalories, chooseProgram }) => {
     const [year, setYear] = React.useState('');
     const [height, setHeight] = React.useState('');
     const [weight, setWeight] = React.useState('');
     const [gender, setGender] = React.useState('female');
     const [activity, setActivity] = React.useState('1.2');
     const [target, setTarget] = React.useState('0.8');
+
+    const language = useAppSelector((state) => state.app.language);
+    const { getRecommend } = useMenu();
+    const t = useTranslations('Calc');
+
+    const { data, isLoading, isError, refetch } = useQuery({
+        queryKey: ['calc_norm'],
+        queryFn: () => getRecommend(calories),
+        enabled: !!calories,
+    });
 
     const calcCaloriesHandler = () => {
         const currentYear = new Date().getFullYear();
@@ -53,40 +71,43 @@ const CalcCaloriesForm: React.FC<Props> = ({ value, setValue, calories, setCalor
         calcCaloriesHandler();
     }, [year, height, weight, gender, activity, target]);
 
+    React.useEffect(() => {
+        if (calories) {
+            refetch();
+        }
+    }, [calories]);
+
     return (
         <Modal size="big" value={value} setValue={setValue}>
             <Text variant="h3" upper>
-                Рассчитать норму калорий
+                {t('title')}
             </Text>
 
-            <p className={styles.calcText}>
-                Наше меню разработано профессиональными диетологами, приготовлено только из натуральных продуктов и
-                рассчитано на каждого человека под его цели.
-            </p>
+            <p className={styles.calcText}>{t('text')}</p>
 
             <div className={styles.calcForm}>
                 <div className={styles.calcFormItem}>
-                    <p className={styles.calcFormItemTitle}>Ваши данные:</p>
+                    <p className={styles.calcFormItemTitle}>{t('data')}</p>
 
                     <div className={styles.calcFormItemContent}>
                         <input
                             type="number"
                             className={cn(styles.calcFormItemElem, styles.calcFormItemInput)}
-                            placeholder="Год рождения"
+                            placeholder={t('year')}
                             value={year}
                             onChange={(e) => setYear(e.target.value)}
                         />
                         <input
                             type="number"
                             className={cn(styles.calcFormItemElem, styles.calcFormItemInput)}
-                            placeholder="Рост, см"
+                            placeholder={t('height')}
                             value={height}
                             onChange={(e) => setHeight(e.target.value)}
                         />
                         <input
                             type="number"
                             className={cn(styles.calcFormItemElem, styles.calcFormItemInput)}
-                            placeholder="Вес, кг"
+                            placeholder={t('weight')}
                             value={weight}
                             onChange={(e) => setWeight(e.target.value)}
                         />
@@ -94,7 +115,7 @@ const CalcCaloriesForm: React.FC<Props> = ({ value, setValue, calories, setCalor
                 </div>
 
                 <div className={styles.calcFormItem}>
-                    <p className={styles.calcFormItemTitle}>Ваш пол:</p>
+                    <p className={styles.calcFormItemTitle}>{t('gender')}</p>
 
                     <div className={styles.calcFormItemContent}>
                         <button
@@ -103,7 +124,7 @@ const CalcCaloriesForm: React.FC<Props> = ({ value, setValue, calories, setCalor
                             })}
                             onClick={() => setGender('female')}
                         >
-                            Женский
+                            {t('female')}
                         </button>
 
                         <button
@@ -112,13 +133,13 @@ const CalcCaloriesForm: React.FC<Props> = ({ value, setValue, calories, setCalor
                             })}
                             onClick={() => setGender('male')}
                         >
-                            Мужской
+                            {t('male')}
                         </button>
                     </div>
                 </div>
 
                 <div className={styles.calcFormItem}>
-                    <p className={styles.calcFormItemTitle}>Уровень активности:</p>
+                    <p className={styles.calcFormItemTitle}>{t('activity')}</p>
 
                     <div className={styles.calcFormItemContent}>
                         <button
@@ -127,7 +148,7 @@ const CalcCaloriesForm: React.FC<Props> = ({ value, setValue, calories, setCalor
                             })}
                             onClick={() => setActivity('1.2')}
                         >
-                            Нет физической активности
+                            {t('activity1')}
                         </button>
 
                         <button
@@ -136,7 +157,7 @@ const CalcCaloriesForm: React.FC<Props> = ({ value, setValue, calories, setCalor
                             })}
                             onClick={() => setActivity('1.3')}
                         >
-                            1-2 тренировки в неделю
+                            {t('activity2')}
                         </button>
 
                         <button
@@ -145,7 +166,7 @@ const CalcCaloriesForm: React.FC<Props> = ({ value, setValue, calories, setCalor
                             })}
                             onClick={() => setActivity('1.7')}
                         >
-                            Каждодневные тренировки
+                            {t('activity3')}
                         </button>
 
                         <button
@@ -154,13 +175,13 @@ const CalcCaloriesForm: React.FC<Props> = ({ value, setValue, calories, setCalor
                             })}
                             onClick={() => setActivity('1.9')}
                         >
-                            3-4 тренировки в неделю
+                            {t('activity4')}
                         </button>
                     </div>
                 </div>
 
                 <div className={styles.calcFormItem}>
-                    <p className={styles.calcFormItemTitle}>Ваша цель:</p>
+                    <p className={styles.calcFormItemTitle}>{t('target')}</p>
 
                     <div className={styles.calcFormItemContent}>
                         <button
@@ -169,7 +190,7 @@ const CalcCaloriesForm: React.FC<Props> = ({ value, setValue, calories, setCalor
                             })}
                             onClick={() => setTarget('0.8')}
                         >
-                            Сбросить вес
+                            {t('target1')}
                         </button>
 
                         <button
@@ -178,7 +199,7 @@ const CalcCaloriesForm: React.FC<Props> = ({ value, setValue, calories, setCalor
                             })}
                             onClick={() => setTarget('1')}
                         >
-                            Поддерживать вес
+                            {t('target2')}
                         </button>
 
                         <button
@@ -187,13 +208,53 @@ const CalcCaloriesForm: React.FC<Props> = ({ value, setValue, calories, setCalor
                             })}
                             onClick={() => setTarget('1.2')}
                         >
-                            Набор веса
+                            {t('target3')}
                         </button>
                     </div>
                 </div>
+
+                {!!calories && (
+                    <>
+                        <Text fontWeight={600}>
+                            {t('day_norm')} {calories}
+                        </Text>
+
+                        <div className={styles.calcFormWrp}>
+                            <Text fontWeight={600}>{t('rec_title')}</Text>
+
+                            {isLoading ? (
+                                <Preloader page small />
+                            ) : isError ? (
+                                <NotContent />
+                            ) : !!data && !!data.length ? (
+                                <div className={styles.calcFormRecommend}>
+                                    {data.map((menu) => (
+                                        <div key={menu.id} className={styles.calcFormRecommendItem}>
+                                            <Text variant="text2" fontWeight={600}>
+                                                {menu.name[language]} {menu.calories} {t('calories')}
+                                            </Text>
+
+                                            <Text variant="text3">{menu.description[language]}</Text>
+
+                                            <Button
+                                                full
+                                                small
+                                                onClick={() => chooseProgram(menu as unknown as MenuUser)}
+                                            >
+                                                {t('choose')}
+                                            </Button>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <NotContent text="Нет подходящих рационов" />
+                            )}
+                        </div>
+                    </>
+                )}
             </div>
 
-            <div className={styles.calcResult}>
+            {/* <div className={styles.calcResult}>
                 <p className={styles.calcResultCount}>
                     Результат: <span className={styles.calcResultValue}>{calories ? calories : '-'}</span> ККал/день
                 </p>
@@ -202,7 +263,7 @@ const CalcCaloriesForm: React.FC<Props> = ({ value, setValue, calories, setCalor
                     Применить
                     <ArrowRight />
                 </Button>
-            </div>
+            </div> */}
         </Modal>
     );
 };

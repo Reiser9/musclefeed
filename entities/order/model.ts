@@ -32,9 +32,31 @@ export type OrderAdminDTO = OrderDTO & {
     paidAmount: string;
     promocodeDiscount: string;
     finalPrice: string;
-    isProcessed: true;
-    isAllowedExtendion: true;
-    isPaid: true;
+    isProcessed: boolean;
+    isAllowedExtendion: boolean;
+    isPaid: boolean;
+    isCompleted: boolean;
+    freezeStartDate: string;
+    freezeEndDate: string;
+};
+
+export type OrderIndiDTO = {
+    dishes: {
+        id: number;
+        count: number;
+    }[];
+    date: string;
+    paymentMethodId: string | number;
+    fullName: string;
+    email: string;
+    phone: string;
+    allergies: string;
+    cityId: string | number;
+    street: string;
+    house: string;
+    floor: string;
+    apartment: string;
+    comment: string;
 };
 
 export type Order = {
@@ -50,6 +72,7 @@ export type Order = {
         name: LanguageField;
         description: LanguageField;
         calories: number;
+        backgroundPicture?: string;
     };
     city: City;
     street: string;
@@ -59,11 +82,13 @@ export type Order = {
     comment: string;
     daysCount: number;
     daysLeft: number;
-    deliveryStartDate: Date;
-    deliveryEndDate: Date;
+    startDate: Date;
+    endDate: Date;
     skippedWeekdays: number[];
     paymentMethod: PaymentMethod;
     isPaid: boolean;
+    isIndividual: boolean;
+    count: number;
 };
 
 export type AdminOrder = {
@@ -81,9 +106,9 @@ export type AdminOrder = {
     paidAmount: number;
     promocodeDiscount: number;
     finalPrice: number;
-    isProcessed: true;
-    isAllowedExtendion: true;
-    isPaid: true;
+    isProcessed: boolean;
+    isAllowedExtendion: boolean;
+    isPaid: boolean;
     createdAt: Date;
     updatedAt: Date;
     user: UserShortInfo;
@@ -100,6 +125,10 @@ export type AdminOrder = {
     startDate: Date;
     endDate: Date;
     skippedWeekdays: number[];
+    isCompleted: boolean;
+    freezeStartDate: Date;
+    freezeEndDate: Date;
+    isIndividual: boolean;
 };
 
 export type OrderPagination = Pagination & {
@@ -121,4 +150,45 @@ export type OrderDishList = {
         fats: number;
         carbohydrates: number;
     };
+};
+
+export type Day = {
+    id: number;
+    date: Date;
+    isSkipped: boolean;
+    daySkipType: 'WEEKDAY_SKIPPED' | 'FROZEN';
+};
+
+export type OrderShort = {
+    menuId: number;
+    startDate: Date;
+    daysCount: number;
+    skippedWeekdays: number[];
+    paymentMethodId: number;
+    fullName: string;
+    email: string;
+    phone: string;
+    allergies: string;
+    cityId: number;
+    street: string;
+    house: string;
+    floor: number;
+    apartment: number;
+    comment: string;
+};
+
+export type ORDER_CHANGE_TYPES = 'MENU' | 'CALORIES' | 'DURATION' | 'FORMAT' | 'FREEZE' | 'OTHER';
+
+export type OrderRequest = {
+    id: number;
+    orderChangeType: ORDER_CHANGE_TYPES;
+    comment: string;
+    isProcessed: boolean;
+    createdAt: Date;
+    updateddAt: Date;
+    order: OrderShort;
+};
+
+export type OrderRequestPagination = Pagination & {
+    orderChangeRequests: OrderRequest[];
 };

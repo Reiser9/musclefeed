@@ -19,7 +19,7 @@ const BannerSmall = () => {
         <section className={styles.banner}>
             <div className={base.container}>
                 <div className={styles.banner2Inner}>
-                    <div className={cn(styles.bannerFood, styles.small)}>
+                    <div className={cn("bannerFood", "small")}>
                         <Image src="/img/foods.png" alt="img" fill />
                     </div>
 

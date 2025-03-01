@@ -29,8 +29,32 @@ const useFiles = () => {
         }
     };
 
+    const uploadMap = async (data: FormData, successCallback = () => {}) => {
+        const response = await request<{ file: File }>({
+            url: '/admin/upload/map',
+            method: 'POST',
+            data,
+            isAuth: true,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        successCallback();
+
+        if ('data' in response) {
+            return response.data;
+        }
+    };
+
     return {
         uploadFile,
+        uploadMap,
     };
 };
 

@@ -92,33 +92,35 @@
 	}
 }
 
-.complexItemImg{
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	right: -70px;
-	width: 100%;
-	max-width: 210px;
-	height: 90%;
-}
-
-@media (max-width: 768px) {
-	.complexItemImg{
-		right: -90px;
-		max-width: 170px;
-	}
-}
-
-.complexItemImg img{
-	object-fit: contain;
-}
-
-.complexWrp{
+.complexWrp, .calcFormWrp{
 	width: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
 	margin-top: 6.4rem;
+}
+
+.calcFormWrp{
+	margin-top: 0;
+	gap: 16px;
+}
+
+.calcFormRecommend{
+	width: 100%;
+	display: grid;
+	grid-gap: 16px;
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.calcFormRecommendItem{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 1.6rem 2.4rem;
+	border: 1px solid #777E90;
+	border-radius: 8px;
+	gap: 12px;
 }
 
 .foodWrap, .foodMenu{
@@ -146,6 +148,7 @@
 }
 
 .foodItem{
+	width: 100%;
 	height: auto!important;
 }
 
@@ -1057,6 +1060,11 @@
 	width: 24px;
 	height: 24px;
 	flex-shrink: 0;
+}
+
+.menuItemDishSlide{
+	height: auto;
+	display: flex;
 }
 
 @media (any-hover: hover) {

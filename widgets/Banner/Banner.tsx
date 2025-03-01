@@ -4,6 +4,7 @@ import React from 'react';
 import cn from 'classnames';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import { Link as ScrollLink } from 'react-scroll';
 
 import styles from './index.module.scss';
 import base from '@/shared/styles/base.module.scss';
@@ -23,12 +24,12 @@ const Banner: React.FC<Props> = ({ innerClass }) => {
         <section className={styles.banner}>
             <div className={base.container}>
                 <div className={cn(styles.bannerInner, innerClass)}>
-                    <div className={styles.bannerFood}>
+                    <div className="bannerFood">
                         <Image src="/img/foods.png" alt="img" fill />
                     </div>
 
-                    <p className={cn(styles.bannerSign, styles.bannerSign1)}>{t('abs_text1')}</p>
-                    <p className={cn(styles.bannerSign, styles.bannerSign2)}>{t('abs_text2')}</p>
+                    <p className={cn("bannerSign", "bannerSign1")}>{t('abs_text1')}</p>
+                    <p className={cn("bannerSign", "bannerSign2")}>{t('abs_text2')}</p>
 
                     <div className={styles.bannerContent}>
                         <h2 className={styles.bannerTitle}>
@@ -39,10 +40,12 @@ const Banner: React.FC<Props> = ({ innerClass }) => {
 
                         <p className={styles.bannerText}>{t('text')}</p>
 
-                        <Button className={styles.bannerLink} color="green">
-                            {t('button')}
-                            <ArrowRight />
-                        </Button>
+                        <ScrollLink to="menu" smooth={true} duration={400}>
+                            <Button className={styles.bannerLink} color="green">
+                                {t('button')}
+                                <ArrowRight />
+                            </Button>
+                        </ScrollLink>
                     </div>
                 </div>
             </div>

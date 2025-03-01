@@ -32,6 +32,8 @@ const AdminEditUser = () => {
         queryKey: ['user_by_id', id],
         queryFn: () => getUserById(String(id)),
         enabled: !!id,
+        gcTime: 0,
+        refetchOnMount: true
     });
 
     const { firstName, lastName, email, phone, roles, isVerified, allergies } = user || {};

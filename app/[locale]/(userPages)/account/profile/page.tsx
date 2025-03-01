@@ -41,7 +41,7 @@ const AccountProfile = () => {
         queryFn: getUserAddresses,
     });
 
-    const { primaryAddress, otherAddresses } = data || {};
+    const { primary, addresses } = data || {};
 
     return (
         <AuthWrapper>
@@ -85,11 +85,11 @@ const AccountProfile = () => {
                                         <div className={styles.profileMain}>
                                             <Text>{t('main_address')}</Text>
 
-                                            {primaryAddress ? (
+                                            {primary ? (
                                                 <div className={styles.profileAddress}>
                                                     <Check2 />
 
-                                                    {`${primaryAddress.city.name[language]}, ${primaryAddress.street}, ${primaryAddress.house}, ${primaryAddress.floor}, ${primaryAddress.apartment}`}
+                                                    {`${primary.city.name[language]}, ${primary.street}, ${primary.house}, ${primary.floor}, ${primary.apartment}`}
                                                 </div>
                                             ) : (
                                                 <NotContent text="Основной адрес не создан" />
@@ -99,9 +99,9 @@ const AccountProfile = () => {
                                         <div className={styles.profileAddresses}>
                                             <Text>{t('other_address')}</Text>
 
-                                            {!!otherAddresses && !!otherAddresses.length ? (
+                                            {!!addresses && !!addresses.length ? (
                                                 <div className={styles.profileAddressesInner}>
-                                                    {otherAddresses.map((address) => (
+                                                    {addresses.map((address) => (
                                                         <AddressItem
                                                             key={address.id}
                                                             data={address}

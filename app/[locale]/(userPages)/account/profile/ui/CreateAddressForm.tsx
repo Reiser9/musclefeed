@@ -56,6 +56,12 @@ const CreateAddressForm = ({ successCallback = () => {} }: { successCallback?: (
         });
     };
 
+    React.useEffect(() => {
+        if (data && !!data.length) {
+            setCity(`${data[0].id}`);
+        }
+    }, [data]);
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.addAddressForm}>

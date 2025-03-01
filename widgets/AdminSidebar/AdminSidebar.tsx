@@ -7,112 +7,162 @@ import cn from 'classnames';
 import { usePathname } from 'next/navigation';
 
 import styles from './index.module.scss';
+import { Cross, Menu } from '@/shared/icons';
 
 const AdminSidebar = () => {
+    const [showSidebar, setShowSidebar] = React.useState(false);
     const pathname = usePathname();
     const locale = React.useMemo(() => (pathname.split('/')[1] === 'he' ? 'he' : 'ru'), [pathname]);
 
     return (
-        <aside className={styles.sidebar}>
-            <div className={styles.sidebarLogoInner}>
-                <Link href="/" className={styles.sidebarLogo}>
-                    <Image src="/img/logo.png" alt="logo" fill />
-                </Link>
-            </div>
+        <>
+            <aside
+                className={cn(styles.sidebar, {
+                    [styles.show]: showSidebar,
+                })}
+            >
+                <div className={styles.sidebarLogoInner}>
+                    <button className={styles.sidebarClose} onClick={() => setShowSidebar(false)}>
+                        <Cross />
+                    </button>
 
-            <nav className={styles.sidebarNav}>
-                {/* Выделить в массив */}
-                <Link
-                    href={`/${locale}/admin`}
-                    className={cn(styles.sidebarNavLink, {
-                        [styles.active]: pathname === `/${locale}/admin`,
-                    })}
-                >
-                    Заказы
-                </Link>
+                    <Link href="/" className={styles.sidebarLogo}>
+                        <Image src="/img/logo.png" alt="logo" fill />
+                    </Link>
+                </div>
 
-                <Link
-                    href={`/${locale}/admin/dish`}
-                    className={cn(styles.sidebarNavLink, {
-                        [styles.active]: pathname.includes(`/${locale}/admin/dish`),
-                    })}
-                >
-                    Блюда
-                </Link>
+                <nav className={styles.sidebarNav}>
+                    <Link
+                        href={`/${locale}/admin`}
+                        className={cn(styles.sidebarNavLink, {
+                            [styles.active]: pathname === `/${locale}/admin`,
+                        })}
+                        onClick={() => setShowSidebar(false)}
+                    >
+                        Заказы
+                    </Link>
 
-                <Link
-                    href={`/${locale}/admin/typesdish`}
-                    className={cn(styles.sidebarNavLink, {
-                        [styles.active]: pathname.includes(`/${locale}/admin/typesdish`),
-                    })}
-                >
-                    Типы блюд
-                </Link>
+                    <Link
+                        href={`/${locale}/admin/request`}
+                        className={cn(styles.sidebarNavLink, {
+                            [styles.active]: pathname === `/${locale}/admin/request`,
+                        })}
+                        onClick={() => setShowSidebar(false)}
+                    >
+                        Запросы изменений
+                    </Link>
 
-                <Link
-                    href={`/${locale}/admin/menu`}
-                    className={cn(styles.sidebarNavLink, {
-                        [styles.active]: pathname.includes(`/${locale}/admin/menu`),
-                    })}
-                >
-                    Меню
-                </Link>
+                    <Link
+                        href={`/${locale}/admin/panel`}
+                        className={cn(styles.sidebarNavLink, {
+                            [styles.active]: pathname === `/${locale}/admin/panel`,
+                        })}
+                        onClick={() => setShowSidebar(false)}
+                    >
+                        Панель
+                    </Link>
 
-                <Link
-                    href={`/${locale}/admin/typesmenu`}
-                    className={cn(styles.sidebarNavLink, {
-                        [styles.active]: pathname.includes(`/${locale}/admin/typesmenu`),
-                    })}
-                >
-                    Типы меню
-                </Link>
+                    <Link
+                        href={`/${locale}/admin/dish`}
+                        className={cn(styles.sidebarNavLink, {
+                            [styles.active]: pathname.includes(`/${locale}/admin/dish`),
+                        })}
+                        onClick={() => setShowSidebar(false)}
+                    >
+                        Блюда
+                    </Link>
 
-                <Link
-                    href={`/${locale}/admin/team`}
-                    className={cn(styles.sidebarNavLink, {
-                        [styles.active]: pathname.includes(`/${locale}/admin/team`),
-                    })}
-                >
-                    Команда
-                </Link>
+                    <Link
+                        href={`/${locale}/admin/typesdish`}
+                        className={cn(styles.sidebarNavLink, {
+                            [styles.active]: pathname.includes(`/${locale}/admin/typesdish`),
+                        })}
+                        onClick={() => setShowSidebar(false)}
+                    >
+                        Типы блюд
+                    </Link>
 
-                <Link
-                    href={`/${locale}/admin/faq`}
-                    className={cn(styles.sidebarNavLink, {
-                        [styles.active]: pathname.includes(`/${locale}/admin/faq`),
-                    })}
-                >
-                    FAQ
-                </Link>
+                    <Link
+                        href={`/${locale}/admin/menu`}
+                        className={cn(styles.sidebarNavLink, {
+                            [styles.active]: pathname.includes(`/${locale}/admin/menu`),
+                        })}
+                        onClick={() => setShowSidebar(false)}
+                    >
+                        Меню
+                    </Link>
 
-                <Link
-                    href={`/${locale}/admin/reviews`}
-                    className={cn(styles.sidebarNavLink, {
-                        [styles.active]: pathname.includes(`/${locale}/admin/reviews`),
-                    })}
-                >
-                    Отзывы
-                </Link>
+                    <Link
+                        href={`/${locale}/admin/typesmenu`}
+                        className={cn(styles.sidebarNavLink, {
+                            [styles.active]: pathname.includes(`/${locale}/admin/typesmenu`),
+                        })}
+                        onClick={() => setShowSidebar(false)}
+                    >
+                        Типы меню
+                    </Link>
 
-                <Link
-                    href={`/${locale}/admin/cities`}
-                    className={cn(styles.sidebarNavLink, {
-                        [styles.active]: pathname.includes(`/${locale}/admin/cities`),
-                    })}
-                >
-                    Города
-                </Link>
+                    <Link
+                        href={`/${locale}/admin/team`}
+                        className={cn(styles.sidebarNavLink, {
+                            [styles.active]: pathname.includes(`/${locale}/admin/team`),
+                        })}
+                        onClick={() => setShowSidebar(false)}
+                    >
+                        Команда
+                    </Link>
 
-                <Link
-                    href={`/${locale}/admin/users`}
-                    className={cn(styles.sidebarNavLink, {
-                        [styles.active]: pathname.includes(`/${locale}/admin/users`),
-                    })}
-                >
-                    Пользователи
-                </Link>
-            </nav>
-        </aside>
+                    <Link
+                        href={`/${locale}/admin/faq`}
+                        className={cn(styles.sidebarNavLink, {
+                            [styles.active]: pathname.includes(`/${locale}/admin/faq`),
+                        })}
+                        onClick={() => setShowSidebar(false)}
+                    >
+                        FAQ
+                    </Link>
+
+                    <Link
+                        href={`/${locale}/admin/reviews`}
+                        className={cn(styles.sidebarNavLink, {
+                            [styles.active]: pathname.includes(`/${locale}/admin/reviews`),
+                        })}
+                        onClick={() => setShowSidebar(false)}
+                    >
+                        Отзывы
+                    </Link>
+
+                    <Link
+                        href={`/${locale}/admin/cities`}
+                        className={cn(styles.sidebarNavLink, {
+                            [styles.active]: pathname.includes(`/${locale}/admin/cities`),
+                        })}
+                        onClick={() => setShowSidebar(false)}
+                    >
+                        Города
+                    </Link>
+
+                    <Link
+                        href={`/${locale}/admin/users`}
+                        className={cn(styles.sidebarNavLink, {
+                            [styles.active]: pathname.includes(`/${locale}/admin/users`),
+                        })}
+                        onClick={() => setShowSidebar(false)}
+                    >
+                        Пользователи
+                    </Link>
+                </nav>
+            </aside>
+
+            <button
+                className={cn(styles.sidebarMenu, {
+                    [styles.show]: !showSidebar,
+                })}
+                onClick={() => setShowSidebar(true)}
+            >
+                <Menu />
+            </button>
+        </>
     );
 };
 

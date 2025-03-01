@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import cn from 'classnames';
 
 import styles from './index.module.scss';
@@ -19,7 +20,7 @@ type Props = {
 const Modal: React.FC<Props> = ({ value, setValue, size = 'default', withClose = true, contentClass, children }) => {
     if (!value) return;
 
-    return (
+    return ReactDOM.createPortal(
         <div className={styles.modal} onClick={() => setValue(false)}>
             <div className={cn(styles.modalInner, styles[size])}>
                 <div className={cn(styles.modalContent, contentClass)} onClick={(e) => e.stopPropagation()}>
@@ -32,7 +33,8 @@ const Modal: React.FC<Props> = ({ value, setValue, size = 'default', withClose =
                     {children}
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body,
     );
 };
 

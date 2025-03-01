@@ -1,26 +1,29 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { DatePicker } from 'antd';
 import cn from 'classnames';
 import dayjs, { Dayjs } from 'dayjs';
 import Image from 'next/image';
 import React from 'react';
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
+import { useTranslations } from 'next-intl';
+import { Element } from 'react-scroll';
 
 import 'swiper/css';
 
 import base from '@/shared/styles/base.module.scss';
 import styles from './index.module.scss';
 
-import { DishItem } from '@/entities/dish/ui';
 import type { MenuType, MenuUser, PriceItem } from '@/entities/menu';
+import { ArrowLeft, ArrowRight, Date as DateIcon } from '@/shared/icons';
+import { DishItem } from '@/entities/dish/ui';
 import { useMenu } from '@/features/menu';
 import { useAppSelector } from '@/shared/hooks/useRedux';
-import { ArrowLeft, ArrowRight, Date as DateIcon } from '@/shared/icons';
 import CalcCaloriesForm from './CalcCaloriesForm';
 import { getDayDeclension } from '@/shared/utils/getDayDeclension';
 import OrderModal from './OrderModal';
+import { DATE_OF_DELIVERY } from '@/shared/consts/DATE_OF_DELIVERY';
 
 import { Button } from '@/shared/ui/Button';
 import { Modal } from '@/shared/ui/Modal';
@@ -46,13 +49,7 @@ const getNextWeek = (): { date: string; day: string; fullDate: string }[] => {
     return dates;
 };
 
-const findNearCalories = (array: MenuUser[], value: number) => {
-    return array.reduce((closest, current) =>
-        Math.abs(current.calories - value) < Math.abs(closest.calories - value) ? current : closest,
-    );
-};
-
-const startDate = dayjs('2025-02-20');
+const startDate = dayjs(DATE_OF_DELIVERY);
 const disabledDate = (current: Dayjs) => {
     if (!current) return false;
 
@@ -95,11 +92,30 @@ const MenusBlock = () => {
 
     const { getTypesmenuUser, getMenuUser, getMenuDishesUser, getSwapMenuDishesUser } = useMenu();
     const language = useAppSelector((state) => state.app.language);
+    const t = useTranslations('Menu');
 
     const { data, isPending, isError } = useQuery({
         queryKey: ['typesmenu'],
         queryFn: getTypesmenuUser,
     });
+
+    const chooseProgram = (menu: MenuUser) => {
+        const { id, menuType } = menu || {};
+
+        if (data) {
+            const currentMenuType = data?.findIndex((el) => el.id === menuType.id);
+
+            setActiveMenuTypeId(menuType.id);
+            setCurrentMenuType(data[currentMenuType]);
+
+            setTimeout(() => {
+                setActiveMenuId(id);
+                setCurrentMenu(menu);
+            }, 300);
+
+            setCalcNormModal(false);
+        }
+    };
 
     const {
         data: menus,
@@ -119,6 +135,7 @@ const MenusBlock = () => {
         queryKey: ['menu_dishes', activeMenuId, selectedDay],
         queryFn: () => getMenuDishesUser(activeMenuId, selectedDay),
         enabled: !!activeMenuId,
+        placeholderData: keepPreviousData,
     });
 
     const {
@@ -163,18 +180,6 @@ const MenusBlock = () => {
         }
     }, [activeMenuId, menus]);
 
-    React.useEffect(() => {
-        if (calcNorm && menus) {
-            const menu = findNearCalories(menus.menus, calcNorm);
-
-            setCurrentMenu(menu);
-            setActiveMenuId(menu.id);
-        } else {
-            setCurrentMenu(null);
-            setActiveMenuId(null);
-        }
-    }, [calcNorm, menus]);
-
     if (isPending) {
         return <Preloader page small />;
     }
@@ -185,314 +190,325 @@ const MenusBlock = () => {
 
     return (
         <>
-            <section className={styles.complex}>
-                <div className={base.container}>
-                    <div className={styles.complexInner}>
-                        <h2 className={styles.complexTitle}>Ваше меню — ваши правила: настройте под себя</h2>
+            <Element name="menu">
+                <section className={styles.complex}>
+                    <div className={base.container}>
+                        <div className={styles.complexInner}>
+                            <h2 className={styles.complexTitle}>{t('title')}</h2>
 
-                        {!!data && !!data.length ? (
-                            <Swiper
-                                spaceBetween={24}
-                                slidesPerView={3}
-                                className={styles.complexSlider}
-                                breakpoints={{
-                                    0: {
-                                        slidesPerView: 1.1,
-                                        spaceBetween: 8,
-                                    },
-                                    480: {
-                                        slidesPerView: 1.1,
-                                        spaceBetween: 12,
-                                    },
-                                    768: {
-                                        slidesPerView: 1.5,
-                                        spaceBetween: 20,
-                                    },
-                                    1065: {
-                                        slidesPerView: 2,
-                                    },
-                                    1270: {
-                                        slidesPerView: 2.5,
-                                    },
-                                    1630: {
-                                        slidesPerView: 3,
-                                    },
-                                }}
-                            >
-                                {data.map((type) => {
-                                    const { id, name, shortDescription, backgroundPicture, initialPrice } = type || {};
+                            {!!data && !!data.length ? (
+                                <Swiper
+                                    spaceBetween={24}
+                                    slidesPerView={3}
+                                    className={styles.complexSlider}
+                                    breakpoints={{
+                                        0: {
+                                            slidesPerView: 1.1,
+                                            spaceBetween: 8,
+                                        },
+                                        480: {
+                                            slidesPerView: 1.1,
+                                            spaceBetween: 12,
+                                        },
+                                        768: {
+                                            slidesPerView: 1.5,
+                                            spaceBetween: 20,
+                                        },
+                                        1065: {
+                                            slidesPerView: 2,
+                                        },
+                                        1270: {
+                                            slidesPerView: 2.5,
+                                        },
+                                        1630: {
+                                            slidesPerView: 3,
+                                        },
+                                    }}
+                                >
+                                    {data.map((type) => {
+                                        const { id, name, shortDescription, backgroundPicture, initialPrice } =
+                                            type || {};
 
-                                    return (
-                                        <SwiperSlide
-                                            key={id}
-                                            className={cn(styles.complexItem, {
-                                                [styles.active]: activeMenuTypeId === id,
-                                            })}
-                                            onClick={() => setActiveMenuTypeId(id)}
-                                        >
-                                            <div className={styles.complexTextInner}>
-                                                <p className={styles.complexTextTitle}>{name[language]}</p>
+                                        return (
+                                            <SwiperSlide
+                                                key={id}
+                                                className={cn(styles.complexItem, {
+                                                    [styles.active]: activeMenuTypeId === id,
+                                                })}
+                                                onClick={() => setActiveMenuTypeId(id)}
+                                            >
+                                                <div className={styles.complexTextInner}>
+                                                    <p className={styles.complexTextTitle}>{name[language]}</p>
 
-                                                <p className={styles.complexTextText}>{shortDescription[language]}</p>
+                                                    <p className={styles.complexTextText}>
+                                                        {shortDescription[language]}
+                                                    </p>
 
-                                                <p className={styles.complexTextPrice}>от {initialPrice[language]} ₪</p>
+                                                    <p className={styles.complexTextPrice}>
+                                                        от {initialPrice[language]} ₪
+                                                    </p>
+                                                </div>
+
+                                                <div className="complexItemImg">
+                                                    <Image src={backgroundPicture} alt={name[language]} fill />
+                                                </div>
+                                            </SwiperSlide>
+                                        );
+                                    })}
+                                </Swiper>
+                            ) : (
+                                <NotContent text="Типы меню еще не созданы" />
+                            )}
+
+                            {activeMenuTypeId && (
+                                <div className={styles.complexWrp}>
+                                    <div className={styles.foodTextInner}>
+                                        <p className={styles.foodTextTitle}>{currentMenuType?.name[language]}</p>
+
+                                        <p className={styles.foodTextText}>{currentMenuType?.description[language]}</p>
+                                    </div>
+
+                                    <div className={styles.foodForm}>
+                                        {menusIsPending ? (
+                                            <Preloader page small offIndent />
+                                        ) : menusIsError ? (
+                                            <NotContent />
+                                        ) : (
+                                            <div className={styles.foodFormItem}>
+                                                <div className={styles.foodFormItemName}>
+                                                    <p className={styles.foodFormItemNameText}>{t('program')}</p>
+
+                                                    <button
+                                                        className={styles.foodFormButton}
+                                                        onClick={() => setCalcNormModal(true)}
+                                                    >
+                                                        {t('calc_norm')}
+                                                    </button>
+                                                </div>
+
+                                                <div className={styles.foodFormItemContent}>
+                                                    {menus &&
+                                                        menus.menus.map((menu) => (
+                                                            <button
+                                                                key={menu.id}
+                                                                className={cn(
+                                                                    styles.foodFormChoose,
+                                                                    styles.foodCalories,
+                                                                    {
+                                                                        [styles.active]: activeMenuId === menu.id,
+                                                                    },
+                                                                )}
+                                                                onClick={() => setActiveMenuId(menu.id)}
+                                                            >
+                                                                {menu.name[language]}
+                                                                <span className={styles.foodSign}>
+                                                                    {menu.mealsCount[language]}
+                                                                </span>
+                                                            </button>
+                                                        ))}
+                                                </div>
                                             </div>
+                                        )}
 
-                                            <div className={styles.complexItemImg}>
-                                                <Image src={backgroundPicture} alt={name[language]} fill />
+                                        {currentMenu && activeMenuId && (
+                                            <div className={styles.foodFormItem}>
+                                                <div className={styles.foodFormItemName}>
+                                                    <p className={styles.foodFormItemNameText}>{t('program')}</p>
+                                                </div>
+
+                                                <div className={styles.foodFormItemContent}>
+                                                    {currentMenu?.prices &&
+                                                        currentMenu.prices.map((day) => (
+                                                            <button
+                                                                key={day.id}
+                                                                className={cn(styles.foodFormChoose, {
+                                                                    [styles.active]: day.id === activePrice?.id,
+                                                                })}
+                                                                onClick={() => setActivePrice(day)}
+                                                            >
+                                                                {day.daysCount} дней
+                                                            </button>
+                                                        ))}
+                                                </div>
                                             </div>
-                                        </SwiperSlide>
-                                    );
-                                })}
-                            </Swiper>
-                        ) : (
-                            <NotContent text="Типы меню еще не созданы" />
-                        )}
+                                        )}
 
-                        {activeMenuTypeId && (
-                            <div className={styles.complexWrp}>
-                                <div className={styles.foodTextInner}>
-                                    <p className={styles.foodTextTitle}>{currentMenuType?.name[language]}</p>
-
-                                    <p className={styles.foodTextText}>{currentMenuType?.description[language]}</p>
-                                </div>
-
-                                <div className={styles.foodForm}>
-                                    {menusIsPending ? (
-                                        <Preloader page small offIndent />
-                                    ) : menusIsError ? (
-                                        <NotContent />
-                                    ) : (
                                         <div className={styles.foodFormItem}>
                                             <div className={styles.foodFormItemName}>
-                                                <p className={styles.foodFormItemNameText}>Программа:</p>
+                                                <p className={styles.foodFormItemNameText}>{t('format')}</p>
+                                            </div>
+
+                                            <div className={cn(styles.foodFormItemContent, styles.big)}>
+                                                <button
+                                                    className={cn(styles.foodFormChoose, {
+                                                        [styles.active]:
+                                                            disabledDays.length === 2 &&
+                                                            disabledDays.includes(6) &&
+                                                            disabledDays.includes(7),
+                                                    })}
+                                                    onClick={() => setDisabledDays([6, 7])}
+                                                >
+                                                    {t('format1')}
+                                                </button>
+
+                                                <button
+                                                    className={cn(styles.foodFormChoose, {
+                                                        [styles.active]:
+                                                            disabledDays.length === 1 && disabledDays.includes(5),
+                                                    })}
+                                                    onClick={() => setDisabledDays([5])}
+                                                >
+                                                    {t('format2')}
+                                                </button>
+
+                                                <button
+                                                    className={cn(styles.foodFormChoose, {
+                                                        [styles.active]:
+                                                            disabledDays.length === 2 &&
+                                                            disabledDays.includes(5) &&
+                                                            disabledDays.includes(6),
+                                                    })}
+                                                    onClick={() => setDisabledDays([5, 6])}
+                                                >
+                                                    {t('format3')}
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div className={styles.foodFormItem}>
+                                            <div className={styles.foodFormItemName}>
+                                                <p className={styles.foodFormItemNameText}>{t('date')}</p>
 
                                                 <button
                                                     className={styles.foodFormButton}
-                                                    onClick={() => setCalcNormModal(true)}
+                                                    onClick={() => setDeliveryModal(true)}
                                                 >
-                                                    Рассчитать норму калорий
+                                                    {t('delivery_cond')}
                                                 </button>
                                             </div>
 
-                                            <div className={styles.foodFormItemContent}>
-                                                {menus &&
-                                                    menus.menus.map((menu) => (
-                                                        <button
-                                                            key={menu.id}
-                                                            className={cn(styles.foodFormChoose, styles.foodCalories, {
-                                                                [styles.active]: activeMenuId === menu.id,
-                                                            })}
-                                                            onClick={() => setActiveMenuId(menu.id)}
-                                                        >
-                                                            {menu.name[language]}
-                                                            <span className={styles.foodSign}>
-                                                                {menu.mealsCount[language]}
-                                                            </span>
-                                                        </button>
-                                                    ))}
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {currentMenu && activeMenuId && (
-                                        <div className={styles.foodFormItem}>
-                                            <div className={styles.foodFormItemName}>
-                                                <p className={styles.foodFormItemNameText}>Длительность:</p>
-                                            </div>
-
-                                            <div className={styles.foodFormItemContent}>
-                                                {currentMenu?.prices &&
-                                                    currentMenu.prices.map((day) => (
-                                                        <button
-                                                            key={day.id}
-                                                            className={cn(styles.foodFormChoose, {
-                                                                [styles.active]: day.id === activePrice?.id,
-                                                            })}
-                                                            onClick={() => setActivePrice(day)}
-                                                        >
-                                                            {day.daysCount} дней
-                                                        </button>
-                                                    ))}
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    <div className={styles.foodFormItem}>
-                                        <div className={styles.foodFormItemName}>
-                                            <p className={styles.foodFormItemNameText}>Формат питания:</p>
-                                        </div>
-
-                                        <div className={cn(styles.foodFormItemContent, styles.big)}>
-                                            <button
-                                                className={cn(styles.foodFormChoose, {
-                                                    [styles.active]:
-                                                        disabledDays.length === 2 &&
-                                                        disabledDays.includes(6) &&
-                                                        disabledDays.includes(7),
-                                                })}
-                                                onClick={() => setDisabledDays([6, 7])}
-                                            >
-                                                Будни
-                                            </button>
-
-                                            <button
-                                                className={cn(styles.foodFormChoose, {
-                                                    [styles.active]:
-                                                        disabledDays.length === 1 && disabledDays.includes(5),
-                                                })}
-                                                onClick={() => setDisabledDays([5])}
-                                            >
-                                                Пропускаем пятницу
-                                            </button>
-
-                                            <button
-                                                className={cn(styles.foodFormChoose, {
-                                                    [styles.active]:
-                                                        disabledDays.length === 2 &&
-                                                        disabledDays.includes(5) &&
-                                                        disabledDays.includes(6),
-                                                })}
-                                                onClick={() => setDisabledDays([5, 6])}
-                                            >
-                                                Пропускаем пятницу и субботу
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.foodFormItem}>
-                                        <div className={styles.foodFormItemName}>
-                                            <p className={styles.foodFormItemNameText}>С какого дня начинаем:</p>
-
-                                            <button
-                                                className={styles.foodFormButton}
-                                                onClick={() => setDeliveryModal(true)}
-                                            >
-                                                Условия доставки
-                                            </button>
-                                        </div>
-
-                                        <div className={styles.foodFormItemDate}>
-                                            <div className={styles.foodFormItemDateButtonInner}>
-                                                <button
-                                                    className={styles.foodFormItemDateButton}
-                                                    onClick={() => setDateDeliveryPicker(true)}
-                                                >
-                                                    <DateIcon />
-                                                    Выберите дату
-                                                </button>
-
-                                                <DatePicker
-                                                    className={styles.modalCalendar}
-                                                    disabledDate={disabledDate}
-                                                    format={'DD.MM.YYYY'}
-                                                    value={dateDelivery ? dayjs(dateDelivery) : null}
-                                                    onChange={(date) => setDateDelivery(date.format('YYYY-MM-DD'))}
-                                                    open={dateDeliveryPicker}
-                                                    onOpenChange={(isOpen) => setDateDeliveryPicker(isOpen)}
-                                                />
-                                            </div>
-
-                                            {dateDelivery && (
-                                                <p className={styles.foodFormDateText}>
-                                                    Мы привезем еду:{' '}
-                                                    <span className={styles.orderDate}>
-                                                        {dayjs(dateDelivery).format('DD.MM.YYYY')}
-                                                    </span>
-                                                </p>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {currentMenu && activeMenuId && (
-                                        <div className={styles.foodFormItem}>
-                                            <div className={styles.foodFormItemName}>
-                                                <p className={styles.foodFormItemNameText}>Пример меню:</p>
-                                            </div>
-
-                                            <div className={styles.foodFormItemContent}>
-                                                {getNextWeek().map((item, index) => (
+                                            <div className={styles.foodFormItemDate}>
+                                                <div className={styles.foodFormItemDateButtonInner}>
                                                     <button
-                                                        key={index}
-                                                        className={cn(styles.foodFormChoose, {
-                                                            [styles.active]: selectedDay === item.fullDate,
-                                                        })}
-                                                        onClick={() => setSelectedDay(item.fullDate)}
+                                                        className={styles.foodFormItemDateButton}
+                                                        onClick={() => setDateDeliveryPicker(true)}
                                                     >
-                                                        {item.day} {item.date}
+                                                        <DateIcon />
+                                                        {t('choose_date')}
                                                     </button>
-                                                ))}
+
+                                                    <DatePicker
+                                                        className={styles.modalCalendar}
+                                                        disabledDate={disabledDate}
+                                                        format={'DD.MM.YYYY'}
+                                                        value={dateDelivery ? dayjs(dateDelivery) : null}
+                                                        onChange={(date) => setDateDelivery(date.format('YYYY-MM-DD'))}
+                                                        open={dateDeliveryPicker}
+                                                        onOpenChange={(isOpen) => setDateDeliveryPicker(isOpen)}
+                                                    />
+                                                </div>
+
+                                                {dateDelivery && (
+                                                    <p className={styles.foodFormDateText}>
+                                                        {t('date_text')}{' '}
+                                                        <span className={styles.orderDate}>
+                                                            {dayjs(dateDelivery).format('DD.MM.YYYY')}
+                                                        </span>
+                                                    </p>
+                                                )}
                                             </div>
                                         </div>
-                                    )}
+
+                                        {currentMenu && activeMenuId && (
+                                            <div className={styles.foodFormItem}>
+                                                <div className={styles.foodFormItemName}>
+                                                    <p className={styles.foodFormItemNameText}>{t('example')}</p>
+                                                </div>
+
+                                                <div className={styles.foodFormItemContent}>
+                                                    {getNextWeek().map((item, index) => (
+                                                        <button
+                                                            key={index}
+                                                            className={cn(styles.foodFormChoose, {
+                                                                [styles.active]: selectedDay === item.fullDate,
+                                                            })}
+                                                            onClick={() => setSelectedDay(item.fullDate)}
+                                                        >
+                                                            {item.day} {item.date}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {activeMenuId &&
+                                        (dishesIsLoading ? (
+                                            <Preloader small page />
+                                        ) : dishesIsError ? (
+                                            <NotContent />
+                                        ) : !!dishes ? (
+                                            <div className={styles.foodWrap}>
+                                                <Swiper
+                                                    slidesPerView={5}
+                                                    breakpoints={{
+                                                        0: {
+                                                            slidesPerView: 1.5,
+                                                        },
+                                                        768: {
+                                                            slidesPerView: 2,
+                                                        },
+                                                        1065: {
+                                                            slidesPerView: 3,
+                                                        },
+                                                        1270: {
+                                                            slidesPerView: 4,
+                                                        },
+                                                        1630: {
+                                                            slidesPerView: 5,
+                                                        },
+                                                    }}
+                                                    className={styles.foodContent}
+                                                    onSwiper={(swiper) => {
+                                                        swiperIntance.current = swiper;
+                                                    }}
+                                                >
+                                                    {dishes.dishes.map((dish) => (
+                                                        <SwiperSlide key={dish.id} className={styles.menuItemDishSlide}>
+                                                            <DishItem
+                                                                data={dish}
+                                                                buttonCallback={() => {
+                                                                    setSwapModal(true);
+                                                                    setSwapDishTypeId(dish.dishType.id);
+                                                                }}
+                                                            />
+                                                        </SwiperSlide>
+                                                    ))}
+                                                </Swiper>
+
+                                                <button
+                                                    className={cn(styles.sliderArrow, styles.foodPrev)}
+                                                    onClick={() => swiperIntance.current?.slidePrev()}
+                                                >
+                                                    <ArrowLeft />
+                                                </button>
+
+                                                <button
+                                                    className={cn(styles.sliderArrow, styles.foodNext)}
+                                                    onClick={() => swiperIntance.current?.slideNext()}
+                                                >
+                                                    <ArrowRight />
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <NotContent text="Блюд на этот день не создано" />
+                                        ))}
                                 </div>
-
-                                {activeMenuId &&
-                                    (dishesIsLoading ? (
-                                        <Preloader small page />
-                                    ) : dishesIsError ? (
-                                        <NotContent />
-                                    ) : !!dishes ? (
-                                        <div className={styles.foodWrap}>
-                                            <Swiper
-                                                slidesPerView={5}
-                                                breakpoints={{
-                                                    0: {
-                                                        slidesPerView: 1.5,
-                                                    },
-                                                    768: {
-                                                        slidesPerView: 2,
-                                                    },
-                                                    1065: {
-                                                        slidesPerView: 3,
-                                                    },
-                                                    1270: {
-                                                        slidesPerView: 4,
-                                                    },
-                                                    1630: {
-                                                        slidesPerView: 5,
-                                                    },
-                                                }}
-                                                className={styles.foodContent}
-                                                onSwiper={(swiper) => {
-                                                    swiperIntance.current = swiper;
-                                                }}
-                                            >
-                                                {dishes.dishes.map((dish) => (
-                                                    <SwiperSlide key={dish.id}>
-                                                        <DishItem
-                                                            data={dish}
-                                                            buttonCallback={() => {
-                                                                setSwapModal(true);
-                                                                setSwapDishTypeId(dish.dishType.id);
-                                                            }}
-                                                        />
-                                                    </SwiperSlide>
-                                                ))}
-                                            </Swiper>
-
-                                            <button
-                                                className={cn(styles.sliderArrow, styles.foodPrev)}
-                                                onClick={() => swiperIntance.current?.slidePrev()}
-                                            >
-                                                <ArrowLeft />
-                                            </button>
-
-                                            <button
-                                                className={cn(styles.sliderArrow, styles.foodNext)}
-                                                onClick={() => swiperIntance.current?.slideNext()}
-                                            >
-                                                <ArrowRight />
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <NotContent text="Блюд на этот день не создано" />
-                                    ))}
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </Element>
 
             <section
                 className={cn(styles.cart, {
@@ -529,26 +545,17 @@ const MenusBlock = () => {
             <Modal value={deliveryModal} setValue={setDeliveryModal}>
                 <>
                     <Text variant="h3" upper className={styles.modalDeliveryTitle}>
-                        Условия доставки
+                        {t('delivery_cond')}
                     </Text>
 
                     <div className={styles.modalDeliveryTextInner}>
-                        <p className={styles.modalDeliveryText}>
-                            Мы бережем ваше время, поэтому привозим еду с запасом на 2 дня.
-                        </p>
+                        <p className={styles.modalDeliveryText}>{t('delivery_cond_text1')}</p>
 
-                        <p className={styles.modalDeliveryText}>
-                            Заказы доставляются в выбранный вами временной интервал.
-                        </p>
+                        <p className={styles.modalDeliveryText}>{t('delivery_cond_text2')}</p>
 
-                        <p className={styles.modalDeliveryText}>
-                            Если вы выбрали программу на 5 дней, доставка осуществляется только по будням: в понедельник
-                            и среду — еда на 2 дня, в пятницу — еда на 1 день (выходные исключены).
-                        </p>
+                        <p className={styles.modalDeliveryText}>{t('delivery_cond_text3')}</p>
 
-                        <p className={styles.modalDeliveryText}>
-                            Сделайте заказ до 12:00, чтобы вам привезли еду в ближайший доступный для заказа день.
-                        </p>
+                        <p className={styles.modalDeliveryText}>{t('delivery_cond_text4')}</p>
                     </div>
                 </>
             </Modal>
@@ -595,6 +602,7 @@ const MenusBlock = () => {
                 setValue={setCalcNormModal}
                 calories={calcNorm}
                 setCalories={setCalcNorm}
+                chooseProgram={chooseProgram}
             />
         </>
     );

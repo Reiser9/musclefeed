@@ -5,6 +5,12 @@
     padding: 6.4rem 3.2rem;
 }
 
+@media (max-width: 580px) {
+    .adminTeam{
+        padding: 4.8rem 2rem;
+    }
+}
+
 .createMenuForm{
     width: 100%;
     display: flex;
@@ -47,9 +53,22 @@
     gap: 16px;
 }
 
+@media (max-width: 998px) {
+    .titleWrap{
+        flex-wrap: wrap;
+    }
+}
+
 .adminDishSearch{
     width: 100%;
     max-width: 370px;
+}
+
+@media (max-width: 998px) {
+    .adminDishSearch{
+        order: 3;
+        max-width: 100%;
+    }
 }
 
 .adminTeamItems{
@@ -237,6 +256,17 @@
 
 .menuFormPriceInput{
     width: calc(100% / 4 - 60px / 4);
+}
+
+@media (max-width: 998px) {
+    .menuFormPriceInput{
+        width: calc(100% / 2 - 20px / 2);
+    }
+}
+@media (max-width: 845px) {
+    .menuFormPriceInput{
+        width: 100%;
+    }
 }
 
 @media (any-hover: hover) {

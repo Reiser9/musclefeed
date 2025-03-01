@@ -31,6 +31,8 @@ const AdminTeamEdit = () => {
         queryKey: ['team_by_id', id],
         queryFn: () => getMemberById(String(id)),
         enabled: !!id,
+        gcTime: 0,
+        refetchOnMount: true
     });
 
     const {

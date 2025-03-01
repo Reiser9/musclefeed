@@ -2,11 +2,11 @@
 
 import React from 'react';
 import cn from 'classnames';
+import dayjs from 'dayjs';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import dayjs, { Dayjs } from 'dayjs';
-import { DatePicker } from 'antd';
+import { DatePicker, Select as SelectAnt } from 'antd';
 
 import styles from '../../index.module.scss';
 
@@ -16,6 +16,7 @@ import { Foods, Home } from '@/shared/icons';
 import { useCities } from '@/features/city';
 import { useMenu } from '@/features/menu';
 import { useOrder } from '@/features/order';
+import { useUsers } from '@/features/admin';
 
 import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/Button';
@@ -25,21 +26,18 @@ import { Select } from '@/shared/ui/Select';
 import { Preloader } from '@/shared/ui/Preloader';
 import { NotContent } from '@/shared/ui/NotContent';
 
-const disabledDate = (current: Dayjs) => {
-    if (!current) return false;
-
-    const today = dayjs().startOf('day');
-
-    return current.isBefore(today, 'day');
-};
+const { RangePicker } = DatePicker;
 
 const AdminOrderCreate = () => {
     const { id } = useParams();
 
-    const [userId, setUserId] = React.useState('');
+    const [userId, setUserId] = React.useState<number | null>(null);
     const [activeMenuId, setActiveMenuId] = React.useState('');
     const [startDate, setStartDate] = React.useState('');
     const [skippedDays, setSkippedDays] = React.useState<number[]>([]);
+
+    const [freezeStartDate, setFreezeStartDate] = React.useState('');
+    const [freezeEndDate, setFreezeEndDate] = React.useState('');
 
     const handleSkipDay = (day: number) => {
         setSkippedDays((prev) => (prev.includes(day) ? prev.filter((n) => n !== day) : [...prev, day]));
@@ -57,15 +55,18 @@ const AdminOrderCreate = () => {
     const { getCities } = useCities();
     const language = useAppSelector((state) => state.app.language);
     const router = useRouter();
+    const { getUsers } = useUsers();
 
     const {
         data: order,
         isPending: orderIsPending,
         isError: orderIsError,
     } = useQuery({
-        queryKey: ['get_adminorder_by_id'],
+        queryKey: ['get_adminorder_by_id', id],
         queryFn: () => getAdminOrderById(String(id)),
         enabled: !!id,
+        gcTime: 0,
+        refetchOnMount: true,
     });
 
     const {
@@ -92,6 +93,10 @@ const AdminOrderCreate = () => {
         street,
         menu,
         user,
+        isCompleted,
+        freezeStartDate: frozenStart,
+        freezeEndDate: frozenEnd,
+        isIndividual,
     } = order || {};
 
     const {
@@ -121,6 +126,15 @@ const AdminOrderCreate = () => {
         queryFn: getCities,
     });
 
+    const {
+        data: users,
+        isPending: usersIsPending,
+        isError: usersIsError,
+    } = useQuery({
+        queryKey: ['users_admin'],
+        queryFn: () => getUsers(1, 1000),
+    });
+
     const onSubmit: SubmitHandler<OrderAdminDTO> = (data) => {
         if (!startDate) return;
 
@@ -129,7 +143,9 @@ const AdminOrderCreate = () => {
             skippedWeekdays: skippedDays,
             startDate,
             menuId: activeMenuId,
-            ...(userId && { userId }),
+            ...(userId && { userId: `${userId}` }),
+            ...(freezeStartDate && { freezeStartDate }),
+            ...(freezeEndDate && { freezeEndDate }),
         };
 
         updateAdminOrder(String(id), orderData, () => router.replace(`/${language}/admin`));
@@ -143,9 +159,9 @@ const AdminOrderCreate = () => {
 
     React.useEffect(() => {
         if (user && user.id) {
-            setUserId(`${user.id}`);
+            setUserId(user.id);
         } else {
-            setUserId('');
+            setUserId(null);
         }
     }, [user]);
 
@@ -161,6 +177,18 @@ const AdminOrderCreate = () => {
         }
     }, [menu]);
 
+    React.useEffect(() => {
+        if (frozenStart) {
+            setFreezeStartDate(dayjs(frozenStart).format('YYYY-MM-DD'));
+        }
+    }, [frozenStart]);
+
+    React.useEffect(() => {
+        if (frozenEnd) {
+            setFreezeEndDate(dayjs(frozenEnd).format('YYYY-MM-DD'));
+        }
+    }, [frozenEnd]);
+
     if (orderIsPending) {
         return <Preloader page />;
     }
@@ -173,6 +201,8 @@ const AdminOrderCreate = () => {
         <div className={styles.adminDish}>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.createForm}>
                 <Text>Редактирование заказа</Text>
+
+                <Button href={`/${language}/admin/order/edit/${id}/swaps`}>Замена блюд</Button>
 
                 <Checkbox
                     id="is_processed"
@@ -187,14 +217,67 @@ const AdminOrderCreate = () => {
                     value={watch('isAllowedExtendion', isAllowedExtendion)}
                 />
                 <Checkbox id="is_paid" label="Оплачен" {...register('isPaid')} value={watch('isPaid', isPaid)} />
-
-                <Input
-                    value={userId}
-                    setValue={setUserId}
-                    full
-                    title={'ID пользователя (необязательно)'}
-                    type="number"
+                <Checkbox
+                    id="is_complete"
+                    label="Выполнен"
+                    {...register('isCompleted')}
+                    value={watch('isCompleted', isCompleted)}
                 />
+
+                <Checkbox id="is_indi" label="Индивидуальный заказ" value={isIndividual} />
+
+                {!isIndividual && (
+                    <div className={styles.skippedButtonsWrap}>
+                        <Text variant="text3">Период заморозки</Text>
+
+                        <RangePicker
+                            className={styles.orderDate}
+                            value={[
+                                freezeStartDate ? dayjs(freezeStartDate) : null,
+                                freezeEndDate ? dayjs(freezeEndDate) : null,
+                            ]}
+                            onChange={(dates) => {
+                                if (!dates || !dates[0] || !dates[1]) {
+                                    setFreezeStartDate('');
+                                    setFreezeEndDate('');
+                                    return;
+                                }
+
+                                setFreezeStartDate(dates[0].format('YYYY-MM-DD'));
+                                setFreezeEndDate(dates[1].format('YYYY-MM-DD'));
+                            }}
+                        />
+                    </div>
+                )}
+
+                <div className={styles.skippedButtonsWrap}>
+                    <Text variant="text3">Пользователь</Text>
+
+                    {usersIsPending ? (
+                        <Preloader page small />
+                    ) : usersIsError ? (
+                        <NotContent />
+                    ) : (
+                        <SelectAnt
+                            className={styles.menuFormItemDishSelect}
+                            showSearch
+                            options={
+                                !!users && !!users.users
+                                    ? users?.users.map((item) => ({
+                                          value: item.id,
+                                          label: item.email,
+                                      }))
+                                    : undefined
+                            }
+                            value={userId}
+                            onChange={setUserId}
+                            filterOption={(input, option) =>
+                                !!option && option.label.toLowerCase().includes(input.toLowerCase())
+                            }
+                            allowClear
+                        />
+                    )}
+                </div>
 
                 <div className={styles.skippedButtonsWrap}>
                     <Text variant="text3">Дата начала заказа</Text>
@@ -204,101 +287,105 @@ const AdminOrderCreate = () => {
                         onChange={(date) => setStartDate(date.format('YYYY-MM-DD'))}
                         className={styles.orderDate}
                         format="DD.MM.YYYY"
-                        disabledDate={disabledDate}
                     />
                 </div>
 
-                <div className={styles.skippedButtonsWrap}>
-                    <Text variant="text3">Пропускаемые дни</Text>
+                {!isIndividual && (
+                    <div className={styles.skippedButtonsWrap}>
+                        <Text variant="text3">Пропускаемые дни</Text>
 
-                    <div className={styles.skippedButtons}>
-                        <span
-                            className={cn(styles.skippedButton, {
-                                [styles.active]: skippedDays.includes(1),
-                            })}
-                            onClick={() => handleSkipDay(1)}
-                        >
-                            Пн
-                        </span>
-                        <span
-                            className={cn(styles.skippedButton, {
-                                [styles.active]: skippedDays.includes(2),
-                            })}
-                            onClick={() => handleSkipDay(2)}
-                        >
-                            Вт
-                        </span>
-                        <span
-                            className={cn(styles.skippedButton, {
-                                [styles.active]: skippedDays.includes(3),
-                            })}
-                            onClick={() => handleSkipDay(3)}
-                        >
-                            Ср
-                        </span>
-                        <span
-                            className={cn(styles.skippedButton, {
-                                [styles.active]: skippedDays.includes(4),
-                            })}
-                            onClick={() => handleSkipDay(4)}
-                        >
-                            Чт
-                        </span>
-                        <span
-                            className={cn(styles.skippedButton, {
-                                [styles.active]: skippedDays.includes(5),
-                            })}
-                            onClick={() => handleSkipDay(5)}
-                        >
-                            Пт
-                        </span>
-                        <span
-                            className={cn(styles.skippedButton, {
-                                [styles.active]: skippedDays.includes(6),
-                            })}
-                            onClick={() => handleSkipDay(6)}
-                        >
-                            Сб
-                        </span>
-                        <span
-                            className={cn(styles.skippedButton, {
-                                [styles.active]: skippedDays.includes(7),
-                            })}
-                            onClick={() => handleSkipDay(7)}
-                        >
-                            Вс
-                        </span>
+                        <div className={styles.skippedButtons}>
+                            <span
+                                className={cn(styles.skippedButton, {
+                                    [styles.active]: skippedDays.includes(1),
+                                })}
+                                onClick={() => handleSkipDay(1)}
+                            >
+                                Пн
+                            </span>
+                            <span
+                                className={cn(styles.skippedButton, {
+                                    [styles.active]: skippedDays.includes(2),
+                                })}
+                                onClick={() => handleSkipDay(2)}
+                            >
+                                Вт
+                            </span>
+                            <span
+                                className={cn(styles.skippedButton, {
+                                    [styles.active]: skippedDays.includes(3),
+                                })}
+                                onClick={() => handleSkipDay(3)}
+                            >
+                                Ср
+                            </span>
+                            <span
+                                className={cn(styles.skippedButton, {
+                                    [styles.active]: skippedDays.includes(4),
+                                })}
+                                onClick={() => handleSkipDay(4)}
+                            >
+                                Чт
+                            </span>
+                            <span
+                                className={cn(styles.skippedButton, {
+                                    [styles.active]: skippedDays.includes(5),
+                                })}
+                                onClick={() => handleSkipDay(5)}
+                            >
+                                Пт
+                            </span>
+                            <span
+                                className={cn(styles.skippedButton, {
+                                    [styles.active]: skippedDays.includes(6),
+                                })}
+                                onClick={() => handleSkipDay(6)}
+                            >
+                                Сб
+                            </span>
+                            <span
+                                className={cn(styles.skippedButton, {
+                                    [styles.active]: skippedDays.includes(7),
+                                })}
+                                onClick={() => handleSkipDay(7)}
+                            >
+                                Вс
+                            </span>
+                        </div>
                     </div>
-                </div>
-
-                {menusIsPending ? (
-                    <Preloader small page />
-                ) : menusIsError ? (
-                    <NotContent text="Произошла ошибка при загрузке меню" />
-                ) : !!menus && !!menus.menus.length ? (
-                    <Select
-                        value={activeMenuId}
-                        setValue={setActiveMenuId}
-                        options={menus?.menus.map((elem) => ({
-                            id: elem.id,
-                            name: elem.name[language],
-                        }))}
-                        title="Меню"
-                        icon={<Foods />}
-                        full
-                    ></Select>
-                ) : (
-                    <NotContent text="Для начала создайте меню" />
                 )}
 
-                <Input
-                    {...register('daysCount')}
-                    error={!!errors.daysCount}
-                    errorMessage={errors.daysCount?.message}
-                    full
-                    title={'Количество дней'}
-                    value={watch('daysCount', `${days}`)}
-                />
+                {!isIndividual &&
+                    (menusIsPending ? (
+                        <Preloader small page />
+                    ) : menusIsError ? (
+                        <NotContent text="Произошла ошибка при загрузке меню" />
+                    ) : !!menus && !!menus.menus.length ? (
+                        <Select
+                            value={activeMenuId}
+                            setValue={setActiveMenuId}
+                            options={menus?.menus.map((elem) => ({
+                                id: elem.id,
+                                name: elem.name[language],
+                            }))}
+                            title="Меню"
+                            icon={<Foods />}
+                            full
+                        ></Select>
+                    ) : (
+                        <NotContent text="Для начала создайте меню" />
+                    ))}
+
+                {!isIndividual && (
+                    <Input
+                        {...register('daysCount')}
+                        error={!!errors.daysCount}
+                        errorMessage={errors.daysCount?.message}
+                        full
+                        title={'Количество дней'}
+                        value={watch('daysCount', `${days}`)}
+                    />
+                )}
 
                 <Input
                     {...register('fullName')}

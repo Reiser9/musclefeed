@@ -12,11 +12,38 @@
     gap: 40px;
 }
 
+@media (max-width: 768px) {
+    .sidebar{
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        transform: translateX(-40px);
+        pointer-events: none;
+        opacity: 0;
+        transition: .2s linear;
+    }
+
+    .sidebar.show{
+        transform: translateX(0px);
+        pointer-events: all;
+        opacity: 1;
+    }
+}
+
 .sidebarLogoInner{
     width: 100%;
     padding: 0rem 2.4rem;
     display: flex;
     justify-content: center;
+    gap: 12px;
+}
+
+@media (max-width: 768px) {
+    .sidebarLogoInner{
+        justify-content: space-between;
+        padding: 0rem 1.2rem;
+    }
 }
 
 .sidebarLogo{
@@ -54,6 +81,47 @@
 .sidebarNavLink.active{
     background: var(--main);
     color: #fff;
+}
+
+.sidebarClose, .sidebarMenu{
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .sidebarClose, .sidebarMenu{
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        flex-shrink: 0;
+        padding: 0;
+        background: #fff;
+        color: var(--main);
+    }
+    
+    .sidebarMenu{
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 100;
+        opacity: 0;
+        transition: .2s linear;
+        pointer-events: none;
+        background: var(--main);
+        color: #fff;
+    }
+    
+    .sidebarMenu.show{
+        opacity: 1;
+        pointer-events: all;
+    }
+    
+    .sidebarClose svg, .saidebarMenu svg{
+        width: 24px;
+        flex-shrink: 0;
+    }
 }
 
 @media (any-hover: hover) {

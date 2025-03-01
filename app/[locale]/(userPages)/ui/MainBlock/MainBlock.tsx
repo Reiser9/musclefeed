@@ -2,6 +2,8 @@
 
 import React from 'react';
 import cn from 'classnames';
+import Image from 'next/image';
+import { Link as ScrollLink } from 'react-scroll';
 import { useTranslations } from 'next-intl';
 
 import styles from './index.module.scss';
@@ -10,7 +12,6 @@ import base from '@/shared/styles/base.module.scss';
 import { ArrowRight, Broccoli, Foods, Moped, Switch, Vegetables } from '@/shared/icons';
 
 import { Button } from '@/shared/ui/Button';
-import Image from 'next/image';
 
 const MainBlock = () => {
     const t = useTranslations('MainBlock');
@@ -24,7 +25,7 @@ const MainBlock = () => {
                             <Image src="/img/main-bg.png" alt="bg" fill />
                         </div>
 
-                        <div className={styles.mainImg}>
+                        <div className="mainImg">
                             <Image src="/img/main-food.png" alt="food" fill />
                         </div>
 
@@ -41,12 +42,14 @@ const MainBlock = () => {
                                 <p className={styles.mainSubtext}>{t('subtext')}</p>
                             </div>
 
-                            <Button className={styles.mainLink}>
-                                {t('button')}
-                                <ArrowRight />
-                            </Button>
+                            <ScrollLink to="menu" smooth={true} duration={400}>
+                                <Button className={styles.mainLink}>
+                                    {t('button')}
+                                    <ArrowRight />
+                                </Button>
+                            </ScrollLink>
 
-                            <p className={styles.mainDelivery}>{t('abs_text')}</p>
+                            <p className="mainDelivery">{t('abs_text')}</p>
                         </div>
                     </div>
 

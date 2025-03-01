@@ -1,4 +1,4 @@
-.orderAdminItem{
+.orderAdminItem, .orderRequestItem{
     width: 100%;
     padding: 1.2rem;
     border: 1px solid var(--main);
@@ -8,7 +8,205 @@
     gap: 8px;
 }
 
+.orderRequestItem.disabled{
+	opacity: 0.65;
+	filter: grayscale(1);
+}
+
 .orderAdminItemNumber{
     font-size: 1.8rem;
     font-weight: 600;
+}
+
+.ordersItem{
+	width: calc(100% / 3 - 48px / 3);
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	border: 1px solid #E6E8EC;
+	border-radius: 8px;
+}
+
+@media (max-width: 1630px) {
+    .ordersItem{
+		width: calc(100% / 2 - 24px / 2);
+	}
+}
+@media (max-width: 1065px) {
+    .ordersItem{
+		width: 100%;
+	}
+}
+
+.ordersItemImg{
+	overflow: hidden;
+	border-radius: 8px;
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	display: flex;
+	position: relative;
+}
+
+.ordersItemImg img{
+	object-fit: cover;
+}
+
+.ordersItemContent{
+	width: 100%;
+	padding: 2.4rem;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 24px;
+}
+
+.ordersItemSign{
+	position: absolute;
+	top: 16px;
+	left: 16px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 0.4rem 0.8rem;
+	background: #F2F3EE;
+	border-radius: 8px;
+	line-height: 1.5;
+}
+
+.ordersItemSign svg{
+	color: #00A31E;
+	width: 24px;
+	flex-shrink: 0;
+}
+
+.ordersItemTextInner{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.ordersItemName{
+	text-transform: uppercase;
+	font-size: 2.8rem;
+	line-height: 1.2;
+	font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .ordersItemName{
+		font-size: 2.4rem;
+	}
+}
+
+.ordersItemDesc{
+	font-size: 1.4rem;
+	line-height: 1.5;
+}
+
+.ordersItemPoints{
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+svg.ordersItemPointRed{
+    color: #FF6433;
+}
+
+.ordersItemButton{
+	width: 100%;
+	text-align: center;
+	color: #fff;
+	background: #FF6433;
+	border-radius: 16px;
+	padding: 1.2rem 1.6rem;
+	line-height: 1.5;
+	font-weight: 500;
+}
+
+.ordersItemButton.green__button{
+	background: #00A31E;
+}
+
+.ordersItemFreeze, .ordersItemFreezeTextInner{
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+}
+
+.ordersItemFreezeTextInner{
+	flex-direction: column;
+	gap: 0;
+}
+
+.ordersItemFreezeTitle{
+	font-size: 1.8rem;
+	line-height: 1.5;
+	font-weight: 500;
+}
+
+.ordersItemFreezeText{
+	font-size: 1.4rem;
+	line-height: 1.5;
+	color: #1F222C;
+}
+
+.ordersItemFreezeSwitch{
+	width: 42px;
+	height: 22px;
+	flex-shrink: 0;
+	border: 1px solid #E0E0E0;
+	background: #F2F3EE;
+	border-radius: 50px;
+	position: relative;
+	top: 2px;
+	transition: background .2s linear, border .2s linear;
+}
+
+.ordersItemFreezeSwitch.active{
+	background: #00A31E;
+	border: 1px solid #00A31E;
+}
+
+.ordersItemFreezeSwitch.active .ordersItemFreezeCircle{
+	left: 21px;
+}
+
+.ordersItemFreezeCircle{
+	width: 16px;
+	height: 16px;
+	background: #fff;
+	border-radius: 50%;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 3px;
+	box-shadow: 0 2px 5px 0px rgba(0, 0, 0, .3);
+	transition: left .2s linear;
+}
+
+.teamAdminDelete{
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	background: #ff000010;
+	border-radius: 8px;
+	color: #ff0000;
+}
+
+@media (any-hover: hover) {
+    .ordersTab:hover{
+        color: #00A31E;
+    }
+
+	.ordersItemFreeze{
+		cursor: pointer;
+	}
 }

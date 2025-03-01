@@ -5,8 +5,8 @@ import cn from 'classnames';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import dayjs, { Dayjs } from 'dayjs';
-import { DatePicker } from 'antd';
+import { DatePicker, Select as SelectAnt } from 'antd';
+import dayjs from 'dayjs';
 
 import styles from '../index.module.scss';
 
@@ -16,6 +16,7 @@ import { Foods, Home } from '@/shared/icons';
 import { useCities } from '@/features/city';
 import { useMenu } from '@/features/menu';
 import { useOrder } from '@/features/order';
+import { useUsers } from '@/features/admin';
 
 import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/Button';
@@ -25,19 +26,16 @@ import { Select } from '@/shared/ui/Select';
 import { Preloader } from '@/shared/ui/Preloader';
 import { NotContent } from '@/shared/ui/NotContent';
 
-const disabledDate = (current: Dayjs) => {
-    if (!current) return false;
-
-    const today = dayjs().startOf('day');
-
-    return current.isBefore(today, 'day');
-};
+const { RangePicker } = DatePicker;
 
 const AdminOrderCreate = () => {
-    const [userId, setUserId] = React.useState('');
+    const [userId, setUserId] = React.useState<number | null>(null);
     const [activeMenuId, setActiveMenuId] = React.useState('');
     const [startDate, setStartDate] = React.useState('');
     const [skippedDays, setSkippedDays] = React.useState<number[]>([]);
+
+    const [freezeStartDate, setFreezeStartDate] = React.useState('');
+    const [freezeEndDate, setFreezeEndDate] = React.useState('');
 
     const handleSkipDay = (day: number) => {
         setSkippedDays((prev) => (prev.includes(day) ? prev.filter((n) => n !== day) : [...prev, day]));
@@ -53,6 +51,7 @@ const AdminOrderCreate = () => {
     const { createAdminOrder, getPaymentMethods } = useOrder();
     const { getMenus } = useMenu();
     const { getCities } = useCities();
+    const { getUsers } = useUsers();
     const language = useAppSelector((state) => state.app.language);
     const router = useRouter();
 
@@ -63,6 +62,15 @@ const AdminOrderCreate = () => {
     } = useQuery({
         queryKey: ['menus'],
         queryFn: () => getMenus(1, 1000, ''),
+    });
+
+    const {
+        data: users,
+        isPending: usersIsPending,
+        isError: usersIsError,
+    } = useQuery({
+        queryKey: ['users_admin'],
+        queryFn: () => getUsers(1, 1000),
     });
 
     const {
@@ -91,7 +99,9 @@ const AdminOrderCreate = () => {
             skippedWeekdays: skippedDays,
             startDate,
             menuId: activeMenuId,
-            ...(userId && { userId }),
+            ...(userId && { userId: `${userId}` }),
+            ...(freezeStartDate && { freezeStartDate }),
+            ...(freezeEndDate && { freezeEndDate }),
         };
 
         createAdminOrder(orderData, () => router.replace(`/${language}/admin`));
@@ -105,24 +115,67 @@ const AdminOrderCreate = () => {
                 <Checkbox id="is_processed" label="Обработан" {...register('isProcessed')} />
                 <Checkbox id="is_allowed_extendion" label="Разрешено продление" {...register('isAllowedExtendion')} />
                 <Checkbox id="is_paid" label="Оплачен" {...register('isPaid')} />
-
-                <Input
-                    value={userId}
-                    setValue={setUserId}
-                    full
-                    title={'ID пользователя (необязательно)'}
-                    type="number"
-                />
+                <Checkbox id="is_complete" label="Выполнен" {...register('isCompleted')} />
 
                 <div className={styles.skippedButtonsWrap}>
-                    <Text variant='text3'>Дата начала заказа</Text>
-                    
+                    <Text variant="text3">Период заморозки</Text>
+
+                    <RangePicker
+                        className={styles.orderDate}
+                        value={[
+                            freezeStartDate ? dayjs(freezeStartDate) : null,
+                            freezeEndDate ? dayjs(freezeEndDate) : null,
+                        ]}
+                        onChange={(dates) => {
+                            if (!dates || !dates[0] || !dates[1]) {
+                                setFreezeStartDate('');
+                                setFreezeEndDate('');
+                                return;
+                            }
+
+                            setFreezeStartDate(dates[0].format('YYYY-MM-DD'));
+                            setFreezeEndDate(dates[1].format('YYYY-MM-DD'));
+                        }}
+                    />
+                </div>
+
+                <div className={styles.skippedButtonsWrap}>
+                    <Text variant="text3">Пользователь</Text>
+
+                    {usersIsPending ? (
+                        <Preloader page small />
+                    ) : usersIsError ? (
+                        <NotContent />
+                    ) : (
+                        <SelectAnt
+                            className={styles.menuFormItemDishSelect}
+                            showSearch
+                            options={
+                                !!users && !!users.users
+                                    ? users?.users.map((item) => ({
+                                          value: item.id,
+                                          label: item.email,
+                                      }))
+                                    : undefined
+                            }
+                            value={userId}
+                            onChange={setUserId}
+                            filterOption={(input, option) =>
+                                !!option && option.label.toLowerCase().includes(input.toLowerCase())
+                            }
+                            allowClear
+                        />
+                    )}
+                </div>
+
+                <div className={styles.skippedButtonsWrap}>
+                    <Text variant="text3">Дата начала заказа</Text>
+
                     <DatePicker
                         value={startDate ? dayjs(startDate) : null}
                         onChange={(date) => setStartDate(date.format('YYYY-MM-DD'))}
                         className={styles.orderDate}
                         format="DD.MM.YYYY"
-                        disabledDate={disabledDate}
                     />
                 </div>
 

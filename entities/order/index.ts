@@ -6,4 +6,10 @@ export type {
     OrderDishList,
     OrderAdminDTO,
     AdminOrder,
+    Day,
+    OrderRequest,
+    OrderRequestPagination,
+    OrderShort,
+    ORDER_CHANGE_TYPES,
+    OrderIndiDTO
 } from './model';

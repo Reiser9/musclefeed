@@ -87,7 +87,10 @@ export type Menu = {
     createdAt: Date;
     updatedAt: Date;
     daysCount: number;
-    menuTypeId: number;
+    menuType: {
+        id: number;
+        name: LanguageField;
+    };
     days: MenuDay[];
     prices: PriceItemDTO[];
 };

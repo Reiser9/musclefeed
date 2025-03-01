@@ -7,6 +7,7 @@
 }
 
 .foodItem{
+	width: 100%;
 	height: auto!important;
 }
 
@@ -110,6 +111,10 @@
 	position: relative;
 }
 
+.dishItemImage img{
+	object-fit: contain;
+}
+
 .dishItemButtons{
 	width: 100%;
 	display: flex;
@@ -137,4 +142,19 @@
 .deleteButton{
 	background: #ff000010;
 	color: #ff0000;
+}
+
+.foodItemButtons{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 12px;
+	margin-top: auto;
+}
+
+.benefitsText{
+	width: 100%;
+	display: flex;
+	margin-top: 2.4rem;
 }

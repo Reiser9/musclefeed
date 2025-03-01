@@ -1,4 +1,5 @@
 import ruRU from 'antd/locale/ru_RU';
+import heIL from 'antd/locale/he_IL';
 import type { Metadata } from 'next';
 import { ConfigProvider } from 'antd';
 import { NextIntlClientProvider } from 'next-intl';
@@ -33,9 +34,9 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
             <ReduxProvider>
                 <ReactQueryProvider>
-                    <InitialWrapper>
+                    <InitialWrapper lang={locale as 'ru' | 'he'}>
                         <ConfigProvider
-                            locale={ruRU}
+                            locale={locale === 'he' ? heIL : ruRU}
                             theme={{
                                 token: {
                                     colorPrimary: '#00A31E',

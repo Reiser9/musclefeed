@@ -19,6 +19,12 @@
     padding: 6.4rem 3.2rem;
 }
 
+@media (max-width: 580px) {
+    .adminTeam{
+        padding: 4.8rem 2rem;
+    }
+}
+
 .createForm{
     width: 100%;
     max-width: 500px;
@@ -130,15 +136,4 @@
         background: var(--main);
         color: #fff;
     }
-}
-
-.adminOrdersRoute{
-    width: 100%;
-    display: flex;
-    gap: 24px;
-}
-
-.adminOrdersRoutePicker{
-    width: 100%;
-    max-width: 500px;
 }

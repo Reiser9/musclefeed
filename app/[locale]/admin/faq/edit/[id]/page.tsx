@@ -51,9 +51,11 @@ const AdminFaqEdit = () => {
     const language = useAppSelector((state) => state.app.language);
 
     const { data, isPending, isError } = useQuery({
-        queryKey: ['team_by_id', id],
+        queryKey: ['faq_by_id', id],
         queryFn: () => getFaqById(String(id)),
         enabled: !!id,
+        gcTime: 0,
+        refetchOnMount: true
     });
 
     const {

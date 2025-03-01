@@ -46,6 +46,8 @@ const AdminEditDish = () => {
         queryKey: ['dish_by_id', id],
         queryFn: () => getDishById(String(id)),
         enabled: !!id,
+        gcTime: 0,
+        refetchOnMount: true,
     });
 
     const { data, isPending, isError } = useQuery({
@@ -73,6 +75,7 @@ const AdminEditDish = () => {
         proteins,
         weight,
         price,
+        isIndividualOrderAvailable,
     } = dish || {};
 
     React.useEffect(() => {
@@ -112,7 +115,13 @@ const AdminEditDish = () => {
                     isAdmin={true}
                 />
 
-                <Checkbox id="create_dish_publish" label="Опубликовать" value={publish} setValue={setPublish} />
+                <Checkbox id="edit_dish_publish" label="Опубликовать" value={publish} setValue={setPublish} />
+                <Checkbox
+                    id="edit_dish_indi"
+                    label="Блюдо для индивидуального заказа"
+                    {...register('isIndividualOrderAvailable')}
+                    value={watch('isIndividualOrderAvailable', isIndividualOrderAvailable)}
+                />
 
                 {isPending ? (
                     <Preloader small page />
@@ -242,12 +251,22 @@ const AdminEditDish = () => {
                 />
 
                 <Input
-                    {...register('benefit')}
-                    error={!!errors.benefit}
-                    errorMessage={errors.benefit?.message}
+                    {...register('benefitRu')}
+                    error={!!errors.benefitRu}
+                    errorMessage={errors.benefitRu?.message}
                     full
                     title={'Описание для модалки'}
-                    value={watch('benefit', benefit)}
+                    value={watch('benefitRu', benefit?.ru)}
+                    component="textarea"
+                />
+
+                <Input
+                    {...register('benefitHe')}
+                    error={!!errors.benefitHe}
+                    errorMessage={errors.benefitHe?.message}
+                    full
+                    title={'Описание для модалки'}
+                    value={watch('benefitHe', benefit?.he)}
                     component="textarea"
                 />
 

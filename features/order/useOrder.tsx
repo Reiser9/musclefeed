@@ -1,12 +1,17 @@
 'use client';
 
+import { Dish, DishPagination } from '@/entities/dish';
 import type {
     AdminOrder,
+    Day,
     Order,
+    ORDER_CHANGE_TYPES,
     OrderAdminDTO,
     OrderDishList,
     OrderDTO,
     OrderPagination,
+    OrderRequest,
+    OrderRequestPagination,
     PaymentMethod,
 } from '@/entities/order';
 import useAlert from '@/shared/hooks/useAlert';
@@ -36,7 +41,7 @@ const useOrder = () => {
             url: `/order`,
             method: 'POST',
             data,
-            isAuth: true
+            isAuth: true,
         });
 
         if (catchRequestError(response)) {
@@ -57,6 +62,25 @@ const useOrder = () => {
             url: `/admin/order`,
             method: 'POST',
             data,
+            isAuth: true,
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        successCallback();
+
+        if ('data' in response) {
+            return response.data.order;
+        }
+    };
+
+    const deleteOrder = async (orderId: number | string, successCallback = () => {}) => {
+        const response = await request<{ order: Order }>({
+            url: `/admin/order/${orderId}`,
+            method: 'DELETE',
             isAuth: true,
         });
 
@@ -171,7 +195,7 @@ const useOrder = () => {
 
     const createOrderRoute = async (startDate: string, endDate: string, successCallback = () => {}) => {
         const response = await request({
-            url: `/admin/order/route-list?start_date=${startDate}&end_date=${endDate}`,
+            url: `/admin/report/route-list?start_date=${startDate}&end_date=${endDate}`,
             isAuth: true,
             headers: {
                 'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -192,21 +216,21 @@ const useOrder = () => {
             });
 
             const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'routes.xlsx';
-            a.target = '_blank';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
 
-            window.URL.revokeObjectURL(url);
+            const newTab = window.open(url, '_blank');
+            if (newTab) {
+                newTab.focus();
+            } else {
+                console.error('Не удалось открыть новую вкладку. Возможно, браузер блокирует pop-up.');
+            }
+
+            setTimeout(() => window.URL.revokeObjectURL(url), 5000);
         }
     };
 
     const createOrderDishList = async (date: string, successCallback = () => {}) => {
         const response = await request<{ orders: OrderDishList[] }>({
-            url: `/admin/order/dish-list?date=${date}`,
+            url: `/admin/report/insert?date=${date}`,
             isAuth: true,
         });
 
@@ -222,6 +246,309 @@ const useOrder = () => {
         }
     };
 
+    const createOrderDish = async (startDate: string, endDate: string, successCallback = () => {}) => {
+        const response = await request({
+            url: `/admin/report/dish?start_date=${startDate}&end_date=${endDate}`,
+            isAuth: true,
+            headers: {
+                'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            },
+            isBlob: true,
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        successCallback();
+
+        if ('data' in response) {
+            const blob = new Blob([response.data as BlobPart], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            });
+
+            const url = window.URL.createObjectURL(blob);
+
+            const newTab = window.open(url, '_blank');
+            if (newTab) {
+                newTab.focus();
+            } else {
+                console.error('Не удалось открыть новую вкладку. Возможно, браузер блокирует pop-up.');
+            }
+
+            setTimeout(() => window.URL.revokeObjectURL(url), 5000);
+        }
+    };
+
+    const getOrderDays = async (orderId: number | string) => {
+        const response = await request<{ days: Day[] }>({
+            url: `/order/${orderId}/day`,
+            isAuth: true,
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        if ('data' in response) {
+            return response.data.days;
+        }
+    };
+
+    const getAdminOrderDays = async (orderId: number | string) => {
+        const response = await request<{ days: Day[] }>({
+            url: `/admin/order/${orderId}/day`,
+            isAuth: true,
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        if ('data' in response) {
+            return response.data.days;
+        }
+    };
+
+    const getDayDishes = async (dayId: number | string) => {
+        const response = await request<{
+            dishes: Dish[];
+            total: {
+                calories: number;
+                carbohydrates: number;
+                fats: number;
+                proteins: number;
+            };
+        }>({
+            url: `/order/day/${dayId}`,
+            isAuth: true,
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        if ('data' in response) {
+            return response.data;
+        }
+    };
+
+    const getAdminDayDishes = async (dayId: number | string) => {
+        const response = await request<DishPagination>({
+            url: `/admin/order/day/${dayId}`,
+            isAuth: true,
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        if ('data' in response) {
+            return response.data;
+        }
+    };
+
+    const getReplacementDishes = async (dayId: number | string, dishTypeId: number | string) => {
+        const response = await request<{ dishes: Dish[] }>({
+            url: `/order/day/${dayId}/replacement?dish_type_id=${dishTypeId}`,
+            isAuth: true,
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        if ('data' in response) {
+            return response.data.dishes;
+        }
+    };
+
+    const getAdminReplacementDishes = async (dayId: number | string, dishTypeId: number | string) => {
+        const response = await request<{ dishes: Dish[] }>({
+            url: `/admin/order/day/${dayId}/replacement?dish_type_id=${dishTypeId}`,
+            isAuth: true,
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        if ('data' in response) {
+            return response.data.dishes;
+        }
+    };
+
+    const replaceDish = async (
+        dayId: number | string,
+        dishTypeId: number | string,
+        dishId: number | string,
+        successCallback = () => {},
+    ) => {
+        const response = await request<{ dish: Dish }>({
+            url: `/order/select`,
+            isAuth: true,
+            method: 'POST',
+            data: {
+                dayId,
+                dishTypeId,
+                dishId,
+            },
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        successCallback();
+        alertNotify('Успешно', 'Блюдо заменено');
+
+        if ('data' in response) {
+            return response.data.dish;
+        }
+    };
+
+    const adminReplaceDish = async (
+        dayId: number | string,
+        dishTypeId: number | string,
+        dishId: number | string,
+        successCallback = () => {},
+    ) => {
+        const response = await request<{ dish: Dish }>({
+            url: `/admin/order/select`,
+            isAuth: true,
+            method: 'POST',
+            data: {
+                dayId,
+                dishTypeId,
+                dishId,
+            },
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        successCallback();
+        alertNotify('Успешно', 'Блюдо заменено');
+
+        if ('data' in response) {
+            return response.data.dish;
+        }
+    };
+
+    const getUserOrderById = async (orderId: number | string) => {
+        const response = await request<{ order: Order }>({
+            url: `/order/${orderId}`,
+            isAuth: true,
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        if ('data' in response) {
+            return response.data.order;
+        }
+    };
+
+    const getAdminChangeRequests = async (page: number, limit = 12) => {
+        const response = await request<OrderRequestPagination>({
+            url: `/admin/order/change-request?page=${page}&limit=${limit}`,
+            isAuth: true,
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        if ('data' in response) {
+            return response.data;
+        }
+    };
+
+    const getAdminChangeRequestById = async (requestId: number | string) => {
+        const response = await request<{ orderChangeRequest: OrderRequest }>({
+            url: `/admin/order/change-request/${requestId}`,
+            isAuth: true,
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        if ('data' in response) {
+            return response.data.orderChangeRequest;
+        }
+    };
+
+    const updateChangeRequest = async (
+        requestId: number | string,
+        isProcessed: boolean,
+        successCallback = () => {},
+    ) => {
+        const response = await request<{ orderChangeRequest: OrderRequest }>({
+            url: `/admin/order/change-request/${requestId}`,
+            isAuth: true,
+            method: 'PATCH',
+            data: {
+                isProcessed,
+            },
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        successCallback();
+        alertNotify('Успешно', 'Заявка сохранена');
+
+        if ('data' in response) {
+            return response.data.orderChangeRequest;
+        }
+    };
+
+    const createOrderRequest = async (
+        orderId: number | string,
+        orderChangeType: ORDER_CHANGE_TYPES,
+        comment: string,
+        successCallback = () => {},
+    ) => {
+        const response = await request<{ orderChangeRequest: OrderRequest }>({
+            url: `/order/${orderId}/change-request`,
+            isAuth: true,
+            method: 'POST',
+            data: {
+                orderChangeType,
+                comment,
+            },
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        alertNotify('Успешно', 'Запрос на изменение отправлен, с вами свяжется администратор');
+        successCallback();
+
+        if ('data' in response) {
+            return response.data.orderChangeRequest;
+        }
+    };
+
     return {
         getPaymentMethods,
         createOrder,
@@ -233,6 +560,21 @@ const useOrder = () => {
         getOrderStats,
         createOrderRoute,
         createOrderDishList,
+        createOrderDish,
+        getOrderDays,
+        getDayDishes,
+        getReplacementDishes,
+        replaceDish,
+        getUserOrderById,
+        getAdminChangeRequests,
+        getAdminChangeRequestById,
+        updateChangeRequest,
+        createOrderRequest,
+        deleteOrder,
+        getAdminOrderDays,
+        getAdminDayDishes,
+        getAdminReplacementDishes,
+        adminReplaceDish,
     };
 };
 

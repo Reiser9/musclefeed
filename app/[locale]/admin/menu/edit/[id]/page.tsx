@@ -16,6 +16,7 @@ import { useAppSelector } from '@/shared/hooks/useRedux';
 import { Foods, Plus } from '@/shared/icons';
 import { useAdminDish } from '@/features/admin';
 import DayItem from '../../ui/DayItem';
+import PriceItem from '../../ui/PriceItem';
 
 import { Button } from '@/shared/ui/Button';
 import { Text } from '@/shared/ui/Text';
@@ -24,7 +25,6 @@ import { NotContent } from '@/shared/ui/NotContent';
 import { Select } from '@/shared/ui/Select';
 import { Preloader } from '@/shared/ui/Preloader';
 import { Checkbox } from '@/shared/ui/Checkbox';
-import PriceItem from '../../ui/PriceItem';
 
 const emptyPriceElem = {
     price: '',
@@ -64,6 +64,8 @@ const AdminMenuEdit = () => {
         queryKey: ['menu_by_id', id],
         queryFn: () => getMenuById(String(id)),
         enabled: !!id,
+        gcTime: 0,
+        refetchOnMount: true,
     });
 
     const {
@@ -75,7 +77,7 @@ const AdminMenuEdit = () => {
         name,
         order,
         days: menuDays,
-        menuTypeId,
+        menuType,
         mealsCount,
         prices: menuPrices,
     } = menu || {};
@@ -210,10 +212,10 @@ const AdminMenuEdit = () => {
     }, [menuDays]);
 
     React.useEffect(() => {
-        if (menuTypeId) {
-            setMenuTypeSelect(String(menuTypeId));
+        if (menuType) {
+            setMenuTypeSelect(String(menuType.id));
         }
-    }, [menuTypeId]);
+    }, [menuType]);
 
     React.useEffect(() => {
         if (menuPrices) {

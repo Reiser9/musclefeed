@@ -112,7 +112,7 @@ const OrderModal: React.FC<Props> = ({
         enabled: !!isAuth,
     });
 
-    const { primaryAddress, otherAddresses } = addresses || {};
+    const { addresses: userAddresses } = addresses || {};
 
     const { allergies, firstName, lastName, email: userEmail, phone: userPhone } = user || {};
 
@@ -178,18 +178,15 @@ const OrderModal: React.FC<Props> = ({
     React.useEffect(() => {
         let allAddressesArr: UserAddress[] = [];
 
-        if (primaryAddress) {
-            allAddressesArr = [primaryAddress];
-        }
-        if (otherAddresses && !!otherAddresses.length) {
-            allAddressesArr = [...allAddressesArr, ...otherAddresses];
+        if (userAddresses && !!userAddresses.length) {
+            allAddressesArr = [...allAddressesArr, ...userAddresses];
         }
 
         setAllAddresses(allAddressesArr);
         if (!!allAddressesArr.length) {
             setCurrentAddress(`${allAddressesArr[0].id}`);
         }
-    }, [primaryAddress, otherAddresses]);
+    }, [userAddresses]);
 
     React.useEffect(() => {
         if (firstName || lastName) {

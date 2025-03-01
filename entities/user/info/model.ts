@@ -15,6 +15,6 @@ export type UserAddress = Omit<UserAddressDTO, 'cityId'> & {
 };
 
 export type UserAddresses = {
-    primaryAddress: UserAddress;
-    otherAddresses: UserAddress[];
+    primary: UserAddress;
+    addresses: UserAddress[];
 };

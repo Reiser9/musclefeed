@@ -42,7 +42,7 @@ const AdminCreatePage = () => {
 
     const onSubmit: SubmitHandler<DishDTO> = (data) => {
         const dishData = { ...data, picture };
-        
+
         createDish(dishData, () => router.replace(`/${language}/admin/dish`));
     };
 
@@ -60,6 +60,11 @@ const AdminCreatePage = () => {
                 />
 
                 <Checkbox id="create_dish_publish" label="Опубликовать" {...register('isPublished')} />
+                <Checkbox
+                    id="create_dish_indi"
+                    label="Блюдо для индивидуального заказа"
+                    {...register('isIndividualOrderAvailable')}
+                />
 
                 {isPending ? (
                     <Preloader small page />
@@ -188,12 +193,22 @@ const AdminCreatePage = () => {
                 />
 
                 <Input
-                    {...register('benefit')}
-                    error={!!errors.benefit}
-                    errorMessage={errors.benefit?.message}
+                    {...register('benefitRu')}
+                    error={!!errors.benefitRu}
+                    errorMessage={errors.benefitRu?.message}
                     full
-                    title={'Описание для модалки'}
-                    value={watch('benefit', '')}
+                    title={'Описание для модалки ru'}
+                    value={watch('benefitRu', '')}
+                    component="textarea"
+                />
+
+                <Input
+                    {...register('benefitHe')}
+                    error={!!errors.benefitHe}
+                    errorMessage={errors.benefitHe?.message}
+                    full
+                    title={'Описание для модалки he'}
+                    value={watch('benefitHe', '')}
                     component="textarea"
                 />
 

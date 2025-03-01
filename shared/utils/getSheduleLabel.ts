@@ -1,4 +1,6 @@
-export const getScheduleLabel = (disabledDays: number[]): string => {
+export const getScheduleLabel = (disabledDays?: number[]) => {
+    if (!disabledDays) return '';
+
     const sortedDays = disabledDays.sort((a, b) => a - b).join(',');
 
     const scheduleMap: Record<string, string> = {

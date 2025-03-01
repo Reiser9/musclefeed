@@ -39,6 +39,8 @@ const AdminReviewEdit = () => {
         queryKey: ['review_by_id', id],
         queryFn: () => getReviewById(String(id)),
         enabled: !!id,
+        gcTime: 0,
+        refetchOnMount: true
     });
 
     const onSubmit: SubmitHandler<ReviewDTO> = (data) => {

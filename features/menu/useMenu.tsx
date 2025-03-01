@@ -261,6 +261,21 @@ const useMenu = () => {
         }
     };
 
+    const getRecommend = async (calories: number | string) => {
+        const response = await request<{ menus: Menu[] }>({
+            url: `/menu/recomendation?calories=${calories}`,
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        if ('data' in response) {
+            return response.data.menus;
+        }
+    };
+
     return {
         getTypesmenuUser,
         getMenuUser,
@@ -276,6 +291,7 @@ const useMenu = () => {
         updateMenu,
         getMenuById,
         deleteMenu,
+        getRecommend,
     };
 };
 

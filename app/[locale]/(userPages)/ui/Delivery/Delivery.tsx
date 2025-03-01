@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import { Link as ScrollLink } from 'react-scroll';
 
 import styles from './index.module.scss';
 import base from '@/shared/styles/base.module.scss';
@@ -63,10 +64,12 @@ const Delivery = () => {
                         </div>
 
                         <div className={styles.mapButtons}>
-                            <Button>
-                                {t('delivery_button1')}
-                                <ArrowRight />
-                            </Button>
+                            <ScrollLink to="menu" smooth={true} duration={400}>
+                                <Button>
+                                    {t('delivery_button1')}
+                                    <ArrowRight />
+                                </Button>
+                            </ScrollLink>
 
                             <Button color="green">
                                 {t('delivery_button2')}
@@ -76,7 +79,7 @@ const Delivery = () => {
                     </div>
 
                     <div className={styles.mapImg}>
-                        <Image src="/img/map.png" alt="map" fill />
+                        <Image src={`${process.env.NEXT_PUBLIC_BASE_MAP}static/map.png`} alt="map" fill />
                     </div>
                 </div>
             </div>

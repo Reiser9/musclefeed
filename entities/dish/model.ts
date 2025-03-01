@@ -19,8 +19,10 @@ export type DishDTO = {
     fats: string;
     carbohydrates: string;
     isPublished: boolean;
-    benefit: string;
+    benefitRu: string;
+    benefitHe: string;
     price: string;
+    isIndividualOrderAvailable: boolean;
 };
 
 export type Dish = {
@@ -36,8 +38,12 @@ export type Dish = {
     isPublished: boolean;
     name: LanguageField;
     description: LanguageField;
-    benefit: string;
+    benefit: LanguageField;
     price: number;
+    createdAt: Date;
+    updatedAt: Date;
+    isIndividualOrderAvailable: boolean;
+    count: number;
 };
 
 export type Pagination = {

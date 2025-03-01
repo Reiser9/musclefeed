@@ -4,19 +4,20 @@ import React from 'react';
 import cn from 'classnames';
 import { Swiper, SwiperSlide, SwiperClass } from 'swiper/react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 
 import 'swiper/css';
 
 import styles from './index.module.scss';
 import base from '@/shared/styles/base.module.scss';
 
+import { useTeam } from '@/features/team';
 import { ArrowLeft, ArrowRight } from '@/shared/icons';
 import { TeamItem } from '@/entities/team/ui';
-import { useTeam } from '@/features/team';
+
 import { Preloader } from '@/shared/ui/Preloader';
 import { NotContent } from '@/shared/ui/NotContent';
 import { Text } from '@/shared/ui/Text';
-import { useTranslations } from 'next-intl';
 
 const Team = () => {
     const swiperIntance = React.useRef<SwiperClass | null>(null);
