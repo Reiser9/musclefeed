@@ -5,14 +5,26 @@ import Link from 'next/link';
 import Image from 'next/image';
 import cn from 'classnames';
 import { usePathname } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 
 import styles from './index.module.scss';
+
 import { Cross, Menu } from '@/shared/icons';
+import { useUserInfo } from '@/features/user';
 
 const AdminSidebar = () => {
     const [showSidebar, setShowSidebar] = React.useState(false);
     const pathname = usePathname();
     const locale = React.useMemo(() => (pathname.split('/')[1] === 'he' ? 'he' : 'ru'), [pathname]);
+
+    const { getShortInfo } = useUserInfo();
+
+    const { data } = useQuery({
+        queryKey: ['user_info'],
+        queryFn: getShortInfo,
+    });
+
+    const { roles } = data || {};
 
     return (
         <>
@@ -62,95 +74,113 @@ const AdminSidebar = () => {
                         Панель
                     </Link>
 
-                    <Link
-                        href={`/${locale}/admin/dish`}
-                        className={cn(styles.sidebarNavLink, {
-                            [styles.active]: pathname.includes(`/${locale}/admin/dish`),
-                        })}
-                        onClick={() => setShowSidebar(false)}
-                    >
-                        Блюда
-                    </Link>
+                    {roles?.includes('ADMIN') && (
+                        <Link
+                            href={`/${locale}/admin/dish`}
+                            className={cn(styles.sidebarNavLink, {
+                                [styles.active]: pathname.includes(`/${locale}/admin/dish`),
+                            })}
+                            onClick={() => setShowSidebar(false)}
+                        >
+                            Блюда
+                        </Link>
+                    )}
 
-                    <Link
-                        href={`/${locale}/admin/typesdish`}
-                        className={cn(styles.sidebarNavLink, {
-                            [styles.active]: pathname.includes(`/${locale}/admin/typesdish`),
-                        })}
-                        onClick={() => setShowSidebar(false)}
-                    >
-                        Типы блюд
-                    </Link>
+                    {roles?.includes('ADMIN') && (
+                        <Link
+                            href={`/${locale}/admin/typesdish`}
+                            className={cn(styles.sidebarNavLink, {
+                                [styles.active]: pathname.includes(`/${locale}/admin/typesdish`),
+                            })}
+                            onClick={() => setShowSidebar(false)}
+                        >
+                            Типы блюд
+                        </Link>
+                    )}
 
-                    <Link
-                        href={`/${locale}/admin/menu`}
-                        className={cn(styles.sidebarNavLink, {
-                            [styles.active]: pathname.includes(`/${locale}/admin/menu`),
-                        })}
-                        onClick={() => setShowSidebar(false)}
-                    >
-                        Меню
-                    </Link>
+                    {roles?.includes('ADMIN') && (
+                        <Link
+                            href={`/${locale}/admin/menu`}
+                            className={cn(styles.sidebarNavLink, {
+                                [styles.active]: pathname.includes(`/${locale}/admin/menu`),
+                            })}
+                            onClick={() => setShowSidebar(false)}
+                        >
+                            Меню
+                        </Link>
+                    )}
 
-                    <Link
-                        href={`/${locale}/admin/typesmenu`}
-                        className={cn(styles.sidebarNavLink, {
-                            [styles.active]: pathname.includes(`/${locale}/admin/typesmenu`),
-                        })}
-                        onClick={() => setShowSidebar(false)}
-                    >
-                        Типы меню
-                    </Link>
+                    {roles?.includes('ADMIN') && (
+                        <Link
+                            href={`/${locale}/admin/typesmenu`}
+                            className={cn(styles.sidebarNavLink, {
+                                [styles.active]: pathname.includes(`/${locale}/admin/typesmenu`),
+                            })}
+                            onClick={() => setShowSidebar(false)}
+                        >
+                            Типы меню
+                        </Link>
+                    )}
 
-                    <Link
-                        href={`/${locale}/admin/team`}
-                        className={cn(styles.sidebarNavLink, {
-                            [styles.active]: pathname.includes(`/${locale}/admin/team`),
-                        })}
-                        onClick={() => setShowSidebar(false)}
-                    >
-                        Команда
-                    </Link>
+                    {roles?.includes('ADMIN') && (
+                        <Link
+                            href={`/${locale}/admin/team`}
+                            className={cn(styles.sidebarNavLink, {
+                                [styles.active]: pathname.includes(`/${locale}/admin/team`),
+                            })}
+                            onClick={() => setShowSidebar(false)}
+                        >
+                            Команда
+                        </Link>
+                    )}
 
-                    <Link
-                        href={`/${locale}/admin/faq`}
-                        className={cn(styles.sidebarNavLink, {
-                            [styles.active]: pathname.includes(`/${locale}/admin/faq`),
-                        })}
-                        onClick={() => setShowSidebar(false)}
-                    >
-                        FAQ
-                    </Link>
+                    {roles?.includes('ADMIN') && (
+                        <Link
+                            href={`/${locale}/admin/faq`}
+                            className={cn(styles.sidebarNavLink, {
+                                [styles.active]: pathname.includes(`/${locale}/admin/faq`),
+                            })}
+                            onClick={() => setShowSidebar(false)}
+                        >
+                            FAQ
+                        </Link>
+                    )}
 
-                    <Link
-                        href={`/${locale}/admin/reviews`}
-                        className={cn(styles.sidebarNavLink, {
-                            [styles.active]: pathname.includes(`/${locale}/admin/reviews`),
-                        })}
-                        onClick={() => setShowSidebar(false)}
-                    >
-                        Отзывы
-                    </Link>
+                    {roles?.includes('ADMIN') && (
+                        <Link
+                            href={`/${locale}/admin/reviews`}
+                            className={cn(styles.sidebarNavLink, {
+                                [styles.active]: pathname.includes(`/${locale}/admin/reviews`),
+                            })}
+                            onClick={() => setShowSidebar(false)}
+                        >
+                            Отзывы
+                        </Link>
+                    )}
 
-                    <Link
-                        href={`/${locale}/admin/cities`}
-                        className={cn(styles.sidebarNavLink, {
-                            [styles.active]: pathname.includes(`/${locale}/admin/cities`),
-                        })}
-                        onClick={() => setShowSidebar(false)}
-                    >
-                        Города
-                    </Link>
+                    {roles?.includes('ADMIN') && (
+                        <Link
+                            href={`/${locale}/admin/cities`}
+                            className={cn(styles.sidebarNavLink, {
+                                [styles.active]: pathname.includes(`/${locale}/admin/cities`),
+                            })}
+                            onClick={() => setShowSidebar(false)}
+                        >
+                            Города
+                        </Link>
+                    )}
 
-                    <Link
-                        href={`/${locale}/admin/users`}
-                        className={cn(styles.sidebarNavLink, {
-                            [styles.active]: pathname.includes(`/${locale}/admin/users`),
-                        })}
-                        onClick={() => setShowSidebar(false)}
-                    >
-                        Пользователи
-                    </Link>
+                    {roles?.includes('ADMIN') && (
+                        <Link
+                            href={`/${locale}/admin/users`}
+                            className={cn(styles.sidebarNavLink, {
+                                [styles.active]: pathname.includes(`/${locale}/admin/users`),
+                            })}
+                            onClick={() => setShowSidebar(false)}
+                        >
+                            Пользователи
+                        </Link>
+                    )}
                 </nav>
             </aside>
 

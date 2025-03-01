@@ -65,7 +65,9 @@ const DishItem: React.FC<Props> = ({ data, dayId, day }) => {
                     <div className={styles.swapItemWrapper}>
                         <p className={styles.foodItemTag}>{dishType.name[language]}</p>
 
-                        <p className={styles.swapItemName}>{name[language]} x{count}</p>
+                        <p className={styles.swapItemName}>
+                            {name[language]} {count !== 1 ? `x${count}` : ''}
+                        </p>
 
                         <p className={styles.swapItemText}>{description[language]}</p>
 

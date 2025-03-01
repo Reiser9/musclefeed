@@ -14,6 +14,7 @@ import { Text } from '@/shared/ui/Text';
 import { NotContent } from '@/shared/ui/NotContent';
 import { ReviewsAdminItem } from '@/entities/review/ui';
 import { useReviews } from '@/features/reviews';
+import { PrivateWrapper } from '@/shared/wrappers/PrivateWrapper';
 
 const AdminReviews = () => {
     const [page, setPage] = React.useState(1);
@@ -41,47 +42,49 @@ const AdminReviews = () => {
     }
 
     return (
-        <div className={styles.adminTeam}>
-            <div className={styles.adminTeamWrapper}>
-                <div className={styles.titleWrap}>
-                    <Text>Отзывы {!!data && !!data.totalCount && `(${data.totalCount})`}</Text>
+        <PrivateWrapper haveRole="ADMIN">
+            <div className={styles.adminTeam}>
+                <div className={styles.adminTeamWrapper}>
+                    <div className={styles.titleWrap}>
+                        <Text>Отзывы {!!data && !!data.totalCount && `(${data.totalCount})`}</Text>
 
-                    <Button href={`/${language}/admin/reviews/create`} small>
-                        Создать
-                    </Button>
+                        <Button href={`/${language}/admin/reviews/create`} small>
+                            Создать
+                        </Button>
+                    </div>
+
+                    {!!data && !!data?.reviews.length ? (
+                        <div className={styles.adminTeamItems}>
+                            {data?.reviews.map((review) => (
+                                <ReviewsAdminItem
+                                    key={review.id}
+                                    data={review}
+                                    deleteCallback={() => deleteReview(review.id, revalidateRequest)}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <NotContent text="Нет отзывов" />
+                    )}
+
+                    {!!data && data.totalPages > 1 && (
+                        <div className={styles.pagination}>
+                            {[...Array(data.totalPages)].map((_, id) => (
+                                <button
+                                    key={id}
+                                    className={cn(styles.paginationButton, {
+                                        [styles.active]: id + 1 === data.page,
+                                    })}
+                                    onClick={() => setPage(id + 1)}
+                                >
+                                    {id + 1}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
-
-                {!!data && !!data?.reviews.length ? (
-                    <div className={styles.adminTeamItems}>
-                        {data?.reviews.map((review) => (
-                            <ReviewsAdminItem
-                                key={review.id}
-                                data={review}
-                                deleteCallback={() => deleteReview(review.id, revalidateRequest)}
-                            />
-                        ))}
-                    </div>
-                ) : (
-                    <NotContent text="Нет отзывов" />
-                )}
-
-                {!!data && data.totalPages > 1 && (
-                    <div className={styles.pagination}>
-                        {[...Array(data.totalPages)].map((_, id) => (
-                            <button
-                                key={id}
-                                className={cn(styles.paginationButton, {
-                                    [styles.active]: id + 1 === data.page,
-                                })}
-                                onClick={() => setPage(id + 1)}
-                            >
-                                {id + 1}
-                            </button>
-                        ))}
-                    </div>
-                )}
             </div>
-        </div>
+        </PrivateWrapper>
     );
 };
 

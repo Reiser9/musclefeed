@@ -13,6 +13,7 @@ import { useUsers } from '@/features/admin';
 import { Preloader } from '@/shared/ui/Preloader';
 import { Text } from '@/shared/ui/Text';
 import { NotContent } from '@/shared/ui/NotContent';
+import { PrivateWrapper } from '@/shared/wrappers/PrivateWrapper';
 
 const AdminUsers = () => {
     const [page, setPage] = React.useState(1);
@@ -34,39 +35,41 @@ const AdminUsers = () => {
     }
 
     return (
-        <div className={styles.adminTeam}>
-            <div className={styles.adminTeamWrapper}>
-                <div className={styles.titleWrap}>
-                    <Text>Пользователи {!!data && !!data.totalCount && `(${data.totalCount})`}</Text>
+        <PrivateWrapper haveRole="ADMIN">
+            <div className={styles.adminTeam}>
+                <div className={styles.adminTeamWrapper}>
+                    <div className={styles.titleWrap}>
+                        <Text>Пользователи {!!data && !!data.totalCount && `(${data.totalCount})`}</Text>
+                    </div>
+
+                    {!!data && !!data.users.length ? (
+                        <div className={styles.adminTeamItems}>
+                            {data?.users.map((user) => (
+                                <UserAdminItem key={user.id} data={user} />
+                            ))}
+                        </div>
+                    ) : (
+                        <NotContent text="Пользователей не найдено" />
+                    )}
                 </div>
 
-                {!!data && !!data.users.length ? (
-                    <div className={styles.adminTeamItems}>
-                        {data?.users.map((user) => (
-                            <UserAdminItem key={user.id} data={user} />
+                {!!data && data.totalPages > 1 && (
+                    <div className={styles.pagination}>
+                        {[...Array(data.totalPages)].map((_, id) => (
+                            <button
+                                key={id}
+                                className={cn(styles.paginationButton, {
+                                    [styles.active]: id + 1 === data.page,
+                                })}
+                                onClick={() => setPage(id + 1)}
+                            >
+                                {id + 1}
+                            </button>
                         ))}
                     </div>
-                ) : (
-                    <NotContent text="Пользователей не найдено" />
                 )}
             </div>
-
-            {!!data && data.totalPages > 1 && (
-                <div className={styles.pagination}>
-                    {[...Array(data.totalPages)].map((_, id) => (
-                        <button
-                            key={id}
-                            className={cn(styles.paginationButton, {
-                                [styles.active]: id + 1 === data.page,
-                            })}
-                            onClick={() => setPage(id + 1)}
-                        >
-                            {id + 1}
-                        </button>
-                    ))}
-                </div>
-            )}
-        </div>
+        </PrivateWrapper>
     );
 };
 

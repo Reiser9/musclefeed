@@ -5,6 +5,7 @@ import Image from 'next/image';
 import dayjs from 'dayjs';
 import { DatePicker } from 'antd';
 import { useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 
 import styles from './index.module.scss';
 import { useAppSelector } from '@/shared/hooks/useRedux';
@@ -14,6 +15,7 @@ import useAlert from '@/shared/hooks/useAlert';
 
 import { Button } from '@/shared/ui/Button';
 import { Text } from '@/shared/ui/Text';
+import { useUserInfo } from '@/features/user';
 
 const { RangePicker } = DatePicker;
 
@@ -31,6 +33,14 @@ const AdminPanel = () => {
     const { alertNotify } = useAlert();
     const { uploadMap } = useFiles();
     const language = useAppSelector((state) => state.app.language);
+    const { getShortInfo } = useUserInfo();
+
+    const { data } = useQuery({
+        queryKey: ['user_info'],
+        queryFn: getShortInfo,
+    });
+
+    const { roles } = data || {};
 
     const handleRouteList = () => {
         if (!routeStartDate || !routeEndDate) return;
@@ -142,15 +152,17 @@ const AdminPanel = () => {
                     </div>
                 </div>
 
-                <div className={styles.adminWrp}>
-                    <Text variant="text2">Карта на сайте</Text>
+                {roles?.includes('ADMIN') && (
+                    <div className={styles.adminWrp}>
+                        <Text variant="text2">Карта на сайте</Text>
 
-                    <div className={styles.adminMapImg}>
-                        <Image src={`${process.env.NEXT_PUBLIC_BASE_MAP}static/map.png`} alt="Карта" fill />
+                        <div className={styles.adminMapImg}>
+                            <Image src={`${process.env.NEXT_PUBLIC_BASE_MAP}static/map.png`} alt="Карта" fill />
+                        </div>
+
+                        <input type="file" accept="image/png,image/jpeg" onChange={handleFileChange} />
                     </div>
-
-                    <input type="file" accept="image/png,image/jpeg" onChange={handleFileChange} />
-                </div>
+                )}
             </div>
         </div>
     );

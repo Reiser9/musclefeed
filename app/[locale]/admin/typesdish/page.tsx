@@ -11,6 +11,7 @@ import { useAppSelector } from '@/shared/hooks/useRedux';
 import { Text } from '@/shared/ui/Text';
 import { NotContent } from '@/shared/ui/NotContent';
 import { Preloader } from '@/shared/ui/Preloader';
+import { PrivateWrapper } from '@/shared/wrappers/PrivateWrapper';
 
 const AdminDishTypes = () => {
     const { getDishTypes } = useAdminDish();
@@ -30,23 +31,27 @@ const AdminDishTypes = () => {
     }
 
     return (
-        <div className={styles.adminDishTypes}>
-            <div className={styles.titleWrapper}>
-                <Text>Типы блюд {!!data && !!data?.length && `(${data.length})`}</Text>
+        <PrivateWrapper haveRole="ADMIN">
+            <div className={styles.adminDishTypes}>
+                <div className={styles.titleWrapper}>
+                    <Text>Типы блюд {!!data && !!data?.length && `(${data.length})`}</Text>
 
-                {/* <Button href={`/${language}/admin/typesdish/create`}>Создать</Button> */}
-            </div>
-
-            {!!data && !!data?.length ? (
-                <div className={styles.adminDishItems}>
-                    {data.map((dish) => (
-                        <p key={dish.id} className={styles.adminDishType}>{dish.name[language]}</p>
-                    ))}
+                    {/* <Button href={`/${language}/admin/typesdish/create`}>Создать</Button> */}
                 </div>
-            ) : (
-                <NotContent text="Типы блюд еще не созданы" />
-            )}
-        </div>
+
+                {!!data && !!data?.length ? (
+                    <div className={styles.adminDishItems}>
+                        {data.map((dish) => (
+                            <p key={dish.id} className={styles.adminDishType}>
+                                {dish.name[language]}
+                            </p>
+                        ))}
+                    </div>
+                ) : (
+                    <NotContent text="Типы блюд еще не созданы" />
+                )}
+            </div>
+        </PrivateWrapper>
     );
 };
 

@@ -1,6 +1,7 @@
 import styles from './index.module.scss';
 
 import FaqTabs from './FaqTabs';
+import { PrivateWrapper } from '@/shared/wrappers/PrivateWrapper';
 
 export default function RootLayout({
     children,
@@ -8,10 +9,12 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <div className={styles.adminWrapper}>
-            <FaqTabs />
+        <PrivateWrapper haveRole="ADMIN">
+            <div className={styles.adminWrapper}>
+                <FaqTabs />
 
-            {children}
-        </div>
+                {children}
+            </div>
+        </PrivateWrapper>
     );
 }

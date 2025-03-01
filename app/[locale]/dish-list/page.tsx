@@ -34,7 +34,7 @@ const AdminDishList = () => {
     }
 
     return (
-        <PrivateWrapper haveRole="ADMIN">
+        <PrivateWrapper haveRole="MODERATOR">
             <div className={styles.dishListContent} contentEditable suppressContentEditableWarning>
                 {!!data && !!data.orders.length ? (
                     data.orders.map((order) => <DishListItem key={order.id} data={order} />)

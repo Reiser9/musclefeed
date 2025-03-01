@@ -142,7 +142,7 @@ const AdminOrderCreate = () => {
             ...data,
             skippedWeekdays: skippedDays,
             startDate,
-            menuId: activeMenuId,
+            ...(!isIndividual && { menuId: activeMenuId }),
             ...(userId && { userId: `${userId}` }),
             ...(freezeStartDate && { freezeStartDate }),
             ...(freezeEndDate && { freezeEndDate }),
@@ -376,16 +376,15 @@ const AdminOrderCreate = () => {
                         <NotContent text="Для начала создайте меню" />
                     ))}
 
-                {!isIndividual && (
-                    <Input
-                        {...register('daysCount')}
-                        error={!!errors.daysCount}
-                        errorMessage={errors.daysCount?.message}
-                        full
-                        title={'Количество дней'}
-                        value={watch('daysCount', `${days}`)}
-                    />
-                )}
+                <Input
+                    {...register('daysCount')}
+                    error={!!errors.daysCount}
+                    errorMessage={errors.daysCount?.message}
+                    full
+                    title={'Количество дней'}
+                    value={watch('daysCount', `${days}`)}
+                    disabled={isIndividual}
+                />
 
                 <Input
                     {...register('fullName')}

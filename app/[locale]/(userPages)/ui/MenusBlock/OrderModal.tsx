@@ -206,6 +206,12 @@ const OrderModal: React.FC<Props> = ({
         }
     }, [userPhone]);
 
+    React.useEffect(() => {
+        if (cities) {
+            setCity(`${cities[0].id}`);
+        }
+    }, [cities]);
+
     return (
         <Modal value={value} setValue={setValue} size="big">
             <>

@@ -14,6 +14,7 @@ import { Preloader } from '@/shared/ui/Preloader';
 import { Button } from '@/shared/ui/Button';
 import { Text } from '@/shared/ui/Text';
 import { NotContent } from '@/shared/ui/NotContent';
+import { PrivateWrapper } from '@/shared/wrappers/PrivateWrapper';
 
 const AdminTeam = () => {
     const queryClient = useQueryClient();
@@ -41,31 +42,33 @@ const AdminTeam = () => {
     }
 
     return (
-        <div className={styles.adminTeam}>
-            <div className={styles.adminTeamWrapper}>
-                <div className={styles.titleWrap}>
-                    <Text>Команда {!!data && !!data.length && `(${data.length})`}</Text>
+        <PrivateWrapper haveRole="ADMIN">
+            <div className={styles.adminTeam}>
+                <div className={styles.adminTeamWrapper}>
+                    <div className={styles.titleWrap}>
+                        <Text>Команда {!!data && !!data.length && `(${data.length})`}</Text>
 
-                    <Button href={`/${language}/admin/team/create`} small>
-                        Создать
-                    </Button>
-                </div>
-
-                {!!data && !!data.length ? (
-                    <div className={styles.adminTeamItems}>
-                        {data?.map((team) => (
-                            <TeamAdminItem
-                                key={team.id}
-                                data={team}
-                                deleteCallback={() => deleteMember(team.id, revalidateRequest)}
-                            />
-                        ))}
+                        <Button href={`/${language}/admin/team/create`} small>
+                            Создать
+                        </Button>
                     </div>
-                ) : (
-                    <NotContent text="Нет команды" />
-                )}
+
+                    {!!data && !!data.length ? (
+                        <div className={styles.adminTeamItems}>
+                            {data?.map((team) => (
+                                <TeamAdminItem
+                                    key={team.id}
+                                    data={team}
+                                    deleteCallback={() => deleteMember(team.id, revalidateRequest)}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <NotContent text="Нет команды" />
+                    )}
+                </div>
             </div>
-        </div>
+        </PrivateWrapper>
     );
 };
 

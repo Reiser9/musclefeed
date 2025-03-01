@@ -13,6 +13,7 @@ import { Preloader } from '@/shared/ui/Preloader';
 import { Button } from '@/shared/ui/Button';
 import { Text } from '@/shared/ui/Text';
 import { NotContent } from '@/shared/ui/NotContent';
+import { PrivateWrapper } from '@/shared/wrappers/PrivateWrapper';
 
 const AdminTypesMenu = () => {
     const queryClient = useQueryClient();
@@ -39,31 +40,33 @@ const AdminTypesMenu = () => {
     }
 
     return (
-        <div className={styles.adminTeam}>
-            <div className={styles.adminTeamWrapper}>
-                <div className={styles.titleWrap}>
-                    <Text>Типы меню {!!data && !!data.length && `(${data.length})`}</Text>
+        <PrivateWrapper haveRole="ADMIN">
+            <div className={styles.adminTeam}>
+                <div className={styles.adminTeamWrapper}>
+                    <div className={styles.titleWrap}>
+                        <Text>Типы меню {!!data && !!data.length && `(${data.length})`}</Text>
 
-                    <Button href={`/${language}/admin/typesmenu/create`} small>
-                        Создать
-                    </Button>
-                </div>
-
-                {!!data && !!data.length ? (
-                    <div className={styles.adminTeamItems}>
-                        {data?.map((type) => (
-                            <MenuTypeItem
-                                key={type.id}
-                                data={type}
-                                deleteCallback={() => deleteTypemenu(type.id, revalidateRequest)}
-                            />
-                        ))}
+                        <Button href={`/${language}/admin/typesmenu/create`} small>
+                            Создать
+                        </Button>
                     </div>
-                ) : (
-                    <NotContent text="Нет типов меню" />
-                )}
+
+                    {!!data && !!data.length ? (
+                        <div className={styles.adminTeamItems}>
+                            {data?.map((type) => (
+                                <MenuTypeItem
+                                    key={type.id}
+                                    data={type}
+                                    deleteCallback={() => deleteTypemenu(type.id, revalidateRequest)}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <NotContent text="Нет типов меню" />
+                    )}
+                </div>
             </div>
-        </div>
+        </PrivateWrapper>
     );
 };
 

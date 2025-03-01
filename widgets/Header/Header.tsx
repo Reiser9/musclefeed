@@ -134,7 +134,7 @@ const Header = () => {
 
                                 {!isAuth && (
                                     <button
-                                        className={cn(styles.headerSocialLink, styles.orange, styles.mobileOff)}
+                                        className={cn(styles.headerSocialLink, styles.orange)}
                                         onClick={() => setLoginModal(true)}
                                     >
                                         <UserLogin />

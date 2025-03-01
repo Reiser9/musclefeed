@@ -16,6 +16,7 @@ import { Text } from '@/shared/ui/Text';
 import { Preloader } from '@/shared/ui/Preloader';
 import { NotContent } from '@/shared/ui/NotContent';
 import { Input } from '@/shared/ui/Input';
+import { PrivateWrapper } from '@/shared/wrappers/PrivateWrapper';
 
 const AdminDish = () => {
     const [page, setPage] = React.useState(1);
@@ -47,50 +48,52 @@ const AdminDish = () => {
     }
 
     return (
-        <div className={styles.adminDish}>
-            <div className={styles.titleWrapper}>
-                <Text>Блюда {!!data && !!data?.totalCount && `(${data?.totalCount})`}</Text>
+        <PrivateWrapper haveRole="ADMIN">
+            <div className={styles.adminDish}>
+                <div className={styles.titleWrapper}>
+                    <Text>Блюда {!!data && !!data?.totalCount && `(${data?.totalCount})`}</Text>
 
-                <div className={styles.adminDishSearch}>
-                    <Input placeholder="Поиск" value={search} setValue={setSearch} full />
+                    <div className={styles.adminDishSearch}>
+                        <Input placeholder="Поиск" value={search} setValue={setSearch} full />
+                    </div>
+
+                    <Button href={`/${language}/admin/dish/create`}>Создать</Button>
                 </div>
 
-                <Button href={`/${language}/admin/dish/create`}>Создать</Button>
+                {!!data && !!data.dishes?.length ? (
+                    <div className={styles.adminDishItems}>
+                        {data.dishes.map((dish) => (
+                            <DishAdminItem
+                                key={dish.id}
+                                data={dish}
+                                copyCallback={() => copyDish(dish.id, revalidateRequest)}
+                                deleteCallback={() => deleteDish(dish.id, revalidateRequest)}
+                            />
+                        ))}
+                    </div>
+                ) : searchDebounce ? (
+                    <NotContent text={`По запросу «${searchDebounce}» блюда не найдены`} />
+                ) : (
+                    <NotContent text="Блюда еще не созданы" />
+                )}
+
+                {!!data && data.totalPages > 1 && (
+                    <div className={styles.pagination}>
+                        {[...Array(data.totalPages)].map((_, id) => (
+                            <button
+                                key={id}
+                                className={cn(styles.paginationButton, {
+                                    [styles.active]: id + 1 === data.page,
+                                })}
+                                onClick={() => setPage(id + 1)}
+                            >
+                                {id + 1}
+                            </button>
+                        ))}
+                    </div>
+                )}
             </div>
-
-            {!!data && !!data.dishes?.length ? (
-                <div className={styles.adminDishItems}>
-                    {data.dishes.map((dish) => (
-                        <DishAdminItem
-                            key={dish.id}
-                            data={dish}
-                            copyCallback={() => copyDish(dish.id, revalidateRequest)}
-                            deleteCallback={() => deleteDish(dish.id, revalidateRequest)}
-                        />
-                    ))}
-                </div>
-            ) : searchDebounce ? (
-                <NotContent text={`По запросу «${searchDebounce}» блюда не найдены`} />
-            ) : (
-                <NotContent text="Блюда еще не созданы" />
-            )}
-
-            {!!data && data.totalPages > 1 && (
-                <div className={styles.pagination}>
-                    {[...Array(data.totalPages)].map((_, id) => (
-                        <button
-                            key={id}
-                            className={cn(styles.paginationButton, {
-                                [styles.active]: id + 1 === data.page,
-                            })}
-                            onClick={() => setPage(id + 1)}
-                        >
-                            {id + 1}
-                        </button>
-                    ))}
-                </div>
-            )}
-        </div>
+        </PrivateWrapper>
     );
 };
 

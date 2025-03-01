@@ -16,6 +16,7 @@ import { NotContent } from '@/shared/ui/NotContent';
 import { Preloader } from '@/shared/ui/Preloader';
 import { Input } from '@/shared/ui/Input';
 import { MenuAdminItem } from '@/entities/menu/ui';
+import { PrivateWrapper } from '@/shared/wrappers/PrivateWrapper';
 
 const AdminMenuPage = () => {
     const [page, setPage] = React.useState(1);
@@ -47,51 +48,53 @@ const AdminMenuPage = () => {
     }
 
     return (
-        <div className={styles.adminTeam}>
-            <div className={styles.adminTeamWrapper}>
-                <div className={styles.titleWrap}>
-                    <Text>Меню {!!data && !!data.totalCount && `(${data.totalCount})`}</Text>
+        <PrivateWrapper haveRole="ADMIN">
+            <div className={styles.adminTeam}>
+                <div className={styles.adminTeamWrapper}>
+                    <div className={styles.titleWrap}>
+                        <Text>Меню {!!data && !!data.totalCount && `(${data.totalCount})`}</Text>
 
-                    <div className={styles.adminDishSearch}>
-                        <Input placeholder="Поиск" value={search} setValue={setSearch} full />
+                        <div className={styles.adminDishSearch}>
+                            <Input placeholder="Поиск" value={search} setValue={setSearch} full />
+                        </div>
+
+                        <Button href={`/${language}/admin/menu/create`} small>
+                            Создать
+                        </Button>
                     </div>
 
-                    <Button href={`/${language}/admin/menu/create`} small>
-                        Создать
-                    </Button>
+                    {!!data && !!data?.menus.length ? (
+                        <div className={styles.adminTeamItems}>
+                            {data?.menus.map((menu) => (
+                                <MenuAdminItem
+                                    key={menu.id}
+                                    data={menu}
+                                    deleteCallback={() => deleteMenu(menu.id, revalidateRequest)}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <NotContent text="Нет меню" />
+                    )}
+
+                    {!!data && data.totalPages > 1 && (
+                        <div className={styles.pagination}>
+                            {[...Array(data.totalPages)].map((_, id) => (
+                                <button
+                                    key={id}
+                                    className={cn(styles.paginationButton, {
+                                        [styles.active]: id + 1 === data.page,
+                                    })}
+                                    onClick={() => setPage(id + 1)}
+                                >
+                                    {id + 1}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
-
-                {!!data && !!data?.menus.length ? (
-                    <div className={styles.adminTeamItems}>
-                        {data?.menus.map((menu) => (
-                            <MenuAdminItem
-                                key={menu.id}
-                                data={menu}
-                                deleteCallback={() => deleteMenu(menu.id, revalidateRequest)}
-                            />
-                        ))}
-                    </div>
-                ) : (
-                    <NotContent text="Нет меню" />
-                )}
-
-                {!!data && data.totalPages > 1 && (
-                    <div className={styles.pagination}>
-                        {[...Array(data.totalPages)].map((_, id) => (
-                            <button
-                                key={id}
-                                className={cn(styles.paginationButton, {
-                                    [styles.active]: id + 1 === data.page,
-                                })}
-                                onClick={() => setPage(id + 1)}
-                            >
-                                {id + 1}
-                            </button>
-                        ))}
-                    </div>
-                )}
             </div>
-        </div>
+        </PrivateWrapper>
     );
 };
 

@@ -56,7 +56,7 @@ const usePersonal = () => {
         }
 
         successCallback();
-        alertNotify('Успешно', 'Заказ создан');
+        alertNotify('Успешно', 'С вами свяжется менеджер для подтверждения заказа');
 
         if ('data' in response) {
             return response.data;

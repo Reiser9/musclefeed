@@ -200,6 +200,12 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
         }
     }, [userPhone]);
 
+    React.useEffect(() => {
+        if (cities) {
+            setCity(`${cities[0].id}`);
+        }
+    }, [cities]);
+
     return (
         <Modal value={value} setValue={setValue} size="big">
             <>
@@ -229,7 +235,9 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
 
                                 <div className={styles.cartItemContent}>
                                     <div className={styles.cartItemContentWrap}>
-                                        <p className={styles.cartItemContentTitle}>{dish.dish.name[language]} x{dish.quantity}</p>
+                                        <p className={styles.cartItemContentTitle}>
+                                            {dish.dish.name[language]} x{dish.quantity}
+                                        </p>
 
                                         <p className={styles.cartItemContentText}>{dish.dish.description[language]}</p>
                                     </div>
