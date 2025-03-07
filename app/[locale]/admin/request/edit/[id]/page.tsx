@@ -15,6 +15,7 @@ import { Text } from '@/shared/ui/Text';
 import { Preloader } from '@/shared/ui/Preloader';
 import { NotContent } from '@/shared/ui/NotContent';
 import { useAppSelector } from '@/shared/hooks/useRedux';
+import { getOrderChangeLabel } from '@/shared/utils/getOrderChangeLabel';
 
 const AdminRequestEdit = () => {
     const { id } = useParams();
@@ -61,7 +62,7 @@ const AdminRequestEdit = () => {
 
                 <Input full title={'Комментарий'} component="textarea" disabled value={comment} />
 
-                <Input full title={'Тип изменения'} disabled value={orderChangeType} />
+                <Input full title={'Тип изменения'} disabled value={getOrderChangeLabel(orderChangeType)} />
 
                 <Input full title={'Телефон'} disabled value={phone} />
 

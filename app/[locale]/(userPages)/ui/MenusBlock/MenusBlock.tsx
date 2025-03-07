@@ -56,7 +56,7 @@ const disabledDate = (current: Dayjs) => {
     const today = dayjs().startOf('day');
     const diff = current.diff(startDate, 'day');
 
-    return current.isBefore(today, 'day') || (diff >= 0 && diff % 2 === 1);
+    return current.isBefore(today, 'day') || current.isSame(today, 'day') || (diff >= 0 && diff % 2 === 1);
 };
 
 const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0];
@@ -83,6 +83,7 @@ const MenusBlock = () => {
     const [swapModal, setSwapModal] = React.useState(false);
 
     const [orderModal, setOrderModal] = React.useState(false);
+    const [orderSuccessModal, setOrderSuccessModal] = React.useState(false);
 
     const [calcNormModal, setCalcNormModal] = React.useState(false);
     const [calcNorm, setCalcNorm] = React.useState(0);
@@ -153,6 +154,7 @@ const MenusBlock = () => {
         setDateDelivery('');
         setDisabledDays([6, 7]);
         setSelectedDay(tomorrow);
+        setOrderSuccessModal(true);
     };
 
     React.useEffect(() => {
@@ -177,6 +179,7 @@ const MenusBlock = () => {
         if (activeMenuId && menus) {
             const index = menus.menus.findIndex((el) => el.id === activeMenuId);
             setCurrentMenu(menus.menus[index]);
+            setActivePrice(menus.menus[index].prices[0]);
         }
     }, [activeMenuId, menus]);
 
@@ -313,7 +316,7 @@ const MenusBlock = () => {
                                         {currentMenu && activeMenuId && (
                                             <div className={styles.foodFormItem}>
                                                 <div className={styles.foodFormItemName}>
-                                                    <p className={styles.foodFormItemNameText}>{t('program')}</p>
+                                                    <p className={styles.foodFormItemNameText}>{t('duration')}</p>
                                                 </div>
 
                                                 <div className={styles.foodFormItemContent}>
@@ -327,6 +330,16 @@ const MenusBlock = () => {
                                                                 onClick={() => setActivePrice(day)}
                                                             >
                                                                 {day.daysCount} дней
+                                                                {!!day.discount && (
+                                                                    <span className={styles.foodSale}>
+                                                                        -{day.discount}%
+                                                                    </span>
+                                                                )}
+                                                                {!!day.giftDaysCount && (
+                                                                    <span className={cn(styles.foodSale, styles.block)}>
+                                                                        {day.giftDaysCount} дня в подарок
+                                                                    </span>
+                                                                )}
                                                             </button>
                                                         ))}
                                                 </div>
@@ -398,7 +411,7 @@ const MenusBlock = () => {
                                                     </button>
 
                                                     <DatePicker
-                                                        className={styles.modalCalendar}
+                                                        className={cn(styles.modalCalendar, 'main__calendar')}
                                                         disabledDate={disabledDate}
                                                         format={'DD.MM.YYYY'}
                                                         value={dateDelivery ? dayjs(dateDelivery) : null}
@@ -408,13 +421,15 @@ const MenusBlock = () => {
                                                     />
                                                 </div>
 
-                                                {dateDelivery && (
+                                                {dateDelivery ? (
                                                     <p className={styles.foodFormDateText}>
                                                         {t('date_text')}{' '}
                                                         <span className={styles.orderDate}>
                                                             {dayjs(dateDelivery).format('DD.MM.YYYY')}
                                                         </span>
                                                     </p>
+                                                ) : (
+                                                    <p className={styles.foodFormDateTextRed}>{t('choose_date')}</p>
                                                 )}
                                             </div>
                                         </div>
@@ -604,6 +619,18 @@ const MenusBlock = () => {
                 setCalories={setCalcNorm}
                 chooseProgram={chooseProgram}
             />
+
+            <Modal value={orderSuccessModal} setValue={setOrderSuccessModal}>
+                <>
+                    <Text variant="h3" upper className={styles.modalDeliveryTitle}>
+                        Заказ успешно оформлен
+                    </Text>
+
+                    <div className={styles.modalDeliveryTextInner}>
+                        <p className={styles.modalDeliveryText}>С вами свжется оператор для уточнения информации</p>
+                    </div>
+                </>
+            </Modal>
         </>
     );
 };

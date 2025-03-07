@@ -210,11 +210,16 @@
     flex-shrink: 0;
 }
 
-.menuFormItemDishSelect, .menuFormItemDishReplacement{
+.menuFormItemDishSelect{
+    width: calc(100% - 40px);
+}
+
+.menuFormItemDishSelect.full{
     width: 100%;
 }
 
 .menuFormItemDishReplacement{
+    width: 100%;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -231,6 +236,7 @@
     border-radius: 8px;
     margin: 0 0 1.2rem 1.2rem;
     transition: .2s linear;
+    flex-shrink: 0;
 }
 
 .menuFormDeleteSwap{

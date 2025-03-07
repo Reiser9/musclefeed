@@ -49,6 +49,7 @@ const AdminMain = () => {
         terminatingCount,
         unpaidCount,
         unprocessedCount,
+        individualCount,
     } = orderStats || {};
 
     if (isPending) {
@@ -70,6 +71,15 @@ const AdminMain = () => {
                         onClick={() => setStatus('all')}
                     >
                         Все заказы ({allCount || 0})
+                    </button>
+
+                    <button
+                        className={cn(styles.adminOrdersTab, {
+                            [styles.active]: status === 'individual',
+                        })}
+                        onClick={() => setStatus('individual')}
+                    >
+                        Индивидуальные ({individualCount || 0})
                     </button>
 
                     <button

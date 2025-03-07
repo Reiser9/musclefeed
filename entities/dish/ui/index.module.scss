@@ -8,7 +8,7 @@
 
 .foodItem{
 	width: 100%;
-	height: auto!important;
+	height: 100%!important;
 }
 
 .foodMenuItem{
@@ -113,6 +113,11 @@
 
 .dishItemImage img{
 	object-fit: contain;
+}
+
+.dishItemTitle{
+	font-size: 1.8rem;
+	font-weight: 500;
 }
 
 .dishItemButtons{

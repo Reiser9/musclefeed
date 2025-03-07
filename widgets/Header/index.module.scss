@@ -82,6 +82,24 @@
 	color: #0A0C13;
 }
 
+.highlight{
+	text-transform: uppercase;
+	animation: pulse 2s linear infinite;
+	font-weight: 600;
+}
+
+@keyframes pulse {
+	0%{
+		color: #0a0c13;
+	}
+	50%{
+		color: var(--main);
+	}
+	100%{
+		color: #0a0c13;
+	}
+}
+
 @media (max-width: 1065px) {
     .headerNavLink{
 		padding: 2.4rem 0.8rem;
@@ -116,6 +134,13 @@
 	filter: grayscale(1);
 }
 
+.headerSocialLinkMenu{
+	display: none;
+	align-items: center;
+	gap: 12px;
+	padding: 1.6rem;
+}
+
 @media (max-width: 768px) {
     .headerSocialLink.mobileOff{
         display: none;
@@ -129,6 +154,10 @@
 @media (max-width: 480px) {
 	.headerSocialLink:first-child, .headerSocialLink:nth-child(2){
 		display: none;
+	}
+
+	.menuMobile .headerSocialLink, .headerSocialLinkMenu{
+		display: flex;
 	}
 }
 

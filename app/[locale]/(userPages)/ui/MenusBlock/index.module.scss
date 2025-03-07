@@ -149,7 +149,7 @@
 
 .foodItem{
 	width: 100%;
-	height: auto!important;
+	height: 100%!important;
 }
 
 .foodMenuItem{
@@ -461,19 +461,23 @@
 	}
 }
 
-.foodFormDateText{
+.foodFormDateText, .foodFormDateTextRed{
 	font-size: 2.2rem;
 	line-height: 1.2;
 	font-weight: 500;
 }
 
+.foodFormDateTextRed{
+	color: red;
+}
+
 @media (max-width: 1630px) {
-	.foodFormDateText{
+	.foodFormDateText, .foodFormDateTextRed{
 		font-size: 1.8rem;
 	}
 }
 @media (max-width: 1065px) {
-	.foodFormDateText{
+	.foodFormDateText, .foodFormDateTextRed{
 		font-size: 1.6rem;
 	}
 }
@@ -915,9 +919,40 @@
 	line-height: 1.5;
 }
 
+.promoSubtitle.green{
+	color: var(--main);
+}
+
 .orderPromoWrap{
 	width: 100%;
 	max-width: 360px;
+	position: relative;
+}
+
+.orderPromoApply{
+	width: 40px;
+	height: 40px;
+	border-radius: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	right: 8px;
+	color: var(--main);
+	background: #f5f7fa;
+}
+
+.orderTextSale{
+	font-size: 1.8rem;
+	line-height: 1.5;
+	color: #00A31E;
+}
+
+.orderPromoApply:hover{
+	background: var(--main);
+	color: #fff;
 }
 
 .calcResult{
@@ -1063,7 +1098,7 @@
 }
 
 .menuItemDishSlide{
-	height: auto;
+	height: auto!important;
 	display: flex;
 }
 

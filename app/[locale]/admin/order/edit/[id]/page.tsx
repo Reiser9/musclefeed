@@ -34,6 +34,7 @@ const AdminOrderCreate = () => {
     const [userId, setUserId] = React.useState<number | null>(null);
     const [activeMenuId, setActiveMenuId] = React.useState('');
     const [startDate, setStartDate] = React.useState('');
+    const [endDate, setEndDate] = React.useState('');
     const [skippedDays, setSkippedDays] = React.useState<number[]>([]);
 
     const [freezeStartDate, setFreezeStartDate] = React.useState('');
@@ -88,6 +89,7 @@ const AdminOrderCreate = () => {
         daysCount: days,
         paymentMethod,
         startDate: orderStartDate,
+        endDate: orderEndDate,
         phone,
         floor,
         street,
@@ -97,6 +99,8 @@ const AdminOrderCreate = () => {
         freezeStartDate: frozenStart,
         freezeEndDate: frozenEnd,
         isIndividual,
+        giftDaysCount,
+        menuDiscount,
     } = order || {};
 
     const {
@@ -156,6 +160,12 @@ const AdminOrderCreate = () => {
             setStartDate(dayjs(orderStartDate).format('YYYY-MM-DD'));
         }
     }, [orderStartDate]);
+
+    React.useEffect(() => {
+        if (orderEndDate) {
+            setEndDate(dayjs(orderEndDate).format('YYYY-MM-DD'));
+        }
+    }, [orderEndDate]);
 
     React.useEffect(() => {
         if (user && user.id) {
@@ -290,6 +300,18 @@ const AdminOrderCreate = () => {
                     />
                 </div>
 
+                <div className={styles.skippedButtonsWrap}>
+                    <Text variant="text3">Дата окончания заказа</Text>
+
+                    <DatePicker
+                        value={endDate ? dayjs(endDate) : null}
+                        onChange={(date) => setEndDate(date.format('YYYY-MM-DD'))}
+                        className={styles.orderDate}
+                        format="DD.MM.YYYY"
+                        disabled
+                    />
+                </div>
+
                 {!isIndividual && (
                     <div className={styles.skippedButtonsWrap}>
                         <Text variant="text3">Пропускаемые дни</Text>
@@ -384,6 +406,16 @@ const AdminOrderCreate = () => {
                     title={'Количество дней'}
                     value={watch('daysCount', `${days}`)}
                     disabled={isIndividual}
+                />
+
+                <Input
+                    {...register('giftDaysCount')}
+                    error={!!errors.giftDaysCount}
+                    errorMessage={errors.giftDaysCount?.message}
+                    full
+                    title={'Подарочных дней по промокоду'}
+                    value={watch('giftDaysCount', `${giftDaysCount}`)}
+                    type="number"
                 />
 
                 <Input
@@ -535,6 +567,16 @@ const AdminOrderCreate = () => {
                     full
                     title={'Скидка по промокоду'}
                     value={watch('promocodeDiscount', `${promocodeDiscount}`)}
+                    type="number"
+                />
+
+                <Input
+                    {...register('menuDiscount')}
+                    error={!!errors.menuDiscount}
+                    errorMessage={errors.menuDiscount?.message}
+                    full
+                    title={'Скидка при выборе меню'}
+                    value={watch('menuDiscount', `${menuDiscount}`)}
                     type="number"
                 />
 

@@ -65,7 +65,7 @@ const DayItem: React.FC<DayProps> = ({
                                     <Text variant="text3">Основное блюдо</Text>
 
                                     <SelectAnt
-                                        className={styles.menuFormItemDishSelect}
+                                        className={cn(styles.menuFormItemDishSelect, styles.full)}
                                         showSearch
                                         options={
                                             !!dish && !!dish.dishes

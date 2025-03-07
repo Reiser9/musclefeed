@@ -39,6 +39,10 @@ const AdminDish = () => {
         placeholderData: keepPreviousData,
     });
 
+    React.useEffect(() => {
+        setPage(1);
+    }, [searchDebounce]);
+
     if (isPending) {
         return <Preloader page />;
     }

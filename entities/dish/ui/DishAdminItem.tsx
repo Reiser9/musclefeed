@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
+// import Image from 'next/image';
 import Link from 'next/link';
 
 import styles from './index.module.scss';
@@ -22,18 +22,20 @@ type Props = {
 const DishAdminItem: React.FC<Props> = ({ data, copyCallback = () => {}, deleteCallback = () => {} }) => {
     const [deleteModal, setDeleteModal] = React.useState(false);
 
-    const { id, name, picture, adminName, isPublished } = data || {};
+    const { id, name, adminName, isPublished } = data || {};
     const language = useAppSelector((state) => state.app.language);
 
     return (
         <>
             <div className={styles.dishItem}>
-                <Link href={`/${language}/admin/dish/edit/${id}`} className={styles.dishItemImage}>
+                {/* <Link href={`/${language}/admin/dish/edit/${id}`} className={styles.dishItemImage}>
                     <Image src={picture} alt={name[language]} fill />
+                </Link> */}
+
+                <Link href={`/${language}/admin/dish/edit/${id}`} className={styles.dishItemTitle}>
+                    {adminName}
                 </Link>
 
-                <Text variant="text2">Название для админа: {adminName}</Text>
-                <Text variant="text2">{name[language]}</Text>
                 <Text variant="text2">Опубликован: {isPublished ? 'Да' : 'Нет'}</Text>
 
                 <div className={styles.dishItemButtons}>

@@ -6,31 +6,31 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import styles from './index.module.scss';
 
+import { usePromocode } from '@/features/promocode';
+import { PrivateWrapper } from '@/shared/wrappers/PrivateWrapper';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 
+import { NotContent } from '@/shared/ui/NotContent';
 import { Preloader } from '@/shared/ui/Preloader';
 import { Button } from '@/shared/ui/Button';
 import { Text } from '@/shared/ui/Text';
-import { NotContent } from '@/shared/ui/NotContent';
-import { ReviewsAdminItem } from '@/entities/review/ui';
-import { useReviews } from '@/features/reviews';
-import { PrivateWrapper } from '@/shared/wrappers/PrivateWrapper';
+import { PromocodeItem } from '@/entities/promocode/ui';
 
-const AdminReviews = () => {
+const AdminPromocode = () => {
     const [page, setPage] = React.useState(1);
     const queryClient = useQueryClient();
 
     const revalidateRequest = () => {
-        queryClient.invalidateQueries({ queryKey: ['admin_reviews'] });
+        queryClient.invalidateQueries({ queryKey: ['promocodes'] });
     };
 
     const language = useAppSelector((state) => state.app.language);
 
-    const { getAdminReviews, deleteReview } = useReviews();
+    const { getPromocodes, deletePromocode } = usePromocode();
 
     const { data, isPending, isError } = useQuery({
-        queryKey: ['admin_reviews', page],
-        queryFn: () => getAdminReviews(page),
+        queryKey: ['promocodes'],
+        queryFn: () => getPromocodes(page, 12),
     });
 
     if (isPending) {
@@ -42,29 +42,29 @@ const AdminReviews = () => {
     }
 
     return (
-        <PrivateWrapper haveRole="MODERATOR">
+        <PrivateWrapper haveRole="ADMIN">
             <div className={styles.adminTeam}>
                 <div className={styles.adminTeamWrapper}>
                     <div className={styles.titleWrap}>
-                        <Text>Отзывы {!!data && !!data.totalCount && `(${data.totalCount})`}</Text>
+                        <Text>Промокоды {!!data && !!data.totalCount && `(${data.totalCount})`}</Text>
 
-                        <Button href={`/${language}/admin/reviews/create`} small>
+                        <Button href={`/${language}/admin/promocodes/create`} small>
                             Создать
                         </Button>
                     </div>
 
-                    {!!data && !!data?.reviews.length ? (
+                    {!!data && !!data.promocodes.length ? (
                         <div className={styles.adminTeamItems}>
-                            {data?.reviews.map((review) => (
-                                <ReviewsAdminItem
-                                    key={review.id}
-                                    data={review}
-                                    deleteCallback={() => deleteReview(review.id, revalidateRequest)}
+                            {data?.promocodes.map((promo) => (
+                                <PromocodeItem
+                                    key={promo.id}
+                                    data={promo}
+                                    deleteCallback={() => deletePromocode(promo.id, revalidateRequest)}
                                 />
                             ))}
                         </div>
                     ) : (
-                        <NotContent text="Нет отзывов" />
+                        <NotContent text="Нет промокодов" />
                     )}
 
                     {!!data && data.totalPages > 1 && (
@@ -88,4 +88,4 @@ const AdminReviews = () => {
     );
 };
 
-export default AdminReviews;
+export default AdminPromocode;

@@ -48,7 +48,7 @@ const UserOrderPage = () => {
         });
     };
 
-    const { daysCount, endDate, startDate, menu, skippedWeekdays, allergies, isIndividual } = data || {};
+    const { daysCount, endDate, startDate, menu, skippedWeekdays, allergies, isIndividual, giftDaysCount } = data || {};
 
     if (isPending) {
         return <Preloader page />;
@@ -136,7 +136,9 @@ const UserOrderPage = () => {
                                 <div className={styles.configItem}>
                                     <p className={styles.configItemSuptext}>Длительность</p>
 
-                                    <p className={styles.configItemTitle}>{daysCount} дней</p>
+                                    <p className={styles.configItemTitle}>
+                                        {daysCount} дней {!!giftDaysCount && <span>+ {giftDaysCount} дня</span>}
+                                    </p>
 
                                     {!isIndividual && (
                                         <button

@@ -40,7 +40,7 @@ const AdminReviewEdit = () => {
         queryFn: () => getReviewById(String(id)),
         enabled: !!id,
         gcTime: 0,
-        refetchOnMount: true
+        refetchOnMount: true,
     });
 
     const onSubmit: SubmitHandler<ReviewDTO> = (data) => {
@@ -90,7 +90,7 @@ const AdminReviewEdit = () => {
                     errorMessage={errors.authorRu?.message}
                     full
                     title={'Автор ru'}
-                    value={watch('authorRu', author?.ru)}
+                    value={watch('authorRu', author?.ru || "")}
                 />
 
                 <Input
@@ -99,7 +99,7 @@ const AdminReviewEdit = () => {
                     errorMessage={errors.authorHe?.message}
                     full
                     title={'Автор he'}
-                    value={watch('authorHe', author?.he)}
+                    value={watch('authorHe', author?.he || "")}
                 />
 
                 <Input
@@ -108,7 +108,7 @@ const AdminReviewEdit = () => {
                     errorMessage={errors.textRu?.message}
                     full
                     title={'Текст ru'}
-                    value={watch('textRu', text?.ru)}
+                    value={watch('textRu', text?.ru || "")}
                 />
 
                 <Input
@@ -117,7 +117,7 @@ const AdminReviewEdit = () => {
                     errorMessage={errors.textHe?.message}
                     full
                     title={'Текст he'}
-                    value={watch('textHe', text?.he)}
+                    value={watch('textHe', text?.he || "")}
                 />
 
                 <Button full>Сохранить</Button>

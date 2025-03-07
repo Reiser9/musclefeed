@@ -178,6 +178,19 @@
 	gap: 24px;
 }
 
+.modalDeliveryTextInner{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 16px;
+	margin-top: 2rem;
+}
+
+.modalDeliveryText{
+	line-height: 1.5;
+}
+
 @media (max-width: 1065px) {
 	.mapButtons{
 		gap: 16px;

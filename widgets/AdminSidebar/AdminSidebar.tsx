@@ -112,6 +112,18 @@ const AdminSidebar = () => {
 
                     {roles?.includes('ADMIN') && (
                         <Link
+                            href={`/${locale}/admin/promocodes`}
+                            className={cn(styles.sidebarNavLink, {
+                                [styles.active]: pathname.includes(`/${locale}/admin/promocodes`),
+                            })}
+                            onClick={() => setShowSidebar(false)}
+                        >
+                            Промокоды
+                        </Link>
+                    )}
+
+                    {roles?.includes('ADMIN') && (
+                        <Link
                             href={`/${locale}/admin/typesmenu`}
                             className={cn(styles.sidebarNavLink, {
                                 [styles.active]: pathname.includes(`/${locale}/admin/typesmenu`),
@@ -146,7 +158,7 @@ const AdminSidebar = () => {
                         </Link>
                     )}
 
-                    {roles?.includes('ADMIN') && (
+                    {roles?.includes('MODERATOR') && (
                         <Link
                             href={`/${locale}/admin/reviews`}
                             className={cn(styles.sidebarNavLink, {

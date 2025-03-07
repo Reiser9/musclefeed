@@ -458,6 +458,12 @@ input:focus::placeholder{
 	border-left: none;
 }
 
+.ant-picker-cell-disabled:not(.ant-picker-cell-in-view),
+.ant-picker-cell:not(.ant-picker-cell-in-view){
+	opacity: 0;
+	pointer-events: none;
+}
+
 @media (any-hover: hover) {
 	a, button{
 		cursor: pointer;

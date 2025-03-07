@@ -33,6 +33,8 @@ const emptyPriceElem = {
     totalPriceHe: '',
     pricePerDayRu: '',
     pricePerDayHe: '',
+    discount: '0',
+    giftDaysCount: '0',
 };
 
 const AdminMenuCreate = () => {

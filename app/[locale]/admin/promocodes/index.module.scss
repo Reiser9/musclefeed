@@ -1,4 +1,4 @@
-.adminDish{
+.adminTeam{
     width: 100%;
     height: 100%;
     overflow-y: auto;
@@ -6,7 +6,7 @@
 }
 
 @media (max-width: 580px) {
-    .adminDish{
+    .adminTeam{
         padding: 4.8rem 2rem;
     }
 }
@@ -21,37 +21,42 @@
     margin: 0 auto;
 }
 
-.titleWrapper{
+.adminTeamWrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+}
+
+.titleWrap{
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 16px;
 }
 
-@media (max-width: 998px) {
-    .titleWrapper{
-        flex-wrap: wrap;
+.adminTeamItems{
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-gap: 24px;
+}
+
+@media (max-width: 1500px) {
+    .adminTeamItems{
+        grid-template-columns: repeat(3, 1fr);
     }
 }
-
-.adminDishItems{
-    width: 100%;
-    margin-top: 3.2rem;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: 8px;
+@media (max-width: 1200px) {
+    .adminTeamItems{
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
-
-.adminDishSearch{
-    width: 100%;
-    max-width: 370px;
-}
-
-@media (max-width: 998px) {
-    .adminDishSearch{
-        order: 3;
-        max-width: 100%;
+@media (max-width: 900px) {
+    .adminTeamItems{
+        grid-template-columns: 1fr;
     }
 }
 

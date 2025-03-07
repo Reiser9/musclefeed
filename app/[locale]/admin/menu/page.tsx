@@ -9,14 +9,14 @@ import styles from './index.module.scss';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 import { useMenu } from '@/features/menu';
 import { useDebounce } from '@/shared/hooks/useDebounce';
+import { MenuAdminItem } from '@/entities/menu/ui';
+import { PrivateWrapper } from '@/shared/wrappers/PrivateWrapper';
 
 import { Button } from '@/shared/ui/Button';
 import { Text } from '@/shared/ui/Text';
 import { NotContent } from '@/shared/ui/NotContent';
 import { Preloader } from '@/shared/ui/Preloader';
 import { Input } from '@/shared/ui/Input';
-import { MenuAdminItem } from '@/entities/menu/ui';
-import { PrivateWrapper } from '@/shared/wrappers/PrivateWrapper';
 
 const AdminMenuPage = () => {
     const [page, setPage] = React.useState(1);
@@ -38,6 +38,10 @@ const AdminMenuPage = () => {
         queryFn: () => getMenus(page, 10, searchDebounce),
         placeholderData: keepPreviousData,
     });
+
+    React.useEffect(() => {
+        setPage(1);
+    }, [searchDebounce]);
 
     if (isPending) {
         return <Preloader page />;

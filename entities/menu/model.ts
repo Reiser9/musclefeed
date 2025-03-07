@@ -47,6 +47,8 @@ export type PriceItemDTO = {
     totalPriceHe: string;
     pricePerDayRu: string;
     pricePerDayHe: string;
+    discount: string;
+    giftDaysCount: string;
 };
 
 export type PriceItem = {
@@ -55,6 +57,9 @@ export type PriceItem = {
     price: number;
     totalPrice: LanguageField;
     pricePerDay: LanguageField;
+    discount: number;
+    discountedPrice: number;
+    giftDaysCount: number;
 };
 
 export type MenuDTO = {
@@ -87,16 +92,17 @@ export type Menu = {
     createdAt: Date;
     updatedAt: Date;
     daysCount: number;
-    menuType: {
-        id: number;
-        name: LanguageField;
-    };
+    menuTypeId: number;
     days: MenuDay[];
     prices: PriceItemDTO[];
 };
 
-export type MenuUser = Omit<Menu, 'prices'> & {
+export type MenuUser = Omit<Menu, 'prices' | 'menuTypeId'> & {
     prices: PriceItem[];
+    menuType: {
+        id: number;
+        name: LanguageField;
+    };
 };
 
 export type MenuUserPagination = Pagination & {

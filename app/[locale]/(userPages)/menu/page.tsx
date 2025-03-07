@@ -28,6 +28,7 @@ import { NotContent } from '@/shared/ui/NotContent';
 import { Button } from '@/shared/ui/Button';
 import { Modal } from '@/shared/ui/Modal';
 import { Text } from '@/shared/ui/Text';
+import { Element } from 'react-scroll';
 
 const startDate = dayjs(DATE_OF_DELIVERY);
 const disabledDate = (current: Dayjs) => {
@@ -111,137 +112,141 @@ const MenuPage = () => {
 
     return (
         <>
-            <section className={styles.complex}>
-                <div className={base.container}>
-                    <div className={styles.complexInner}>
-                        <div className={styles.complexWrp}>
-                            <div className={styles.foodTextInner}>
-                                <p className={styles.foodTextTitle}>
-                                    Свобода выбора: Создайте свой идеальный набор блюд
-                                </p>
+            <Element name="menu">
+                <section className={styles.complex}>
+                    <div className={base.container}>
+                        <div className={styles.complexInner}>
+                            <div className={styles.complexWrp}>
+                                <div className={styles.foodTextInner}>
+                                    <p className={styles.foodTextTitle}>
+                                        Свобода выбора: Создайте свой идеальный набор блюд
+                                    </p>
 
-                                <p className={styles.foodTextText}>
-                                    Эта программа для тех, кто хочет питаться правильно и устал от фастфуда. Выберите
-                                    любые блюда на свой вкус из нашего меню и составьте свой идеальный заказ.
-                                    Минимальная сумма — 200 шекелей, а вы получаете только то, что действительно хотите,
-                                    без лишних компромиссов
-                                </p>
-                            </div>
-
-                            <div className={styles.foodForm}>
-                                <div className={styles.foodFormItem}>
-                                    <div className={styles.foodFormItemName}>
-                                        <p className={styles.foodFormItemNameText}>Когда привезти</p>
-
-                                        <button
-                                            className={styles.foodFormButton}
-                                            onClick={() => setDeliveryModal(true)}
-                                        >
-                                            {t('delivery_cond')}
-                                        </button>
-                                    </div>
-
-                                    <div className={styles.foodFormItemDate}>
-                                        <div className={styles.foodFormItemDateButtonInner}>
-                                            <button
-                                                className={styles.foodFormItemDateButton}
-                                                onClick={() => setDateDeliveryPicker(true)}
-                                            >
-                                                <DateIcon />
-                                                {t('choose_date')}
-                                            </button>
-
-                                            <DatePicker
-                                                className={styles.modalCalendar}
-                                                disabledDate={disabledDate}
-                                                format={'DD.MM.YYYY'}
-                                                value={dateDelivery ? dayjs(dateDelivery) : null}
-                                                onChange={(date) => setDateDelivery(date.format('YYYY-MM-DD'))}
-                                                open={dateDeliveryPicker}
-                                                onOpenChange={(isOpen) => setDateDeliveryPicker(isOpen)}
-                                            />
-                                        </div>
-
-                                        {dateDelivery && (
-                                            <p className={styles.foodFormDateText}>
-                                                {t('date_text')}{' '}
-                                                <span className={styles.orderDate}>
-                                                    {dayjs(dateDelivery).format('DD.MM.YYYY')}
-                                                </span>
-                                            </p>
-                                        )}
-                                    </div>
+                                    <p className={styles.foodTextText}>
+                                        Эта программа для тех, кто хочет питаться правильно и устал от фастфуда.
+                                        Выберите любые блюда на свой вкус из нашего меню и составьте свой идеальный
+                                        заказ. Минимальная сумма — 200 шекелей, а вы получаете только то, что
+                                        действительно хотите, без лишних компромиссов
+                                    </p>
                                 </div>
 
-                                {dishtypesIsPending ? (
-                                    <Preloader small offIndent page />
-                                ) : dishtypesIsError ? (
-                                    <NotContent />
-                                ) : (
+                                <div className={styles.foodForm}>
                                     <div className={styles.foodFormItem}>
                                         <div className={styles.foodFormItemName}>
-                                            <p className={styles.foodFormItemNameText}>Выберите тип блюда:</p>
+                                            <p className={styles.foodFormItemNameText}>Когда привезти</p>
+
+                                            <button
+                                                className={styles.foodFormButton}
+                                                onClick={() => setDeliveryModal(true)}
+                                            >
+                                                {t('delivery_cond')}
+                                            </button>
                                         </div>
 
-                                        {!!dishtypes && (
-                                            <div className={cn(styles.foodFormItemContent, styles.big)}>
-                                                {dishtypes.map((type) => (
-                                                    <button
-                                                        key={type.id}
-                                                        className={cn(styles.foodFormChoose, {
-                                                            [styles.active]: activeDishTypeId === type.id,
-                                                        })}
-                                                        onClick={() => setActiveDishTypeId(type.id)}
-                                                    >
-                                                        {type.name[language]}
-                                                    </button>
-                                                ))}
+                                        <div className={styles.foodFormItemDate}>
+                                            <div className={styles.foodFormItemDateButtonInner}>
+                                                <button
+                                                    className={styles.foodFormItemDateButton}
+                                                    onClick={() => setDateDeliveryPicker(true)}
+                                                >
+                                                    <DateIcon />
+                                                    {t('choose_date')}
+                                                </button>
+
+                                                <DatePicker
+                                                    className={styles.modalCalendar}
+                                                    disabledDate={disabledDate}
+                                                    format={'DD.MM.YYYY'}
+                                                    value={dateDelivery ? dayjs(dateDelivery) : null}
+                                                    onChange={(date) => setDateDelivery(date.format('YYYY-MM-DD'))}
+                                                    open={dateDeliveryPicker}
+                                                    onOpenChange={(isOpen) => setDateDeliveryPicker(isOpen)}
+                                                />
                                             </div>
-                                        )}
+
+                                            {dateDelivery ? (
+                                                <p className={styles.foodFormDateText}>
+                                                    {t('date_text')}{' '}
+                                                    <span className={styles.orderDate}>
+                                                        {dayjs(dateDelivery).format('DD.MM.YYYY')}
+                                                    </span>
+                                                </p>
+                                            ) : (
+                                                <p className={styles.foodFormDateTextRed}>{t('choose_date')}</p>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {dishtypesIsPending ? (
+                                        <Preloader small offIndent page />
+                                    ) : dishtypesIsError ? (
+                                        <NotContent />
+                                    ) : (
+                                        <div className={styles.foodFormItem}>
+                                            <div className={styles.foodFormItemName}>
+                                                <p className={styles.foodFormItemNameText}>Выберите тип блюда:</p>
+                                            </div>
+
+                                            {!!dishtypes && (
+                                                <div className={cn(styles.foodFormItemContent, styles.big)}>
+                                                    {dishtypes.map((type) => (
+                                                        <button
+                                                            key={type.id}
+                                                            className={cn(styles.foodFormChoose, {
+                                                                [styles.active]: activeDishTypeId === type.id,
+                                                            })}
+                                                            onClick={() => setActiveDishTypeId(type.id)}
+                                                        >
+                                                            {type.name[language]}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {isLoading ? (
+                                    <Preloader page small />
+                                ) : isError ? (
+                                    <NotContent />
+                                ) : !!data && !!data.dishes && !!data.dishes.length ? (
+                                    <div className={styles.personalDishes}>
+                                        {data.dishes.map((dish) => (
+                                            <DishIndiItem
+                                                key={dish.id}
+                                                data={dish}
+                                                cart={cart}
+                                                addToCart={() => addToCart(dish)}
+                                                incrementQuantity={() => incrementQuantity(dish.id)}
+                                                decrementQuantity={() => decrementQuantity(dish.id)}
+                                            />
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <NotContent text="Блюд не найдено" />
+                                )}
+
+                                {!!data && data.totalPages > 1 && (
+                                    <div className={styles.pagination}>
+                                        {[...Array(data.totalPages)].map((_, id) => (
+                                            <button
+                                                key={id}
+                                                className={cn(styles.paginationButton, {
+                                                    [styles.active]: id + 1 === data.page,
+                                                })}
+                                                onClick={() => setPage(id + 1)}
+                                            >
+                                                {id + 1}
+                                            </button>
+                                        ))}
                                     </div>
                                 )}
                             </div>
-
-                            {isLoading ? (
-                                <Preloader page small />
-                            ) : isError ? (
-                                <NotContent />
-                            ) : !!data && !!data.dishes && !!data.dishes.length ? (
-                                <div className={styles.personalDishes}>
-                                    {data.dishes.map((dish) => (
-                                        <DishIndiItem
-                                            key={dish.id}
-                                            data={dish}
-                                            cart={cart}
-                                            addToCart={() => addToCart(dish)}
-                                            incrementQuantity={() => incrementQuantity(dish.id)}
-                                            decrementQuantity={() => decrementQuantity(dish.id)}
-                                        />
-                                    ))}
-                                </div>
-                            ) : (
-                                <NotContent text="Блюд не найдено" />
-                            )}
-
-                            {!!data && data.totalPages > 1 && (
-                                <div className={styles.pagination}>
-                                    {[...Array(data.totalPages)].map((_, id) => (
-                                        <button
-                                            key={id}
-                                            className={cn(styles.paginationButton, {
-                                                [styles.active]: id + 1 === data.page,
-                                            })}
-                                            onClick={() => setPage(id + 1)}
-                                        >
-                                            {id + 1}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </Element>
 
             <section
                 className={cn(styles.cart, {

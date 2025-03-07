@@ -36,11 +36,14 @@ const useOrder = () => {
         }
     };
 
-    const createOrder = async (data: OrderDTO, successCallback = () => {}) => {
+    const createOrder = async (data: OrderDTO, promocodeId: number | null, successCallback = () => {}) => {
         const response = await request<{ order: Order }>({
             url: `/order`,
             method: 'POST',
-            data,
+            data: {
+                ...data,
+                ...(promocodeId && { promocodeId }),
+            },
             isAuth: true,
         });
 
@@ -50,7 +53,6 @@ const useOrder = () => {
         }
 
         successCallback();
-        alertNotify('Успешно', 'Заказ оформлен');
 
         if ('data' in response) {
             return response.data.order;
@@ -177,6 +179,7 @@ const useOrder = () => {
                 pendingCount: number;
                 terminatingCount: number;
                 unprocessedCount: number;
+                individualCount: number;
             };
         }>({
             url: `/admin/order/stats`,

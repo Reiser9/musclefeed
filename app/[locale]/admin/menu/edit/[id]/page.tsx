@@ -33,6 +33,8 @@ const emptyPriceElem = {
     totalPriceHe: '',
     pricePerDayRu: '',
     pricePerDayHe: '',
+    discount: '0',
+    giftDaysCount: '0',
 };
 
 const AdminMenuEdit = () => {
@@ -77,7 +79,7 @@ const AdminMenuEdit = () => {
         name,
         order,
         days: menuDays,
-        menuType,
+        menuTypeId,
         mealsCount,
         prices: menuPrices,
     } = menu || {};
@@ -212,10 +214,10 @@ const AdminMenuEdit = () => {
     }, [menuDays]);
 
     React.useEffect(() => {
-        if (menuType) {
-            setMenuTypeSelect(String(menuType.id));
+        if (menuTypeId) {
+            setMenuTypeSelect(String(menuTypeId));
         }
-    }, [menuType]);
+    }, [menuTypeId]);
 
     React.useEffect(() => {
         if (menuPrices) {
@@ -237,11 +239,9 @@ const AdminMenuEdit = () => {
                 <div className={styles.menuFormFull}>
                     <Text>Редактирование меню</Text>
                 </div>
-
                 <div className={styles.menuFormFull}>
                     <Checkbox id="create_menu_publish" label="Опубликовать" value={publish} setValue={setPublish} />
                 </div>
-
                 <div className={styles.menuFormItem}>
                     {isPending ? (
                         <Preloader small page />
@@ -263,7 +263,7 @@ const AdminMenuEdit = () => {
                         <NotContent text="Для начала создайте тип меню" />
                     )}
                 </div>
-
+                
                 <div className={styles.menuFormItem}>
                     <Input
                         {...register('adminName')}
@@ -274,7 +274,6 @@ const AdminMenuEdit = () => {
                         value={watch('adminName', adminName)}
                     />
                 </div>
-
                 <div className={styles.menuFormItem}>
                     <Input
                         {...register('nameRu')}
@@ -285,7 +284,6 @@ const AdminMenuEdit = () => {
                         value={watch('nameRu', name?.ru)}
                     />
                 </div>
-
                 <div className={styles.menuFormItem}>
                     <Input
                         {...register('nameHe')}
@@ -296,7 +294,6 @@ const AdminMenuEdit = () => {
                         value={watch('nameHe', name?.he)}
                     />
                 </div>
-
                 <div className={styles.menuFormItem}>
                     <Input
                         {...register('descriptionRu')}
@@ -308,7 +305,6 @@ const AdminMenuEdit = () => {
                         component="textarea"
                     />
                 </div>
-
                 <div className={styles.menuFormItem}>
                     <Input
                         {...register('descriptionHe')}
@@ -320,7 +316,6 @@ const AdminMenuEdit = () => {
                         component="textarea"
                     />
                 </div>
-
                 <div className={styles.menuFormItem}>
                     <Input
                         {...register('mealsCountRu')}
@@ -331,7 +326,6 @@ const AdminMenuEdit = () => {
                         value={watch('mealsCountRu', mealsCount?.ru)}
                     />
                 </div>
-
                 <div className={styles.menuFormItem}>
                     <Input
                         {...register('mealsCountHe')}
@@ -342,7 +336,6 @@ const AdminMenuEdit = () => {
                         value={watch('mealsCountHe', mealsCount?.he)}
                     />
                 </div>
-
                 <div className={styles.menuFormItem}>
                     <Input
                         {...register('calories')}
@@ -354,7 +347,6 @@ const AdminMenuEdit = () => {
                         type="number"
                     />
                 </div>
-
                 <div className={styles.menuFormItem}>
                     <Input
                         {...register('order')}
@@ -366,7 +358,6 @@ const AdminMenuEdit = () => {
                         type="number"
                     />
                 </div>
-
                 <div className={styles.menuFormItem}>
                     <div className={styles.datePickerWrapper}>
                         <Text variant="text3">Выберите дату начала цикла</Text>
@@ -379,7 +370,6 @@ const AdminMenuEdit = () => {
                         />
                     </div>
                 </div>
-
                 <div className={styles.menuFormPrices}>
                     <Text variant="text2">Всего цен: {prices.length}</Text>
 
@@ -399,7 +389,6 @@ const AdminMenuEdit = () => {
                         Добавить
                     </span>
                 </div>
-
                 <div className={styles.menuFormDays}>
                     <Text variant="text2">Всего дней: {days.length}</Text>
 
@@ -423,7 +412,6 @@ const AdminMenuEdit = () => {
                         Добавить
                     </span>
                 </div>
-
                 <Button full>Сохранить</Button>
             </form>
         </div>

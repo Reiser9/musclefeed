@@ -99,6 +99,28 @@ const PriceItem: React.FC<Props> = ({ data, number, removePrice, updatePrice, in
                             }
                         />
                     </div>
+
+                    <div className={styles.menuFormPriceInput}>
+                        <Input
+                            title="Скидка в процентах"
+                            full
+                            value={data.discount}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                updatePrice(index, 'discount', e.target.value)
+                            }
+                        />
+                    </div>
+
+                    <div className={styles.menuFormPriceInput}>
+                        <Input
+                            title="Количество подарочных дней"
+                            full
+                            value={data.giftDaysCount}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                updatePrice(index, 'giftDaysCount', e.target.value)
+                            }
+                        />
+                    </div>
                 </div>
             )}
 

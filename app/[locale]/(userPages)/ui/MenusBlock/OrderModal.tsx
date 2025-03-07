@@ -11,7 +11,7 @@ import styles from './index.module.scss';
 import type { MenuType, MenuUser, PriceItem } from '@/entities/menu';
 import type { OrderDTO } from '@/entities/order';
 import type { UserAddress } from '@/entities/user/info';
-import { ArrowLeft, ArrowRight, Chat, Foods, Home2, Mail, Map, Phone, User } from '@/shared/icons';
+import { ArrowLeft, ArrowRight, Chat, Check, Foods, Gift, Home2, Mail, Map, Phone, User } from '@/shared/icons';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 import { useOrder } from '@/features/order';
 import { useUserInfo } from '@/features/user';
@@ -26,6 +26,7 @@ import { NotContent } from '@/shared/ui/NotContent';
 import { Preloader } from '@/shared/ui/Preloader';
 import { Input } from '@/shared/ui/Input';
 import { Select } from '@/shared/ui/Select';
+import { usePromocode } from '@/features/promocode';
 
 type Props = {
     value: boolean;
@@ -49,6 +50,9 @@ const OrderModal: React.FC<Props> = ({
     resetOrder = () => {},
 }) => {
     const [step, setStep] = React.useState(1);
+    const [promo, setPromo] = React.useState('');
+    const [appliedPromo, setAppliedPromo] = React.useState<number | null>(null);
+    const [finalPrice, setFinalPrice] = React.useState<number | null>(null);
     const t = useTranslations('Profile');
 
     // Заполнение адреса для неавторизованного
@@ -78,6 +82,7 @@ const OrderModal: React.FC<Props> = ({
     const { getPaymentMethods, createOrder } = useOrder();
     const { getShortInfo, getUserAddresses } = useUserInfo();
     const { getCities } = useCities();
+    const { applyPromocode } = usePromocode();
 
     const {
         data: payments,
@@ -156,11 +161,25 @@ const OrderModal: React.FC<Props> = ({
             ...address,
         };
 
-        createOrder(data, () => {
+        createOrder(data, appliedPromo, () => {
             setStep(1);
             setValue(false);
             resetOrder();
         });
+    };
+
+    const applyPromoHandler = async () => {
+        if (!promo) return;
+
+        const promoResult = await applyPromocode(promo, `${activePrice?.price}`);
+
+        if (promoResult) {
+            setFinalPrice(promoResult.finalPrice);
+            setAppliedPromo(promoResult.promocode?.id);
+        } else {
+            setFinalPrice(activePrice.price);
+            setAppliedPromo(null);
+        }
     };
 
     React.useEffect(() => {
@@ -212,6 +231,12 @@ const OrderModal: React.FC<Props> = ({
         }
     }, [cities]);
 
+    React.useEffect(() => {
+        if (activePrice.price) {
+            setFinalPrice(activePrice.price);
+        }
+    }, [activePrice.price]);
+
     return (
         <Modal value={value} setValue={setValue} size="big">
             <>
@@ -248,9 +273,14 @@ const OrderModal: React.FC<Props> = ({
                     <div className={styles.orderItem}>
                         <p className={styles.orderItemName}>Длительность</p>
 
-                        <p className={styles.orderItemTitle}>{getDayDeclension(activePrice?.daysCount)}</p>
+                        <p className={styles.orderItemTitle}>
+                            {getDayDeclension(activePrice?.daysCount)}{' '}
+                            {!!activePrice?.giftDaysCount && <span>+ {activePrice?.giftDaysCount} дня</span>}
+                        </p>
 
-                        {/* <p className={styles.orderItemSubtext}>123</p> */}
+                        {!!activePrice?.giftDaysCount && (
+                            <p className={styles.orderItemSubtext}>{activePrice?.giftDaysCount} дня в подарок!</p>
+                        )}
                     </div>
 
                     <div className={styles.orderItem}>
@@ -322,19 +352,32 @@ const OrderModal: React.FC<Props> = ({
                                 </div>
                             </div>
 
-                            {/* <div className={styles.orderPromo}>
+                            <div className={styles.orderPromo}>
                                 <div className={styles.orderPromoTitleInner}>
                                     <p className={styles.foodFormItemNameText}>У вас есть промокод:</p>
 
-                                    <p className={styles.promoSubtitle}>
-                                        Скидка по промокоду не суммируется с другими скидками
-                                    </p>
+                                    {!appliedPromo ? (
+                                        <p className={styles.promoSubtitle}>
+                                            Скидка по промокоду не суммируется с другими скидками
+                                        </p>
+                                    ) : (
+                                        <p className={cn(styles.promoSubtitle, styles.green)}>Промокод применен</p>
+                                    )}
                                 </div>
 
                                 <div className={styles.orderPromoWrap}>
-                                    <Input icon={<Gift />} placeholder="Введите промокод" />
+                                    <Input
+                                        icon={<Gift />}
+                                        placeholder="Введите промокод"
+                                        value={promo}
+                                        setValue={setPromo}
+                                    />
+
+                                    <button className={styles.orderPromoApply} onClick={applyPromoHandler}>
+                                        <Check />
+                                    </button>
                                 </div>
-                            </div> */}
+                            </div>
                         </>
                     )}
 
@@ -483,10 +526,14 @@ const OrderModal: React.FC<Props> = ({
                 <div className={styles.calcResult}>
                     <div className={styles.orderTextInner}>
                         <p className={styles.calcResultCount}>
-                            Итого: <span className={styles.cartPriceValue}>{activePrice?.price}</span> ₪
+                            Итого: <span className={styles.cartPriceValue}>{finalPrice}</span> ₪
                         </p>
 
-                        {/* <div className={styles.orderTextSale}>Скидка 25% за длительность заказа</div> */}
+                        {!!activePrice.discount && (
+                            <div className={styles.orderTextSale}>
+                                Скидка {activePrice.discount}% за длительность заказа
+                            </div>
+                        )}
                     </div>
 
                     {step === 1 && (

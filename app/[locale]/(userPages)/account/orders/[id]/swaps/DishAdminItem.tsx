@@ -26,7 +26,7 @@ const DishAdminItem: React.FC<Props> = ({ data, dayId }) => {
     const [swapsShowed, setSwapsShowed] = React.useState(false);
 
     const language = useAppSelector((state) => state.app.language);
-    const { picture, name, description, calories, carbohydrates, fats, dishType, proteins } = data || {};
+    const { picture, name, description, calories, carbohydrates, fats, dishType, proteins, count } = data || {};
 
     const { getAdminReplacementDishes } = useOrder();
 
@@ -51,7 +51,9 @@ const DishAdminItem: React.FC<Props> = ({ data, dayId }) => {
                     <div className={styles.swapItemWrapper}>
                         <p className={styles.foodItemTag}>{dishType.name[language]}</p>
 
-                        <p className={styles.swapItemName}>{name[language]}</p>
+                        <p className={styles.swapItemName}>
+                            {name[language]} {count !== 1 ? `x${count}` : ''}
+                        </p>
 
                         <p className={styles.swapItemText}>{description[language]}</p>
 

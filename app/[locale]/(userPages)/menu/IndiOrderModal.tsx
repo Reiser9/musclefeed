@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import styles from './index.module.scss';
 
 import type { UserAddress } from '@/entities/user/info';
-import { ArrowLeft, ArrowRight, Chat, Foods, Home2, Mail, Map, Phone, User } from '@/shared/icons';
+import { ArrowLeft, ArrowRight, Chat, Check, Foods, Gift, Home2, Mail, Map, Phone, User } from '@/shared/icons';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 import { useOrder } from '@/features/order';
 import { useUserInfo } from '@/features/user';
@@ -24,6 +24,7 @@ import { Select } from '@/shared/ui/Select';
 import Image from 'next/image';
 import { Dish } from '@/entities/dish';
 import { usePersonal } from '@/features/personal';
+import { usePromocode } from '@/features/promocode';
 
 type Props = {
     value: boolean;
@@ -35,6 +36,9 @@ type Props = {
 
 const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetOrder, cart }) => {
     const [step, setStep] = React.useState(1);
+    const [promo, setPromo] = React.useState('');
+    const [appliedPromo, setAppliedPromo] = React.useState<number | null>(null);
+    const [finalPrice, setFinalPrice] = React.useState<number | null>(123);
     const t = useTranslations('Profile');
 
     // Заполнение адреса для неавторизованного
@@ -65,6 +69,7 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
     const { getShortInfo, getUserAddresses } = useUserInfo();
     const { getCities } = useCities();
     const { createIndividualOrder } = usePersonal();
+    const { applyPromocode } = usePromocode();
 
     const {
         data: payments,
@@ -150,11 +155,25 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
             ...address,
         };
 
-        createIndividualOrder(data, () => {
+        createIndividualOrder(data, appliedPromo, () => {
             setStep(1);
             setValue(false);
             resetOrder();
         });
+    };
+
+    const applyPromoHandler = async () => {
+        if (!promo) return;
+
+        const promoResult = await applyPromocode(promo, `${123}`);
+
+        if (promoResult) {
+            setFinalPrice(promoResult.finalPrice);
+            setAppliedPromo(promoResult.promocode?.id);
+        } else {
+            setFinalPrice(123);
+            setAppliedPromo(null);
+        }
     };
 
     React.useEffect(() => {
@@ -205,6 +224,12 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
             setCity(`${cities[0].id}`);
         }
     }, [cities]);
+
+    // React.useEffect(() => {
+    //     if (activePrice.price) {
+    //         setFinalPrice(activePrice.price);
+    //     }
+    // }, [activePrice.price]);
 
     return (
         <Modal value={value} setValue={setValue} size="big">
@@ -283,19 +308,32 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
                                 </div>
                             </div>
 
-                            {/* <div className={styles.orderPromo}>
+                            <div className={styles.orderPromo}>
                                 <div className={styles.orderPromoTitleInner}>
                                     <p className={styles.foodFormItemNameText}>У вас есть промокод:</p>
 
-                                    <p className={styles.promoSubtitle}>
-                                        Скидка по промокоду не суммируется с другими скидками
-                                    </p>
+                                    {!appliedPromo ? (
+                                        <p className={styles.promoSubtitle}>
+                                            Скидка по промокоду не суммируется с другими скидками
+                                        </p>
+                                    ) : (
+                                        <p className={cn(styles.promoSubtitle, styles.green)}>Промокод применен</p>
+                                    )}
                                 </div>
 
                                 <div className={styles.orderPromoWrap}>
-                                    <Input icon={<Gift />} placeholder="Введите промокод" />
+                                    <Input
+                                        icon={<Gift />}
+                                        placeholder="Введите промокод"
+                                        value={promo}
+                                        setValue={setPromo}
+                                    />
+
+                                    <button className={styles.orderPromoApply} onClick={applyPromoHandler}>
+                                        <Check />
+                                    </button>
                                 </div>
-                            </div> */}
+                            </div>
                         </>
                     )}
 
@@ -444,7 +482,7 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
                 <div className={styles.calcResult}>
                     <div className={styles.orderTextInner}>
                         <p className={styles.calcResultCount}>
-                            Итого: <span className={styles.cartPriceValue}>123</span> ₪
+                            Итого: <span className={styles.cartPriceValue}>{finalPrice}</span> ₪
                         </p>
 
                         {/* <div className={styles.orderTextSale}>Скидка 25% за длительность заказа</div> */}

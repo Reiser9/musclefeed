@@ -31,6 +31,7 @@ export type OrderAdminDTO = OrderDTO & {
     price: string;
     paidAmount: string;
     promocodeDiscount: string;
+    menuDiscount: string;
     finalPrice: string;
     isProcessed: boolean;
     isAllowedExtendion: boolean;
@@ -38,6 +39,7 @@ export type OrderAdminDTO = OrderDTO & {
     isCompleted: boolean;
     freezeStartDate: string;
     freezeEndDate: string;
+    giftDaysCount: string;
 };
 
 export type OrderIndiDTO = {
@@ -89,6 +91,7 @@ export type Order = {
     isPaid: boolean;
     isIndividual: boolean;
     count: number;
+    giftDaysCount: number;
 };
 
 export type AdminOrder = {
@@ -105,6 +108,8 @@ export type AdminOrder = {
     price: number;
     paidAmount: number;
     promocodeDiscount: number;
+    giftDaysCount: number;
+    menuDiscount: number;
     finalPrice: number;
     isProcessed: boolean;
     isAllowedExtendion: boolean;

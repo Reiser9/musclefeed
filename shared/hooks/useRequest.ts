@@ -5,6 +5,7 @@ import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import type { Error } from '@/api/types';
 import axiosInstance from '@/api/axios';
 import useAlert from './useAlert';
+import { useAppSelector } from './useRedux';
 
 type requestProps = {
     url?: string;
@@ -21,6 +22,7 @@ type RequestResult<T> = AxiosResponse<T> | AxiosError<Error>;
 
 const useRequest = () => {
     const { alertNotify } = useAlert();
+    const language = useAppSelector((state) => state.app.language);
 
     const errorController = async (
         response: AxiosResponse | AxiosError<Error>,
@@ -47,6 +49,8 @@ const useRequest = () => {
                         'Ошибка',
                         errorMessage
                             ? errorMessage
+                            : typeof response.response?.data.message === 'object'
+                            ? response.response?.data.message[language] || 'Что-то поломалось, скоро починим'
                             : response.response?.data.message || 'Что-то поломалось, скоро починим',
                         'error',
                     );

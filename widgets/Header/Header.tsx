@@ -102,7 +102,7 @@ const Header = () => {
                                     </div>
                                 </div> */}
 
-                                <Link href={`/${locale}/menu`} className={styles.headerNavLink}>
+                                <Link href={`/${locale}/menu`} className={cn(styles.headerNavLink, styles.highlight)}>
                                     {t('menu')}
                                 </Link>
 
@@ -207,7 +207,7 @@ const Header = () => {
 
                     <Link
                         href={`/${locale}/menu`}
-                        className={styles.menuMobileLink}
+                        className={cn(styles.menuMobileLink, styles.highlight)}
                         onClick={() => setMobileMenu(false)}
                     >
                         {t('menu')}
@@ -221,10 +221,6 @@ const Header = () => {
                         {t('reviews')}
                     </Link>
 
-                    {/* <a href="#" className={styles.menuMobileLink}>
-                        {t('contacts')}
-                    </a> */}
-
                     <Link
                         href={`/${locale}/faq`}
                         className={styles.menuMobileLink}
@@ -232,6 +228,20 @@ const Header = () => {
                     >
                         {t('buyer')}
                     </Link>
+                </div>
+
+                <div className={styles.headerSocialLinkMenu}>
+                    <a href="#" target="_blank" className={cn(styles.headerSocialLink, styles.blue)}>
+                        <Telegram />
+                    </a>
+
+                    <a
+                        href="https://wa.me/972515883719"
+                        target="_blank"
+                        className={cn(styles.headerSocialLink, styles.green)}
+                    >
+                        <WhatsApp />
+                    </a>
                 </div>
             </div>
 

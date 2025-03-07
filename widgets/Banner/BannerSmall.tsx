@@ -11,15 +11,18 @@ import base from '@/shared/styles/base.module.scss';
 import { ArrowRight } from '@/shared/icons';
 
 import { Button } from '@/shared/ui/Button';
+import { useAppSelector } from '@/shared/hooks/useRedux';
 
 const BannerSmall = () => {
     const t = useTranslations('Banner2');
+
+    const language = useAppSelector((state) => state.app.language);
 
     return (
         <section className={styles.banner}>
             <div className={base.container}>
                 <div className={styles.banner2Inner}>
-                    <div className={cn("bannerFood", "small")}>
+                    <div className={cn('bannerFood', 'small')}>
                         <Image src="/img/foods.png" alt="img" fill />
                     </div>
 
@@ -33,7 +36,7 @@ const BannerSmall = () => {
 
                         <p className={styles.bannerText}>{t('text')}</p>
 
-                        <Button color="green" className={styles.bannerLinkSmall}>
+                        <Button color="green" href={`/${language}`} className={styles.bannerLinkSmall}>
                             {t('button')}
                             <ArrowRight />
                         </Button>

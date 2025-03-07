@@ -42,11 +42,18 @@ const usePersonal = () => {
         }
     };
 
-    const createIndividualOrder = async (data: OrderIndiDTO, successCallback = () => {}) => {
+    const createIndividualOrder = async (
+        data: OrderIndiDTO,
+        promocodeId: number | null,
+        successCallback = () => {},
+    ) => {
         const response = await request<{ order: Order }>({
             url: `/order/individual`,
             isAuth: true,
-            data,
+            data: {
+                ...data,
+                ...(promocodeId && { promocodeId }),
+            },
             method: 'POST',
         });
 

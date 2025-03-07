@@ -272,6 +272,16 @@ const AdminOrderCreate = () => {
                 />
 
                 <Input
+                    {...register('giftDaysCount')}
+                    error={!!errors.giftDaysCount}
+                    errorMessage={errors.giftDaysCount?.message}
+                    full
+                    title={'Подарочных дней по промокоду'}
+                    value={watch('giftDaysCount', '0')}
+                    type="number"
+                />
+
+                <Input
                     {...register('fullName')}
                     error={!!errors.fullName}
                     errorMessage={errors.fullName?.message}
@@ -418,6 +428,16 @@ const AdminOrderCreate = () => {
                     full
                     title={'Скидка по промокоду'}
                     value={watch('promocodeDiscount', '0')}
+                    type="number"
+                />
+
+                <Input
+                    {...register('menuDiscount')}
+                    error={!!errors.menuDiscount}
+                    errorMessage={errors.menuDiscount?.message}
+                    full
+                    title={'Скидка при выборе меню'}
+                    value={watch('menuDiscount', '0')}
                     type="number"
                 />
 
