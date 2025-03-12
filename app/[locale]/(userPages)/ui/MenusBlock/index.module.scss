@@ -33,6 +33,7 @@
 	background: #F2F3EE;
 	transition: border .2s linear!important;
 	user-select: none;
+	cursor: pointer;
 }
 
 @media (max-width: 450px) {
@@ -654,13 +655,19 @@
 	align-items: flex-end;
 	justify-content: space-between;
 	gap: 24px;
-	flex-wrap: wrap;
 }
 
-@media (max-width: 1065px) {
+@media (max-width: 1630px) {
 	.cartInner{
 		padding: 2.4rem 0;
-		justify-content: flex-end;
+	}
+}
+@media (max-width: 768px) {
+	.cartInner{
+		flex-direction: column;
+		align-items: center;
+		gap: 14px;
+		padding: 1.8rem 0 1.2rem 0;
 	}
 }
 
@@ -671,26 +678,37 @@
 	gap: 8px;
 }
 
-@media (max-width: 1065px) {
-	.cartTitleInner{
-		display: none;
-	}
-}
-
 .cartTitle{
 	color: #FF6433;
 	font-size: 2.4rem;
 	line-height: 1.2;
 	font-weight: 600;
 	width: 100%;
-	max-width: 400px;
+	max-width: 340px;
 	text-transform: uppercase;
+}
+
+@media (max-width: 1630px) {
+	.cartTitle{
+		font-size: 2rem;
+	}
+}
+@media (max-width: 768px) {
+	.cartTitle{
+		display: none;
+	}
 }
 
 .cartText{
 	font-size: 2.2rem;
 	line-height: 1.2;
 	font-weight: 500;
+}
+
+@media (max-width: 1630px) {
+	.cartText{
+		font-size: 1.8rem;
+	}
 }
 
 .cartText span{
@@ -703,6 +721,11 @@
 	gap: 24px;
 }
 
+@media (max-width: 1630px) {
+	.cartPriceInner{
+		gap: 12px;
+	}
+}
 @media (max-width: 1270px) {
 	.cartPriceInner{
 		flex-direction: column;
@@ -711,6 +734,18 @@
 @media (max-width: 1065px) {
 	.cartPriceInner{
 		gap: 16px;
+	}
+}
+@media (max-width: 768px) {
+	.cartPriceInner{
+		align-items: center;
+		gap: 8px;
+	}
+}
+
+@media (max-width: 1630px) {
+	.cartButton{
+		padding: 1.2rem 2rem;
 	}
 }
 
@@ -735,6 +770,17 @@
 	line-height: 1.2;
 }
 
+@media (max-width: 1630px) {
+	.cartPrice{
+		font-size: 2rem;
+	}
+}
+@media (max-width: 768px) {
+	.cartPrice{
+		padding: 0;
+	}
+}
+
 // Модалка заказа
 .calcText{
 	width: 100%;
@@ -742,6 +788,12 @@
     margin-top: 0.8rem;
     font-size: 1.8rem;
     line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+	.calcText{
+		font-size: 1.5rem;
+	}
 }
 
 .calcForm{
@@ -898,12 +950,24 @@
 	margin: 8rem 0 4rem 0;
 }
 
+@media (max-width: 998px) {
+	.orderBlock{
+		margin: 4rem 0;
+	}
+}
+
 .orderPromo{
 	width: 100%;
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
 	gap: 16px;
+}
+
+@media (max-width: 768px) {
+	.orderPromo{
+		flex-direction: column;
+	}
 }
 
 .orderPromoTitleInner{
@@ -1069,6 +1133,12 @@
 
 .orderInputsAllergiItem{
 	width: calc(100% / 2 - 24px / 2);
+}
+
+@media (max-width: 768px) {
+	.orderInputsAllergiItem{
+		width: 100%;
+	}
 }
 
 .orderInputsAllergiItemFull{

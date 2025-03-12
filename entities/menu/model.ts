@@ -43,10 +43,6 @@ export type MenuDay = {
 export type PriceItemDTO = {
     daysCount: string;
     price: string;
-    totalPriceRu: string;
-    totalPriceHe: string;
-    pricePerDayRu: string;
-    pricePerDayHe: string;
     discount: string;
     giftDaysCount: string;
 };
@@ -55,11 +51,11 @@ export type PriceItem = {
     id: number;
     daysCount: number;
     price: number;
-    totalPrice: LanguageField;
-    pricePerDay: LanguageField;
     discount: number;
     discountedPrice: number;
     giftDaysCount: number;
+    pricePerDay: number;
+    discountedPricePerDay: number;
 };
 
 export type MenuDTO = {

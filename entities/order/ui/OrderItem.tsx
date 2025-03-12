@@ -2,6 +2,8 @@
 
 import React from 'react';
 import Image from 'next/image';
+import dayjs from 'dayjs';
+import { useTranslations } from 'next-intl';
 
 import styles from './index.module.scss';
 
@@ -11,7 +13,6 @@ import { useAppSelector } from '@/shared/hooks/useRedux';
 
 import { Text } from '@/shared/ui/Text';
 import { Button } from '@/shared/ui/Button';
-import dayjs from 'dayjs';
 
 type Props = {
     data: Order;
@@ -22,6 +23,9 @@ const OrderItem: React.FC<Props> = ({ data, freezeCallback = () => {} }) => {
     const language = useAppSelector((state) => state.app.language);
 
     const { daysLeft, daysCount, menu, id, isIndividual, startDate } = data || {};
+
+    const t = useTranslations('Orders');
+    const m = useTranslations('Menu');
 
     return (
         <div className={styles.ordersItem}>
@@ -35,7 +39,7 @@ const OrderItem: React.FC<Props> = ({ data, freezeCallback = () => {} }) => {
                 {!isIndividual && (
                     <p className={styles.ordersItemSign}>
                         <Calendar />
-                        Осталось дней: {daysLeft}
+                        {t('days_left', { daysLeft })}
                     </p>
                 )}
             </div>
@@ -43,7 +47,11 @@ const OrderItem: React.FC<Props> = ({ data, freezeCallback = () => {} }) => {
             <div className={styles.ordersItemContent}>
                 <div className={styles.ordersItemTextInner}>
                     <Text variant="h3" upper>
-                        {isIndividual ? 'Персональный заказ' : menu?.name[language]}
+                        {isIndividual
+                            ? language === 'ru'
+                                ? 'Персональный заказ'
+                                : 'הזמנה אישית'
+                            : menu?.name[language]}
                     </Text>
 
                     {!isIndividual && <p className={styles.ordersItemDesc}>{menu?.description[language]}</p>}
@@ -53,22 +61,22 @@ const OrderItem: React.FC<Props> = ({ data, freezeCallback = () => {} }) => {
                     {!isIndividual && (
                         <p className="ordersItemPoint">
                             <Fire className={styles.ordersItemPointRed} />
-                            Ккал {menu?.calories}
+                            {m('ccal')} {menu?.calories}
                         </p>
                     )}
 
                     <p className="ordersItemPoint">
                         <Calendar />
-                        {isIndividual ? dayjs(startDate).format('DD.MM.YYYY') : `${daysCount} дня`}
+                        {isIndividual ? dayjs(startDate).format('DD.MM.YYYY') : m('days_count', { count: daysCount })}
                     </p>
                 </div>
 
                 <Button full small href={`/${language}/account/orders/${id}`}>
-                    Подробнее о меню
+                    {t('dishes_more')}
                 </Button>
 
                 <Button full small color="green" href={`/${language}/account/orders/${id}/swaps`}>
-                    Замена блюд
+                    {t('dishes_swap')}
                 </Button>
 
                 {!isIndividual && (
@@ -78,11 +86,9 @@ const OrderItem: React.FC<Props> = ({ data, freezeCallback = () => {} }) => {
                         </div>
 
                         <div className={styles.ordersItemFreezeTextInner}>
-                            <p className={styles.ordersItemFreezeTitle}>Заморозить</p>
+                            <p className={styles.ordersItemFreezeTitle}>{t('freeze')}</p>
 
-                            <p className={styles.ordersItemFreezeText}>
-                                Мы приостановим доставку вам еды до тех пор пока вы не активируете рацион
-                            </p>
+                            <p className={styles.ordersItemFreezeText}>{t('freeze_text')}</p>
                         </div>
                     </div>
                 )}

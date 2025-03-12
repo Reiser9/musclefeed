@@ -148,8 +148,8 @@ const AccountOrders = () => {
                                         />
                                     ))
                                 ) : (
-                                    <NotContent text="У вас еще нет заказов">
-                                        <Button href="/">Сделать заказ</Button>
+                                    <NotContent text={t('orders_empty')}>
+                                        <Button href="/">{t('make_order')}</Button>
                                     </NotContent>
                                 )}
                             </div>
@@ -176,14 +176,14 @@ const AccountOrders = () => {
 
             <Modal value={changeModal} setValue={setChangeModal}>
                 <Text upper fontWeight={600}>
-                    Запрос изменения заказа
+                    {t("request_title")}
                 </Text>
 
                 <div className={styles.changeModal}>
-                    <Input value={comment} setValue={setComment} component="textarea" full title="Комментарий" />
+                    <Input value={comment} setValue={setComment} component="textarea" full title={t("request_comment")} />
 
                     <Button full small onClick={createRequestHandler}>
-                        Отправить
+                        {t("send_request")}
                     </Button>
                 </div>
             </Modal>

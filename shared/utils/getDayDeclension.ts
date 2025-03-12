@@ -1,11 +1,11 @@
-export const getDayDeclension = (num?: number) => {
+export const getDayDeclension = (num?: number, language: 'ru' | 'he' = 'ru') => {
     if (!num) return num;
 
     if (num % 10 === 1 && num % 100 !== 11) {
-        return `${num} день`;
+        return language === 'ru' ? `${num} день` : `${num} יום`;
     } else if ([2, 3, 4].includes(num % 10) && ![12, 13, 14].includes(num % 100)) {
-        return `${num} дня`;
+        return language === 'ru' ? `${num} дня` : `${num} ימים`;
     } else {
-        return `${num} дней`;
+        return language === 'ru' ? `${num} дней` : `${num} ימים`;
     }
 };

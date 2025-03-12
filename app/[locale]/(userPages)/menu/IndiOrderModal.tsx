@@ -2,17 +2,21 @@
 
 import React from 'react';
 import cn from 'classnames';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
 
 import styles from './index.module.scss';
 
 import type { UserAddress } from '@/entities/user/info';
+import type { Dish } from '@/entities/dish';
 import { ArrowLeft, ArrowRight, Chat, Check, Foods, Gift, Home2, Mail, Map, Phone, User } from '@/shared/icons';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 import { useOrder } from '@/features/order';
 import { useUserInfo } from '@/features/user';
 import { useCities } from '@/features/city';
+import { usePersonal } from '@/features/personal';
+import { usePromocode } from '@/features/promocode';
 
 import { Button } from '@/shared/ui/Button';
 import { Modal } from '@/shared/ui/Modal';
@@ -21,10 +25,6 @@ import { NotContent } from '@/shared/ui/NotContent';
 import { Preloader } from '@/shared/ui/Preloader';
 import { Input } from '@/shared/ui/Input';
 import { Select } from '@/shared/ui/Select';
-import Image from 'next/image';
-import { Dish } from '@/entities/dish';
-import { usePersonal } from '@/features/personal';
-import { usePromocode } from '@/features/promocode';
 
 type Props = {
     value: boolean;
@@ -40,6 +40,7 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
     const [appliedPromo, setAppliedPromo] = React.useState<number | null>(null);
     const [finalPrice, setFinalPrice] = React.useState<number | null>(123);
     const t = useTranslations('Profile');
+    const c = useTranslations('Cart');
 
     // Заполнение адреса для неавторизованного
     const [city, setCity] = React.useState('');
@@ -242,12 +243,12 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
                     )}
 
                     <Text variant="h3" upper>
-                        Ваш заказ
+                        {c('title')}
                     </Text>
                 </div>
 
                 <p className={styles.calcTextRed}>
-                    Минимальная сумма заказа <span>200 ₪</span>
+                    {c('min_sum')} <span>200 ₪</span>
                 </p>
 
                 <div className={styles.cartItems}>
@@ -274,7 +275,7 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
                             </div>
                         ))
                     ) : (
-                        <NotContent text="Корзина пуста" />
+                        <NotContent text={c('cart_empty')} />
                     )}
                 </div>
 
@@ -283,7 +284,7 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
                         <>
                             <div className={styles.foodFormItem}>
                                 <div className={styles.foodFormItemName}>
-                                    <p className={styles.foodFormItemNameText}>Способы оплаты:</p>
+                                    <p className={styles.foodFormItemNameText}>{c('payments')}</p>
                                 </div>
 
                                 <div className={cn(styles.foodFormItemContent, styles.one)}>
@@ -310,21 +311,19 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
 
                             <div className={styles.orderPromo}>
                                 <div className={styles.orderPromoTitleInner}>
-                                    <p className={styles.foodFormItemNameText}>У вас есть промокод:</p>
+                                    <p className={styles.foodFormItemNameText}>{c('promo')}</p>
 
                                     {!appliedPromo ? (
-                                        <p className={styles.promoSubtitle}>
-                                            Скидка по промокоду не суммируется с другими скидками
-                                        </p>
+                                        <p className={styles.promoSubtitle}>{c('promo_text')}</p>
                                     ) : (
-                                        <p className={cn(styles.promoSubtitle, styles.green)}>Промокод применен</p>
+                                        <p className={cn(styles.promoSubtitle, styles.green)}>{c('promo_applied')}</p>
                                     )}
                                 </div>
 
                                 <div className={styles.orderPromoWrap}>
                                     <Input
                                         icon={<Gift />}
-                                        placeholder="Введите промокод"
+                                        placeholder={c('promo_placeholder')}
                                         value={promo}
                                         setValue={setPromo}
                                     />
@@ -352,13 +351,13 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
                                             id: address.id,
                                             name: `${address.city.name[language]}, ${address.street}, ${address.house}, ${address.floor}, ${address.apartment}`,
                                         }))}
-                                        title="Выберите адрес"
+                                        title={c('address')}
                                         full
                                         icon={<Home2 />}
                                     />
                                 ) : (
                                     <Button href={`/${language}/account/profile`} full>
-                                        У вас не создан адрес, создайте его
+                                        {c('address_empty')}
                                     </Button>
                                 )
                             ) : (
@@ -392,7 +391,7 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
                                             setValue={setStreet}
                                             title={t('street')}
                                             icon={<Map />}
-                                            placeholder="Выберите или начните вводить"
+                                            placeholder={c('street')}
                                         />
                                     </div>
 
@@ -434,18 +433,12 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
                                     setValue={setFullName}
                                     icon={<User />}
                                     full
-                                    title="Имя и фамилия"
+                                    title={c('fullname')}
                                 />
                             </div>
 
                             <div className={styles.orderInputsAllergiItem}>
-                                <Input
-                                    value={phone}
-                                    setValue={setPhone}
-                                    icon={<Phone />}
-                                    full
-                                    title="Ваш номер телефона"
-                                />
+                                <Input value={phone} setValue={setPhone} icon={<Phone />} full title={c('phone')} />
                             </div>
 
                             {hasAllergi && !isAuth && (
@@ -454,7 +447,7 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
                                     setValue={setUserAllergies}
                                     icon={<Foods />}
                                     full
-                                    title="Аллергии"
+                                    title={c('allergi_placeholder')}
                                 />
                             )}
 
@@ -463,7 +456,7 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
                                 setValue={setEmail}
                                 icon={<Mail />}
                                 full
-                                title="Ваша почта"
+                                title={c('email')}
                                 disabled={isAuth}
                             />
 
@@ -472,7 +465,7 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
                                 setValue={setComment}
                                 icon={<Chat />}
                                 full
-                                title="Ваши комментарии к заказу"
+                                title={c('comment')}
                                 component="textarea"
                             />
                         </div>
@@ -482,22 +475,20 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
                 <div className={styles.calcResult}>
                     <div className={styles.orderTextInner}>
                         <p className={styles.calcResultCount}>
-                            Итого: <span className={styles.cartPriceValue}>{finalPrice}</span> ₪
+                            {c('total')} <span className={styles.cartPriceValue}>{finalPrice}</span> ₪
                         </p>
-
-                        {/* <div className={styles.orderTextSale}>Скидка 25% за длительность заказа</div> */}
                     </div>
 
                     {step === 1 && (
                         <Button color="green" onClick={() => setStep(2)} disabled={getTotalPrice() < 200}>
-                            Далее
+                            {c('next')}
                             <ArrowRight />
                         </Button>
                     )}
 
                     {step === 2 && (
                         <Button color="green" onClick={createOrderHandler}>
-                            Оформить заказ
+                            {c('button')}
                             <ArrowRight />
                         </Button>
                     )}

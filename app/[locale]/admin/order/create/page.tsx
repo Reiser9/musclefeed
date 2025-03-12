@@ -107,6 +107,12 @@ const AdminOrderCreate = () => {
         createAdminOrder(orderData, () => router.replace(`/${language}/admin`));
     };
 
+    React.useEffect(() =>  {
+        if(menus && menus.menus.length){
+            setActiveMenuId(`${menus.menus[0].id}`);
+        }
+    }, [menus]);
+
     return (
         <div className={styles.adminDish}>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.createForm}>
@@ -283,6 +289,7 @@ const AdminOrderCreate = () => {
 
                 <Input
                     {...register('fullName')}
+                    required
                     error={!!errors.fullName}
                     errorMessage={errors.fullName?.message}
                     full
@@ -292,6 +299,7 @@ const AdminOrderCreate = () => {
 
                 <Input
                     {...register('email')}
+                    required
                     error={!!errors.email}
                     errorMessage={errors.email?.message}
                     full
@@ -301,6 +309,7 @@ const AdminOrderCreate = () => {
 
                 <Input
                     {...register('phone')}
+                    required
                     error={!!errors.phone}
                     errorMessage={errors.phone?.message}
                     full
@@ -338,6 +347,7 @@ const AdminOrderCreate = () => {
 
                 <Input
                     {...register('street')}
+                    required
                     error={!!errors.street}
                     errorMessage={errors.street?.message}
                     full
@@ -347,6 +357,7 @@ const AdminOrderCreate = () => {
 
                 <Input
                     {...register('house')}
+                    required
                     error={!!errors.house}
                     errorMessage={errors.house?.message}
                     full

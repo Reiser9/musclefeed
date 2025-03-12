@@ -14,13 +14,13 @@ import { useOrder } from '@/features/order';
 import { AuthWrapper } from '@/shared/wrappers/InitialWrapper';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 import { getScheduleLabel } from '@/shared/utils/getSheduleLabel';
+import { ORDER_CHANGE_TYPES } from '@/entities/order';
 
 import { Preloader } from '@/shared/ui/Preloader';
 import { NotContent } from '@/shared/ui/NotContent';
 import { BreadcrumbLink, Breadcrumbs, BreadcrumbText } from '@/shared/ui/Breadcrumbs';
 import { Text } from '@/shared/ui/Text';
 import { BackLink } from '@/shared/ui/BackLink';
-import { ORDER_CHANGE_TYPES } from '@/entities/order';
 import { Modal } from '@/shared/ui/Modal';
 import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/Button';
@@ -86,20 +86,18 @@ const UserOrderPage = () => {
                         <div className={styles.configContent}>
                             <div className={styles.configTextInner}>
                                 <Text upper variant="h3">
-                                    Конфигурация рациона
+                                    {t('conf_title')}
                                 </Text>
 
                                 <p className={styles.configText}>
-                                    Наше меню разработано профессиональными диетологами, приготовлено только из
-                                    натуральных продуктов и рассчитано на каждого человека под его цели.{' '}
-                                    <span>Худеть вкусно – легко!</span>
+                                    {t('conf_text')} <span>{t('conf_highlight')}</span>
                                 </p>
                             </div>
 
                             <div className={styles.configItems}>
                                 {!isIndividual && (
                                     <div className={styles.configItem}>
-                                        <p className={styles.configItemSuptext}>Рацион</p>
+                                        <p className={styles.configItemSuptext}>{t('racion')}</p>
 
                                         <p className={styles.configItemTitle}>{menu?.name[language]}</p>
 
@@ -110,14 +108,14 @@ const UserOrderPage = () => {
                                                 setChangeType('MENU');
                                             }}
                                         >
-                                            Запросить изменить
+                                            {t('request_button')}
                                         </button>
                                     </div>
                                 )}
 
                                 {!isIndividual && (
                                     <div className={styles.configItem}>
-                                        <p className={styles.configItemSuptext}>Калорийность, ККал</p>
+                                        <p className={styles.configItemSuptext}>{t('ccal')}</p>
 
                                         <p className={styles.configItemTitle}>{menu?.calories}</p>
 
@@ -128,16 +126,17 @@ const UserOrderPage = () => {
                                                 setChangeType('CALORIES');
                                             }}
                                         >
-                                            Запросить изменить
+                                            {t('request_button')}
                                         </button>
                                     </div>
                                 )}
 
                                 <div className={styles.configItem}>
-                                    <p className={styles.configItemSuptext}>Длительность</p>
+                                    <p className={styles.configItemSuptext}>{t('duration')}</p>
 
                                     <p className={styles.configItemTitle}>
-                                        {daysCount} дней {!!giftDaysCount && <span>+ {giftDaysCount} дня</span>}
+                                        {t('duration_days', { days: daysCount })}{' '}
+                                        {!!giftDaysCount && <span>+ {giftDaysCount} дня</span>}
                                     </p>
 
                                     {!isIndividual && (
@@ -148,33 +147,37 @@ const UserOrderPage = () => {
                                                 setChangeType('DURATION');
                                             }}
                                         >
-                                            Запросить изменить
+                                            {t('request_button')}
                                         </button>
                                     )}
                                 </div>
 
                                 <div className={styles.configItem}>
-                                    <p className={styles.configItemSuptext}>Доставка</p>
+                                    <p className={styles.configItemSuptext}>{t('delivery')}</p>
 
                                     <p className={styles.configItemTitle}>
-                                        {!isIndividual && 'Начало доставки'} {dayjs(startDate).format('DD.MM.YYYY')}
+                                        {!isIndividual && language === 'ru' ? 'Начало доставки' : 'תחילת המשלוח'}{' '}
+                                        {dayjs(startDate).format('DD.MM.YYYY')}
                                     </p>
                                 </div>
 
                                 {!isIndividual && (
                                     <div className={styles.configItem}>
-                                        <p className={styles.configItemSuptext}>Доставка</p>
+                                        <p className={styles.configItemSuptext}>{t('delivery')}</p>
 
                                         <p className={styles.configItemTitle}>
-                                            Дата окончания {dayjs(endDate).format('DD.MM.YYYY')}
+                                            {language === 'ru' ? 'Дата окончания' : 'תאריך סיום'}{' '}
+                                            {dayjs(endDate).format('DD.MM.YYYY')}
                                         </p>
                                     </div>
                                 )}
 
                                 <div className={styles.configItem}>
-                                    <p className={styles.configItemSuptext}>Формат питания</p>
+                                    <p className={styles.configItemSuptext}>{t('format')}</p>
 
-                                    <p className={styles.configItemTitle}>{getScheduleLabel(skippedWeekdays)}</p>
+                                    <p className={styles.configItemTitle}>
+                                        {getScheduleLabel(skippedWeekdays, language)}
+                                    </p>
 
                                     {!isIndividual && (
                                         <button
@@ -184,13 +187,13 @@ const UserOrderPage = () => {
                                                 setChangeType('FORMAT');
                                             }}
                                         >
-                                            Запросить изменить
+                                            {t('request_button')}
                                         </button>
                                     )}
                                 </div>
 
                                 <div className={styles.configItem}>
-                                    <p className={styles.configItemSuptext}>Аллергии</p>
+                                    <p className={styles.configItemSuptext}>{t('allergi')}</p>
 
                                     <p className={styles.configItemTitle}>{allergies ? allergies : '-'}</p>
 
@@ -202,7 +205,7 @@ const UserOrderPage = () => {
                                                 setChangeType('OTHER');
                                             }}
                                         >
-                                            Запросить изменить
+                                            {t('request_button')}
                                         </button>
                                     )}
                                 </div>
@@ -214,14 +217,20 @@ const UserOrderPage = () => {
 
             <Modal value={changeModal} setValue={setChangeModal}>
                 <Text upper fontWeight={600}>
-                    Запрос изменения заказа
+                    {t('request_title')}
                 </Text>
 
                 <div className={styles.changeModal}>
-                    <Input value={comment} setValue={setComment} component="textarea" full title="Комментарий" />
+                    <Input
+                        value={comment}
+                        setValue={setComment}
+                        component="textarea"
+                        full
+                        title={t('request_comment')}
+                    />
 
                     <Button full small onClick={createRequestHandler}>
-                        Отправить
+                        {t('send_request')}
                     </Button>
                 </div>
             </Modal>

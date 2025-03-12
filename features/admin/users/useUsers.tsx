@@ -39,13 +39,19 @@ const useUsers = () => {
         }
     };
 
-    const updateUserInfo = async (userId: string | number, isVerified: boolean, successCallback = () => {}) => {
+    const updateUserInfo = async (
+        userId: string | number,
+        roles: string[],
+        isVerified: boolean,
+        successCallback = () => {},
+    ) => {
         const response = await request<{ user: UserShortInfo }>({
             url: `/admin/user/${userId}`,
             isAuth: true,
             method: 'PATCH',
             data: {
                 isVerified,
+                roles
             },
         });
 

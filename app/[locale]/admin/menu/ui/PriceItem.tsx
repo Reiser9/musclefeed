@@ -58,50 +58,6 @@ const PriceItem: React.FC<Props> = ({ data, number, removePrice, updatePrice, in
 
                     <div className={styles.menuFormPriceInput}>
                         <Input
-                            title="Текст общей цены ru"
-                            full
-                            value={data.totalPriceRu}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                updatePrice(index, 'totalPriceRu', e.target.value)
-                            }
-                        />
-                    </div>
-
-                    <div className={styles.menuFormPriceInput}>
-                        <Input
-                            title="Текст общей цены he"
-                            full
-                            value={data.totalPriceHe}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                updatePrice(index, 'totalPriceHe', e.target.value)
-                            }
-                        />
-                    </div>
-
-                    <div className={styles.menuFormPriceInput}>
-                        <Input
-                            title="Текст дневной цены ru"
-                            full
-                            value={data.pricePerDayRu}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                updatePrice(index, 'pricePerDayRu', e.target.value)
-                            }
-                        />
-                    </div>
-
-                    <div className={styles.menuFormPriceInput}>
-                        <Input
-                            title="Текст дневной цены he"
-                            full
-                            value={data.pricePerDayHe}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                updatePrice(index, 'pricePerDayHe', e.target.value)
-                            }
-                        />
-                    </div>
-
-                    <div className={styles.menuFormPriceInput}>
-                        <Input
                             title="Скидка в процентах"
                             full
                             value={data.discount}

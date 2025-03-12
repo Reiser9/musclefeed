@@ -54,6 +54,7 @@ const OrderModal: React.FC<Props> = ({
     const [appliedPromo, setAppliedPromo] = React.useState<number | null>(null);
     const [finalPrice, setFinalPrice] = React.useState<number | null>(null);
     const t = useTranslations('Profile');
+    const c = useTranslations('Cart');
 
     // Заполнение адреса для неавторизованного
     const [city, setCity] = React.useState('');
@@ -171,13 +172,13 @@ const OrderModal: React.FC<Props> = ({
     const applyPromoHandler = async () => {
         if (!promo) return;
 
-        const promoResult = await applyPromocode(promo, `${activePrice?.price}`);
+        const promoResult = await applyPromocode(promo, `${activePrice?.discountedPrice}`);
 
         if (promoResult) {
             setFinalPrice(promoResult.finalPrice);
             setAppliedPromo(promoResult.promocode?.id);
         } else {
-            setFinalPrice(activePrice.price);
+            setFinalPrice(activePrice.discountedPrice);
             setAppliedPromo(null);
         }
     };
@@ -233,7 +234,7 @@ const OrderModal: React.FC<Props> = ({
 
     React.useEffect(() => {
         if (activePrice.price) {
-            setFinalPrice(activePrice.price);
+            setFinalPrice(activePrice.discountedPrice);
         }
     }, [activePrice.price]);
 
@@ -248,30 +249,27 @@ const OrderModal: React.FC<Props> = ({
                     )}
 
                     <Text variant="h3" upper>
-                        Ваш заказ
+                        {c('title')}
                     </Text>
                 </div>
 
-                <p className={styles.calcText}>
-                    Тут можно посмотреть опции заказа и оплатить его, с вами свяжется наш оператор для уточнения деталей
-                    заказа
-                </p>
+                <p className={styles.calcText}>{c('text')}</p>
 
                 <div className={styles.orderItems}>
                     <div className={styles.orderItem}>
-                        <p className={styles.orderItemName}>Рацион</p>
+                        <p className={styles.orderItemName}>{c('racion')}</p>
 
                         <p className={styles.orderItemTitle}>{currentMenuType?.name[language]}</p>
                     </div>
 
                     <div className={styles.orderItem}>
-                        <p className={styles.orderItemName}>Программа</p>
+                        <p className={styles.orderItemName}>{c('program')}</p>
 
                         <p className={styles.orderItemTitle}>{currentMenu?.name[language]}</p>
                     </div>
 
                     <div className={styles.orderItem}>
-                        <p className={styles.orderItemName}>Длительность</p>
+                        <p className={styles.orderItemName}>{c('duration')}</p>
 
                         <p className={styles.orderItemTitle}>
                             {getDayDeclension(activePrice?.daysCount)}{' '}
@@ -284,18 +282,18 @@ const OrderModal: React.FC<Props> = ({
                     </div>
 
                     <div className={styles.orderItem}>
-                        <p className={styles.orderItemName}>Доставка</p>
+                        <p className={styles.orderItemName}>{c('delivery')}</p>
 
                         <p className={styles.orderItemTitle}>
-                            Начало доставки:{' '}
+                            {c('delivery_start')}{' '}
                             <span className={styles.orderDilivery}>{dayjs(dateDelivery).format('DD.MM.YYYY')}</span>
                         </p>
                     </div>
 
                     <div className={styles.orderItem}>
-                        <p className={styles.orderItemName}>Формат питания</p>
+                        <p className={styles.orderItemName}>{c('format')}</p>
 
-                        <p className={styles.orderItemTitle}>{getScheduleLabel(disabledDays)}</p>
+                        <p className={styles.orderItemTitle}>{getScheduleLabel(disabledDays, language)}</p>
                     </div>
                 </div>
 
@@ -304,11 +302,9 @@ const OrderModal: React.FC<Props> = ({
                         className={styles.orderAllergyBlock}
                         onClick={() => step === 1 && setHasAllergi((prev) => !prev)}
                     >
-                        <p className={styles.orderItemTitle}>У вас есть аллергии:</p>
+                        <p className={styles.orderItemTitle}>{c('allergi')}</p>
 
-                        <p className={styles.orderAllergyText}>
-                            С вами свяжется наш специалист и уточнит возможные замены продуктов
-                        </p>
+                        <p className={styles.orderAllergyText}>{c('allergi_text')}</p>
                     </div>
 
                     <div
@@ -327,7 +323,7 @@ const OrderModal: React.FC<Props> = ({
                         <>
                             <div className={styles.foodFormItem}>
                                 <div className={styles.foodFormItemName}>
-                                    <p className={styles.foodFormItemNameText}>Способы оплаты:</p>
+                                    <p className={styles.foodFormItemNameText}>{c('payments')}</p>
                                 </div>
 
                                 <div className={cn(styles.foodFormItemContent, styles.one)}>
@@ -354,21 +350,19 @@ const OrderModal: React.FC<Props> = ({
 
                             <div className={styles.orderPromo}>
                                 <div className={styles.orderPromoTitleInner}>
-                                    <p className={styles.foodFormItemNameText}>У вас есть промокод:</p>
+                                    <p className={styles.foodFormItemNameText}>{c('promo')}</p>
 
                                     {!appliedPromo ? (
-                                        <p className={styles.promoSubtitle}>
-                                            Скидка по промокоду не суммируется с другими скидками
-                                        </p>
+                                        <p className={styles.promoSubtitle}>{c('promo_text')}</p>
                                     ) : (
-                                        <p className={cn(styles.promoSubtitle, styles.green)}>Промокод применен</p>
+                                        <p className={cn(styles.promoSubtitle, styles.green)}>{c('promo_applied')}</p>
                                     )}
                                 </div>
 
                                 <div className={styles.orderPromoWrap}>
                                     <Input
                                         icon={<Gift />}
-                                        placeholder="Введите промокод"
+                                        placeholder={c('promo_placeholder')}
                                         value={promo}
                                         setValue={setPromo}
                                     />
@@ -396,13 +390,13 @@ const OrderModal: React.FC<Props> = ({
                                             id: address.id,
                                             name: `${address.city.name[language]}, ${address.street}, ${address.house}, ${address.floor}, ${address.apartment}`,
                                         }))}
-                                        title="Выберите адрес"
+                                        title={c('address')}
                                         full
                                         icon={<Home2 />}
                                     />
                                 ) : (
                                     <Button href={`/${language}/account/profile`} full>
-                                        У вас не создан адрес, создайте его
+                                        {c('address_empty')}
                                     </Button>
                                 )
                             ) : (
@@ -433,16 +427,18 @@ const OrderModal: React.FC<Props> = ({
                                     <div className={styles.orderInputsAllergiItem}>
                                         <Input
                                             value={street}
+                                            required
                                             setValue={setStreet}
                                             title={t('street')}
                                             icon={<Map />}
-                                            placeholder="Выберите или начните вводить"
+                                            placeholder={c('street')}
                                         />
                                     </div>
 
                                     <div className={styles.orderInputsAllergiItem}>
                                         <Input
                                             value={house}
+                                            required
                                             setValue={setHouse}
                                             title={t('home')}
                                             icon={<Home2 />}
@@ -475,21 +471,16 @@ const OrderModal: React.FC<Props> = ({
                             <div className={styles.orderInputsAllergiItem}>
                                 <Input
                                     value={fullName}
+                                    required
                                     setValue={setFullName}
                                     icon={<User />}
                                     full
-                                    title="Имя и фамилия"
+                                    title={c('fullname')}
                                 />
                             </div>
 
                             <div className={styles.orderInputsAllergiItem}>
-                                <Input
-                                    value={phone}
-                                    setValue={setPhone}
-                                    icon={<Phone />}
-                                    full
-                                    title="Ваш номер телефона"
-                                />
+                                <Input value={phone} setValue={setPhone} icon={<Phone />} full title={c('phone')} />
                             </div>
 
                             {hasAllergi && !isAuth && (
@@ -498,16 +489,17 @@ const OrderModal: React.FC<Props> = ({
                                     setValue={setUserAllergies}
                                     icon={<Foods />}
                                     full
-                                    title="Аллергии"
+                                    title={c('allergi_placeholder')}
                                 />
                             )}
 
                             <Input
                                 value={email}
+                                required
                                 setValue={setEmail}
                                 icon={<Mail />}
                                 full
-                                title="Ваша почта"
+                                title={c('email')}
                                 disabled={isAuth}
                             />
 
@@ -516,7 +508,7 @@ const OrderModal: React.FC<Props> = ({
                                 setValue={setComment}
                                 icon={<Chat />}
                                 full
-                                title="Ваши комментарии к заказу"
+                                title={c('comment')}
                                 component="textarea"
                             />
                         </div>
@@ -526,26 +518,24 @@ const OrderModal: React.FC<Props> = ({
                 <div className={styles.calcResult}>
                     <div className={styles.orderTextInner}>
                         <p className={styles.calcResultCount}>
-                            Итого: <span className={styles.cartPriceValue}>{finalPrice}</span> ₪
+                            {c('total')} <span className={styles.cartPriceValue}>{finalPrice}</span> ₪
                         </p>
 
                         {!!activePrice.discount && (
-                            <div className={styles.orderTextSale}>
-                                Скидка {activePrice.discount}% за длительность заказа
-                            </div>
+                            <div className={styles.orderTextSale}>{c('sale', { value: activePrice.discount })}</div>
                         )}
                     </div>
 
                     {step === 1 && (
                         <Button color="green" onClick={() => setStep(2)}>
-                            Далее
+                            {c('next')}
                             <ArrowRight />
                         </Button>
                     )}
 
                     {step === 2 && (
                         <Button color="green" onClick={createOrderHandler}>
-                            Оформить заказ
+                            {c('button')}
                             <ArrowRight />
                         </Button>
                     )}

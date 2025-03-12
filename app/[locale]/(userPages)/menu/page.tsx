@@ -46,6 +46,7 @@ const MenuPage = () => {
     const [dateDeliveryPicker, setDateDeliveryPicker] = React.useState(false);
     const [deliveryModal, setDeliveryModal] = React.useState(false);
     const [orderModal, setOrderModal] = React.useState(false);
+    const [orderSuccessModal, setOrderSuccessModal] = React.useState(false);
     const [activeDishTypeId, setActiveDishTypeId] = React.useState<number | null>(null);
 
     const [cart, setCart] = React.useState<{ quantity: number; dish: Dish }[]>([]);
@@ -118,22 +119,15 @@ const MenuPage = () => {
                         <div className={styles.complexInner}>
                             <div className={styles.complexWrp}>
                                 <div className={styles.foodTextInner}>
-                                    <p className={styles.foodTextTitle}>
-                                        Свобода выбора: Создайте свой идеальный набор блюд
-                                    </p>
+                                    <p className={styles.foodTextTitle}>{t('personal_title')}</p>
 
-                                    <p className={styles.foodTextText}>
-                                        Эта программа для тех, кто хочет питаться правильно и устал от фастфуда.
-                                        Выберите любые блюда на свой вкус из нашего меню и составьте свой идеальный
-                                        заказ. Минимальная сумма — 200 шекелей, а вы получаете только то, что
-                                        действительно хотите, без лишних компромиссов
-                                    </p>
+                                    <p className={styles.foodTextText}>{t('personal_text')}</p>
                                 </div>
 
                                 <div className={styles.foodForm}>
                                     <div className={styles.foodFormItem}>
                                         <div className={styles.foodFormItemName}>
-                                            <p className={styles.foodFormItemNameText}>Когда привезти</p>
+                                            <p className={styles.foodFormItemNameText}>{t('date2')}</p>
 
                                             <button
                                                 className={styles.foodFormButton}
@@ -184,7 +178,7 @@ const MenuPage = () => {
                                     ) : (
                                         <div className={styles.foodFormItem}>
                                             <div className={styles.foodFormItemName}>
-                                                <p className={styles.foodFormItemNameText}>Выберите тип блюда:</p>
+                                                <p className={styles.foodFormItemNameText}>{t('dish_type')}</p>
                                             </div>
 
                                             {!!dishtypes && (
@@ -224,7 +218,7 @@ const MenuPage = () => {
                                         ))}
                                     </div>
                                 ) : (
-                                    <NotContent text="Блюд не найдено" />
+                                    <NotContent text={t('dish_empty')} />
                                 )}
 
                                 {!!data && data.totalPages > 1 && (
@@ -255,24 +249,13 @@ const MenuPage = () => {
             >
                 <div className={base.container}>
                     <div className={styles.cartInner}>
-                        <div className={styles.cartTitleInner}>
-                            <p className={styles.cartTitle}>Cкидка! не упускай возможность</p>
-
-                            <p className={styles.cartText}>
-                                Закажи скорее
-                                {/* <span>(Какой-то подтекст)</span> */}
-                            </p>
-                        </div>
-
                         <div className={styles.cartPriceInner}>
-                            {/* <div className={styles.cartPriceWrap}>
-                                <p className={styles.cartPriceOld}>345 ₪</p>
-
-                                <p className={styles.cartPrice}>Итого: 200 ₪</p>
-                            </div> */}
+                            <div className={styles.cartPriceWrap}>
+                                <p className={styles.cartPrice}>{t('total')} {getTotalPrice()} ₪</p>
+                            </div>
 
                             <Button className={styles.cartButton} onClick={() => setOrderModal(true)}>
-                                Оформить заказ за <span className={styles.orderPrice}>{getTotalPrice()}</span> ₪
+                                {t('order_button')} <span className={styles.orderPrice}>{getTotalPrice()}</span> ₪
                                 <ArrowRight />
                             </Button>
                         </div>
@@ -305,6 +288,7 @@ const MenuPage = () => {
                 resetOrder={() => {
                     setCart([]);
                     setDateDelivery('');
+                    setOrderSuccessModal(true);
                 }}
                 cart={cart}
             />
@@ -316,6 +300,18 @@ const MenuPage = () => {
             <Reviews />
 
             <Delivery />
+
+            <Modal value={orderSuccessModal} setValue={setOrderSuccessModal}>
+                <>
+                    <Text variant="h3" upper className={styles.modalDeliveryTitle}>
+                        {t('success_title')}
+                    </Text>
+
+                    <div className={styles.modalDeliveryTextInner}>
+                        <p className={styles.modalDeliveryText}>{t('success_text')}</p>
+                    </div>
+                </>
+            </Modal>
         </>
     );
 };

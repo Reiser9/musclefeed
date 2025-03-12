@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 import styles from './index.module.scss';
 
@@ -19,11 +20,12 @@ type Props = {
     buttonCallback?: () => void;
 };
 
-const DishItem: React.FC<Props> = ({ data, buttonText = 'Посмотреть замены', buttonCallback }) => {
+const DishItem: React.FC<Props> = ({ data, buttonText, buttonCallback }) => {
     const [benefitsModal, setBenefitsModal] = React.useState(false);
     const { picture, name, description, proteins, fats, carbohydrates, calories, dishType, benefit } = data || {};
 
     const language = useAppSelector((state) => state.app.language);
+    const t = useTranslations('Menu');
 
     return (
         <>
@@ -41,30 +43,30 @@ const DishItem: React.FC<Props> = ({ data, buttonText = 'Посмотреть з
 
                     <div className={styles.foodItemParams}>
                         <p className={styles.foodItemParam}>
-                            <span>Ккал</span> {calories}
+                            <span>{t('ccal')}</span> {calories}
                         </p>
                         <p className={styles.foodItemParam}>
-                            <span>Б</span> {proteins}
+                            <span>{t('b')}</span> {proteins}
                         </p>
                         <p className={styles.foodItemParam}>
-                            <span>Ж</span> {fats}
+                            <span>{t('j')}</span> {fats}
                         </p>
                         <p className={styles.foodItemParam}>
-                            <span>У</span> {carbohydrates}
+                            <span>{t('u')}</span> {carbohydrates}
                         </p>
                     </div>
 
                     <div className={styles.foodItemButtons}>
                         {benefit[language] && (
                             <Button full color="green" small onClick={() => setBenefitsModal(true)}>
-                                Подробнее
+                                {t('dish_more_buton')}
                             </Button>
                         )}
 
                         {buttonCallback && (
                             <Button full className={styles.foodButton} onClick={buttonCallback}>
                                 <Swap />
-                                {buttonText}
+                                {buttonText ? buttonText : language === 'ru' ? 'Посмотреть замены' : 'ראה תחליפים'}
                             </Button>
                         )}
                     </div>
@@ -74,7 +76,7 @@ const DishItem: React.FC<Props> = ({ data, buttonText = 'Посмотреть з
             {benefit[language] && (
                 <Modal value={benefitsModal} setValue={setBenefitsModal}>
                     <Text variant="h3" upper>
-                        Подробное описание блюда
+                        {t('dish_more')}
                     </Text>
 
                     <div className={styles.benefitsText}>{benefit[language]}</div>

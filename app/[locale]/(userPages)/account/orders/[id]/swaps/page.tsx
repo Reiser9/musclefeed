@@ -111,13 +111,11 @@ const UserOrderSwaps = () => {
                         <div className={styles.configContent}>
                             <div className={styles.configTextInner}>
                                 <Text upper variant="h3">
-                                    Конфигурация рациона
+                                    {t('conf_title')}
                                 </Text>
 
                                 <p className={styles.configText}>
-                                    Наше меню разработано профессиональными диетологами, приготовлено только из
-                                    натуральных продуктов и рассчитано на каждого человека под его цели.{' '}
-                                    <span>Худеть вкусно – легко!</span>
+                                    {t('conf_text')} <span>{t('conf_highlight')}</span>
                                 </p>
                             </div>
 
@@ -127,7 +125,7 @@ const UserOrderSwaps = () => {
                                 <NotContent />
                             ) : (
                                 <div className={styles.swapDateInner}>
-                                    <p className={styles.swapDateTitle}>Замены блюд:</p>
+                                    <p className={styles.swapDateTitle}>{t('swaps')}</p>
 
                                     <div className={styles.swapDateButtons}>
                                         <button
@@ -228,13 +226,15 @@ const UserOrderSwaps = () => {
                                     ))}
 
                                     <div className={styles.dishTotal}>
-                                        <Text fontWeight={600} upper>Всего за день:</Text>
+                                        <Text fontWeight={600} upper>
+                                            {t('total')}
+                                        </Text>
 
                                         <div className={styles.dishTotalPoints}>
-                                            <p>Калорий: {dishes.total.calories}</p>
-                                            <p>Белки: {dishes.total.proteins}</p>
-                                            <p>Жиры: {dishes.total.fats}</p>
-                                            <p>Углеводы: {dishes.total.carbohydrates}</p>
+                                            <p>{t('ccals')} {dishes.total.calories}</p>
+                                            <p>{t('bel')} {dishes.total.proteins}</p>
+                                            <p>{t('fat')} {dishes.total.fats}</p>
+                                            <p>{t('ugl')} {dishes.total.carbohydrates}</p>
                                         </div>
                                     </div>
                                 </div>

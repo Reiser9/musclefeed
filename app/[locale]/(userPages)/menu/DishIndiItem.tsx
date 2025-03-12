@@ -12,6 +12,7 @@ import { useAppSelector } from '@/shared/hooks/useRedux';
 import { Button } from '@/shared/ui/Button';
 import { Text } from '@/shared/ui/Text';
 import { Modal } from '@/shared/ui/Modal';
+import { useTranslations } from 'next-intl';
 
 type Props = {
     data: Dish;
@@ -27,6 +28,7 @@ const DishIndiItem: React.FC<Props> = ({ data, cart, addToCart, incrementQuantit
     const { picture, name, description, proteins, fats, carbohydrates, calories, price, benefit } = data || {};
 
     const language = useAppSelector((state) => state.app.language);
+    const t = useTranslations('Menu');
 
     return (
         <>
@@ -42,16 +44,16 @@ const DishIndiItem: React.FC<Props> = ({ data, cart, addToCart, incrementQuantit
 
                     <div className={styles.foodItemParams}>
                         <p className={styles.foodItemParam}>
-                            <span>Ккал</span> {calories}
+                            <span>{t('ccal')}</span> {calories}
                         </p>
                         <p className={styles.foodItemParam}>
-                            <span>Б</span> {proteins}
+                            <span>{t('b')}</span> {proteins}
                         </p>
                         <p className={styles.foodItemParam}>
-                            <span>Ж</span> {fats}
+                            <span>{t('j')}</span> {fats}
                         </p>
                         <p className={styles.foodItemParam}>
-                            <span>У</span> {carbohydrates}
+                            <span>{t('u')}</span> {carbohydrates}
                         </p>
                     </div>
 
@@ -60,7 +62,7 @@ const DishIndiItem: React.FC<Props> = ({ data, cart, addToCart, incrementQuantit
 
                         {benefit[language] && (
                             <Button full color="green" small onClick={() => setBenefitsModal(true)}>
-                                Подробнее
+                                {t('dish_more_buton')}
                             </Button>
                         )}
 
@@ -78,7 +80,7 @@ const DishIndiItem: React.FC<Props> = ({ data, cart, addToCart, incrementQuantit
                             </div>
                         ) : (
                             <Button small full onClick={addToCart}>
-                                Выбрать блюдо
+                                {t('choose_dish')}
                                 <ArrowRight />
                             </Button>
                         )}
@@ -89,7 +91,7 @@ const DishIndiItem: React.FC<Props> = ({ data, cart, addToCart, incrementQuantit
             {benefit[language] && (
                 <Modal value={benefitsModal} setValue={setBenefitsModal}>
                     <Text variant="h3" upper>
-                        Подробное описание блюда
+                        {t('dish_more')}
                     </Text>
 
                     <div className={styles.benefitsText}>{benefit[language]}</div>

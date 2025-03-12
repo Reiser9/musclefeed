@@ -88,6 +88,14 @@
     background: var(--main);
 }
 
+.rolesInner{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
 @media (any-hover: hover) {
     .paginationButton:hover{
         background: var(--main);

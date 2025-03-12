@@ -19,6 +19,7 @@ import { Button } from '@/shared/ui/Button';
 const AdminEditUser = () => {
     const { id } = useParams();
     const [verify, setVerify] = React.useState(false);
+    const [roles, setRoles] = React.useState<string[]>([]);
 
     const { getUserById, updateUserInfo } = useUsers();
     const language = useAppSelector((state) => state.app.language);
@@ -33,20 +34,36 @@ const AdminEditUser = () => {
         queryFn: () => getUserById(String(id)),
         enabled: !!id,
         gcTime: 0,
-        refetchOnMount: true
+        refetchOnMount: true,
     });
 
-    const { firstName, lastName, email, phone, roles, isVerified, allergies } = user || {};
+    const { firstName, lastName, email, phone, roles: userRoles, isVerified, allergies } = user || {};
 
     const saveUser = () => {
-        updateUserInfo(String(id), verify, () => {
+        updateUserInfo(String(id), roles, verify, () => {
             router.push(`/${language}/admin/users`);
+        });
+    };
+
+    const updateRole = (role: string) => {
+        setRoles((prev) => {
+            if (prev.includes(role)) {
+                return prev.filter((el) => el !== role);
+            } else {
+                return [...prev, role];
+            }
         });
     };
 
     React.useEffect(() => {
         setVerify(!!isVerified);
     }, [isVerified]);
+
+    React.useEffect(() => {
+        if (userRoles) {
+            setRoles(userRoles);
+        }
+    }, [userRoles]);
 
     if (userIsPending) {
         return <Preloader page />;
@@ -63,11 +80,27 @@ const AdminEditUser = () => {
 
                 <Checkbox id="user_verify" label="Верифицрован" value={verify} setValue={setVerify} />
 
-                <Input disabled value={firstName} full title={'Имя'} />
-                <Input disabled value={lastName} full title={'Фамилия'} />
-                <Input disabled value={email} full title={'Email'} />
-                <Input disabled value={phone} full title={'Телефон'} />
-                <Input disabled value={roles?.join(', ')} full title={'Роли'} />
+                <div className={styles.rolesInner}>
+                    <Text variant="text3">Роли пользователя:</Text>
+
+                    <Checkbox
+                        id="moder"
+                        label="Модератор"
+                        value={roles?.includes('MODERATOR')}
+                        onChangeHandler={() => updateRole('MODERATOR')}
+                    />
+                    <Checkbox
+                        id="admin"
+                        label="Админ"
+                        value={roles?.includes('ADMIN')}
+                        onChangeHandler={() => updateRole('ADMIN')}
+                    />
+                </div>
+
+                <Input disabled value={firstName || ''} full title={'Имя'} />
+                <Input disabled value={lastName || ''} full title={'Фамилия'} />
+                <Input disabled value={email || ''} full title={'Email'} />
+                <Input disabled value={phone || ''} full title={'Телефон'} />
                 <Input disabled value={allergies || '-'} full title={'Аллергии'} />
 
                 <Button full onClick={saveUser}>

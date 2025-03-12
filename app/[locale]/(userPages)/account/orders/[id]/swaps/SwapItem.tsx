@@ -27,11 +27,10 @@ const SwapItem: React.FC<Props> = ({ data, dayId, isAdmin = false }) => {
     const { picture, name, description, dishType, id } = data || {};
 
     const revalidateRequests = () => {
-        if(isAdmin){
+        if (isAdmin) {
             queryClient.invalidateQueries({ queryKey: ['admin_order_dishes_by_day', dayId] });
             queryClient.invalidateQueries({ queryKey: ['admin_order_swaps_by_dishes', dayId, dishType.id] });
-        }
-        else{
+        } else {
             queryClient.invalidateQueries({ queryKey: ['user_order_dishes_by_day', dayId] });
             queryClient.invalidateQueries({ queryKey: ['order_swaps_by_dishes', dayId, dishType.id] });
         }
@@ -69,7 +68,7 @@ const SwapItem: React.FC<Props> = ({ data, dayId, isAdmin = false }) => {
                         full
                         onClick={() => setConfirmSwap(true)}
                     >
-                        Выбрать
+                        {language === 'ru' ? 'Выбрать' : 'בחר'}
                     </Button>
                 </div>
             </div>
@@ -77,7 +76,7 @@ const SwapItem: React.FC<Props> = ({ data, dayId, isAdmin = false }) => {
             <ConfirmModal
                 value={confirmSwap}
                 setValue={setConfirmSwap}
-                title="Вы действительно хотите заменить блюдо?"
+                title={language === 'ru' ? 'Вы действительно хотите заменить блюдо?' : 'האם אתה באמת רוצה להחליף מנה?'}
                 callback={handleReplaceDish}
             />
         </>

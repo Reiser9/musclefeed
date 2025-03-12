@@ -2,12 +2,10 @@
 
 import { DishPagination } from '@/entities/dish';
 import type { Order, OrderIndiDTO, OrderPagination } from '@/entities/order';
-import useAlert from '@/shared/hooks/useAlert';
 import useRequest from '@/shared/hooks/useRequest';
 
 const usePersonal = () => {
     const { request, catchRequestError, errorController } = useRequest();
-    const { alertNotify } = useAlert();
 
     const getDishesIndi = async (page: number, limit = 10, search: string, dishTypeId: number | string) => {
         const response = await request<DishPagination>({
@@ -63,7 +61,6 @@ const usePersonal = () => {
         }
 
         successCallback();
-        alertNotify('Успешно', 'С вами свяжется менеджер для подтверждения заказа');
 
         if ('data' in response) {
             return response.data;

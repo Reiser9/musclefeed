@@ -9,9 +9,10 @@ type Props = {
     label?: string;
     value?: boolean;
     setValue?: React.Dispatch<SetStateAction<boolean>>;
+    onChangeHandler?: () => void;
 };
 
-const Checkbox: React.FC<Props> = ({ id, label, value, setValue, ...props }) => {
+const Checkbox: React.FC<Props> = ({ id, label, value, setValue, onChangeHandler, ...props }) => {
     return (
         <div className={styles.checkboxInner}>
             <input
@@ -19,7 +20,7 @@ const Checkbox: React.FC<Props> = ({ id, label, value, setValue, ...props }) => 
                 className={styles.checkbox}
                 id={id}
                 checked={value}
-                onChange={(e) => setValue && setValue(e.target.checked)}
+                onChange={onChangeHandler ? onChangeHandler : (e) => setValue && setValue(e.target.checked)}
                 {...props}
             />
 

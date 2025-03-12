@@ -29,10 +29,6 @@ import { NotContent } from '@/shared/ui/NotContent';
 const emptyPriceElem = {
     price: '',
     daysCount: '',
-    totalPriceRu: '',
-    totalPriceHe: '',
-    pricePerDayRu: '',
-    pricePerDayHe: '',
     discount: '0',
     giftDaysCount: '0',
 };

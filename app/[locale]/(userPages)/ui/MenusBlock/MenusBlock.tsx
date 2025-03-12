@@ -21,7 +21,6 @@ import { DishItem } from '@/entities/dish/ui';
 import { useMenu } from '@/features/menu';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 import CalcCaloriesForm from './CalcCaloriesForm';
-import { getDayDeclension } from '@/shared/utils/getDayDeclension';
 import OrderModal from './OrderModal';
 import { DATE_OF_DELIVERY } from '@/shared/consts/DATE_OF_DELIVERY';
 
@@ -31,17 +30,21 @@ import { NotContent } from '@/shared/ui/NotContent';
 import { Preloader } from '@/shared/ui/Preloader';
 import { Text } from '@/shared/ui/Text';
 
-const getNextWeek = (): { date: string; day: string; fullDate: string }[] => {
+const getNextWeek = (language: 'ru' | 'he'): { date: string; day: string; fullDate: string }[] => {
     const dates: { date: string; day: string; fullDate: string }[] = [];
     const today = new Date();
     const weekDays = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
+    const weekDaysHe = ["א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ש'"];
 
     for (let i = 1; i <= 7; i++) {
         const nextDay = new Date(today);
         nextDay.setDate(today.getDate() + i);
         dates.push({
-            date: nextDay.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' }),
-            day: weekDays[nextDay.getDay()],
+            date: nextDay.toLocaleDateString(language === 'ru' ? 'ru-RU' : 'he-IL', {
+                day: '2-digit',
+                month: '2-digit',
+            }),
+            day: language === 'ru' ? weekDays[nextDay.getDay()] : weekDaysHe[nextDay.getDay()],
             fullDate: nextDay.toISOString().split('T')[0],
         });
     }
@@ -73,7 +76,7 @@ const MenusBlock = () => {
     // Выбранное кол-во дней
     const [activePrice, setActivePrice] = React.useState<PriceItem | null>(null);
     // Пропускаемые дни
-    const [disabledDays, setDisabledDays] = React.useState<number[]>([6, 7]);
+    const [disabledDays, setDisabledDays] = React.useState<number[]>([5]);
     // Дата начала доставки
     const [dateDelivery, setDateDelivery] = React.useState('');
     const [dateDeliveryPicker, setDateDeliveryPicker] = React.useState(false);
@@ -179,7 +182,7 @@ const MenusBlock = () => {
         if (activeMenuId && menus) {
             const index = menus.menus.findIndex((el) => el.id === activeMenuId);
             setCurrentMenu(menus.menus[index]);
-            setActivePrice(menus.menus[index].prices[0]);
+            setActivePrice(menus.menus[index]?.prices[0]);
         }
     }, [activeMenuId, menus]);
 
@@ -248,7 +251,7 @@ const MenusBlock = () => {
                                                     </p>
 
                                                     <p className={styles.complexTextPrice}>
-                                                        от {initialPrice[language]} ₪
+                                                        {initialPrice[language]} ₪
                                                     </p>
                                                 </div>
 
@@ -260,7 +263,9 @@ const MenusBlock = () => {
                                     })}
                                 </Swiper>
                             ) : (
-                                <NotContent text="Типы меню еще не созданы" />
+                                <NotContent
+                                    text={language === 'ru' ? 'Типы меню еще не созданы' : 'סוגי התפריטים טרם נוצרו'}
+                                />
                             )}
 
                             {activeMenuTypeId && (
@@ -329,15 +334,27 @@ const MenusBlock = () => {
                                                                 })}
                                                                 onClick={() => setActivePrice(day)}
                                                             >
-                                                                {day.daysCount} дней
-                                                                {!!day.discount && (
+                                                                {t('days_count', { count: day.daysCount })}
+
+                                                                {!!day.discount && !!day.giftDaysCount && (
+                                                                    <span className={cn(styles.foodSale, styles.block)}>
+                                                                        {t('combo_sale', {
+                                                                            discount: day.discount,
+                                                                            giftDaysCount: day.giftDaysCount,
+                                                                        })}
+                                                                    </span>
+                                                                )}
+
+                                                                {!!day.discount && !day.giftDaysCount && (
                                                                     <span className={styles.foodSale}>
                                                                         -{day.discount}%
                                                                     </span>
                                                                 )}
-                                                                {!!day.giftDaysCount && (
+                                                                {!!day.giftDaysCount && !day.discount && (
                                                                     <span className={cn(styles.foodSale, styles.block)}>
-                                                                        {day.giftDaysCount} дня в подарок
+                                                                        {t('sale_days', {
+                                                                            giftDaysCount: day.giftDaysCount,
+                                                                        })}
                                                                     </span>
                                                                 )}
                                                             </button>
@@ -355,11 +372,15 @@ const MenusBlock = () => {
                                                 <button
                                                     className={cn(styles.foodFormChoose, {
                                                         [styles.active]:
-                                                            disabledDays.length === 2 &&
-                                                            disabledDays.includes(6) &&
-                                                            disabledDays.includes(7),
+                                                            disabledDays.length === 1 && disabledDays.includes(5),
                                                     })}
-                                                    onClick={() => setDisabledDays([6, 7])}
+                                                    onClick={() => {
+                                                        if (disabledDays.length === 1 && disabledDays.includes(5)) {
+                                                            return setDisabledDays([]);
+                                                        }
+
+                                                        setDisabledDays([5]);
+                                                    }}
                                                 >
                                                     {t('format1')}
                                                 </button>
@@ -367,9 +388,15 @@ const MenusBlock = () => {
                                                 <button
                                                     className={cn(styles.foodFormChoose, {
                                                         [styles.active]:
-                                                            disabledDays.length === 1 && disabledDays.includes(5),
+                                                            disabledDays.length === 1 && disabledDays.includes(6),
                                                     })}
-                                                    onClick={() => setDisabledDays([5])}
+                                                    onClick={() => {
+                                                        if (disabledDays.length === 1 && disabledDays.includes(6)) {
+                                                            return setDisabledDays([]);
+                                                        }
+
+                                                        setDisabledDays([6]);
+                                                    }}
                                                 >
                                                     {t('format2')}
                                                 </button>
@@ -381,7 +408,17 @@ const MenusBlock = () => {
                                                             disabledDays.includes(5) &&
                                                             disabledDays.includes(6),
                                                     })}
-                                                    onClick={() => setDisabledDays([5, 6])}
+                                                    onClick={() => {
+                                                        if (
+                                                            disabledDays.length === 2 &&
+                                                            disabledDays.includes(5) &&
+                                                            disabledDays.includes(6)
+                                                        ) {
+                                                            return setDisabledDays([]);
+                                                        }
+
+                                                        setDisabledDays([5, 6]);
+                                                    }}
                                                 >
                                                     {t('format3')}
                                                 </button>
@@ -441,7 +478,7 @@ const MenusBlock = () => {
                                                 </div>
 
                                                 <div className={styles.foodFormItemContent}>
-                                                    {getNextWeek().map((item, index) => (
+                                                    {getNextWeek(language).map((item, index) => (
                                                         <button
                                                             key={index}
                                                             className={cn(styles.foodFormChoose, {
@@ -516,7 +553,7 @@ const MenusBlock = () => {
                                                 </button>
                                             </div>
                                         ) : (
-                                            <NotContent text="Блюд на этот день не создано" />
+                                            <NotContent text={t('dishes_empty')} />
                                         ))}
                                 </div>
                             )}
@@ -533,23 +570,29 @@ const MenusBlock = () => {
                 <div className={base.container}>
                     <div className={styles.cartInner}>
                         <div className={styles.cartTitleInner}>
-                            <p className={styles.cartTitle}>Cкидка! не упускай возможность</p>
+                            <p className={styles.cartTitle}>{t('sale')}</p>
 
                             <p className={styles.cartText}>
-                                Рацион на {getDayDeclension(activePrice?.daysCount)}{' '}
+                                {t('racion_cart', { count: activePrice?.daysCount })}{' '}
                                 <span>({currentMenu?.mealsCount[language]})</span>
                             </p>
                         </div>
 
                         <div className={styles.cartPriceInner}>
                             <div className={styles.cartPriceWrap}>
-                                {/* <p className={styles.cartPriceOld}>345 ₪</p> */}
+                                {!!activePrice?.discount && (
+                                    <p className={styles.cartPriceOld}>{activePrice?.pricePerDay} ₪</p>
+                                )}
 
-                                <p className={styles.cartPrice}>Итого: {activePrice?.pricePerDay[language]}</p>
+                                <p className={styles.cartPrice}>
+                                    {t('total')} {activePrice?.discountedPricePerDay} ₪ /{' '}
+                                    {language === 'ru' ? 'день' : 'יום'}
+                                </p>
                             </div>
 
                             <Button className={styles.cartButton} onClick={() => setOrderModal(true)}>
-                                Оформить заказ за <span className={styles.orderPrice}>{activePrice?.price}</span> ₪
+                                {t('order_button')}{' '}
+                                <span className={styles.orderPrice}>{activePrice?.discountedPrice}</span> ₪
                                 <ArrowRight />
                             </Button>
                         </div>
@@ -579,7 +622,7 @@ const MenusBlock = () => {
                 <Modal value={swapModal} setValue={setSwapModal} size="big">
                     <>
                         <Text variant="h3" upper className={styles.modalDeliveryTitle}>
-                            Блюда для замены
+                            {t('swap')}
                         </Text>
 
                         {swapDishesIsLoading ? (
@@ -593,7 +636,7 @@ const MenusBlock = () => {
                                 ))}
                             </div>
                         ) : (
-                            <NotContent text="Блюд для замен нет" />
+                            <NotContent text={t('swap_empty')} />
                         )}
                     </>
                 </Modal>
@@ -623,11 +666,11 @@ const MenusBlock = () => {
             <Modal value={orderSuccessModal} setValue={setOrderSuccessModal}>
                 <>
                     <Text variant="h3" upper className={styles.modalDeliveryTitle}>
-                        Заказ успешно оформлен
+                        {t('success_title')}
                     </Text>
 
                     <div className={styles.modalDeliveryTextInner}>
-                        <p className={styles.modalDeliveryText}>С вами свжется оператор для уточнения информации</p>
+                        <p className={styles.modalDeliveryText}>{t('success_text')}</p>
                     </div>
                 </>
             </Modal>

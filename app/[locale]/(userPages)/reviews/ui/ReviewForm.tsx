@@ -65,6 +65,7 @@ const ReviewForm = () => {
                         <form onSubmit={handleSubmit(onSubmit)} className={styles.reviewformFormContent}>
                             <Input
                                 {...register('author')}
+                                required
                                 error={!!errors.author}
                                 errorMessage={errors.author?.message}
                                 title={t('form_name')}
@@ -76,6 +77,7 @@ const ReviewForm = () => {
 
                             <Input
                                 {...register('text')}
+                                required
                                 error={!!errors.text}
                                 errorMessage={errors.text?.message}
                                 title={t('form_comment')}

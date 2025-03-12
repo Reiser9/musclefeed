@@ -7,6 +7,7 @@ import styles from './index.module.scss';
 import { Text } from '../Text';
 import { Button } from '../Button';
 import Modal from './Modal';
+import { useAppSelector } from '@/shared/hooks/useRedux';
 
 type Props = {
     value: boolean;
@@ -16,6 +17,8 @@ type Props = {
 };
 
 const ConfirmModal: React.FC<Props> = ({ value, setValue, title, callback = () => {} }) => {
+    const language = useAppSelector((state) => state.app.language);
+
     return (
         <Modal value={value} setValue={setValue}>
             {title && <Text>{title}</Text>}
@@ -28,11 +31,11 @@ const ConfirmModal: React.FC<Props> = ({ value, setValue, title, callback = () =
                     }}
                     full
                 >
-                    Да
+                    {language === 'ru' ? 'Да' : 'כן.'}
                 </Button>
 
                 <Button full onClick={() => setValue(false)}>
-                    Нет
+                    {language === 'ru' ? 'Нет' : 'לא.'}
                 </Button>
             </div>
         </Modal>

@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 
 import styles from '../../index.module.scss';
 
@@ -42,6 +43,8 @@ const DishItem: React.FC<Props> = ({ data, dayId, day }) => {
     const language = useAppSelector((state) => state.app.language);
     const { picture, name, description, calories, carbohydrates, fats, dishType, proteins, count } = data || {};
 
+    const t = useTranslations("Menu");
+
     const { getReplacementDishes } = useOrder();
 
     const {
@@ -72,13 +75,13 @@ const DishItem: React.FC<Props> = ({ data, dayId, day }) => {
                         <p className={styles.swapItemText}>{description[language]}</p>
 
                         <div className={styles.swapItemParams}>
-                            <p className={styles.swapItemParam}>Ккал {calories}</p>
+                            <p className={styles.swapItemParam}>{t("ccal")} {calories}</p>
 
-                            <p className={styles.swapItemParam}>Б {proteins}</p>
+                            <p className={styles.swapItemParam}>{t("b")} {proteins}</p>
 
-                            <p className={styles.swapItemParam}>Ж {fats}</p>
+                            <p className={styles.swapItemParam}>{t("j")} {fats}</p>
 
-                            <p className={styles.swapItemParam}>У {carbohydrates}</p>
+                            <p className={styles.swapItemParam}>{t("u")} {carbohydrates}</p>
                         </div>
                     </div>
 
@@ -88,7 +91,7 @@ const DishItem: React.FC<Props> = ({ data, dayId, day }) => {
                         className={styles.swapItemButton}
                         onClick={() => setSwapsShowed((prev) => !prev)}
                     >
-                        Заменить блюдо
+                        {t("swap_dish")}
                     </Button>
                 </div>
             </div>
@@ -102,7 +105,7 @@ const DishItem: React.FC<Props> = ({ data, dayId, day }) => {
                     ) : !!swaps && !!swaps.length ? (
                         swaps.map((swap) => <SwapItem key={swap.id} data={swap} dayId={dayId} />)
                     ) : (
-                        <NotContent text="Замен нет" />
+                        <NotContent text={t("swaps_empty")} />
                     )}
                 </div>
             )}
