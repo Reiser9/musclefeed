@@ -142,7 +142,7 @@ const AdminMenuCreate = () => {
 
     const { data: dish } = useQuery({
         queryKey: ['dish'],
-        queryFn: () => getDishsPagination(1, 1500, ''),
+        queryFn: () => getDishsPagination(1, 3000, ''),
     });
 
     const onSubmit: SubmitHandler<MenuDTO> = (data) => {
