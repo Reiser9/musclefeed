@@ -34,8 +34,8 @@ export type MenuType = {
 export type MenuDay = {
     number: number;
     dishes: {
-        dishTypeId: string;
-        dishId: string | null;
+        dishTypeId: string | number;
+        dishId: string | null | number;
         isPrimary: boolean;
     }[];
 };

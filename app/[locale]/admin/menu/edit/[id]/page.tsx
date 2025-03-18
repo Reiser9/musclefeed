@@ -149,19 +149,23 @@ const AdminMenuEdit = () => {
 
     const addDish = React.useCallback((dayIndex: number, dishTypeId: number, dishId: number, isPrimary: boolean) => {
         setDays((prev) =>
-            prev.map((day, index) =>
-                index === dayIndex
-                    ? {
-                          ...day,
-                          dishes: isPrimary
-                              ? [
-                                    ...day.dishes.filter((d) => d.dishTypeId !== String(dishTypeId) || !d.isPrimary),
-                                    { dishTypeId: String(dishTypeId), dishId: String(dishId), isPrimary },
-                                ]
-                              : [...day.dishes, { dishTypeId: String(dishTypeId), dishId: String(dishId), isPrimary }],
-                      }
-                    : day,
-            ),
+            prev.map((day, index) => {
+                const a = index === dayIndex
+                ? {
+                      ...day,
+                      dishes: isPrimary
+                          ? [
+                                ...day.dishes.filter((d) => d.dishTypeId !== dishTypeId || !d.isPrimary),
+                                { dishTypeId: dishTypeId, dishId: dishId, isPrimary },
+                            ]
+                          : [...day.dishes, { dishTypeId: dishTypeId, dishId: dishId, isPrimary }],
+                  }
+                : day;
+
+                debugger;
+
+                return a;
+            }),
         );
     }, []);
 
