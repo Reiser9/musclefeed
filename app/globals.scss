@@ -31,6 +31,11 @@
     src: url('/fonts/Inter-VariableFont.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'Assistant';
+    src: url('/fonts/Assistant.ttf') format('truetype');
+}
+
 :root{
 	font-size: 10px;
 
@@ -112,6 +117,11 @@ input:focus::placeholder{
 
 .rtl{
 	direction: rtl;
+	font-family: 'Assistant', sans-serif;
+}
+
+.rtl a, .rtl button, .rtl input, .rtl textarea, .rtl select{
+	font-family: 'Assistant', sans-serif;
 }
 
 .mainImg{
