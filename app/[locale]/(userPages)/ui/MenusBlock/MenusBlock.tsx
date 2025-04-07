@@ -233,6 +233,7 @@ const MenusBlock = () => {
                                 >
                                     {data.map((type) => {
                                         const { id, name, shortDescription, menuType, initialPrice } = type || {};
+                                        const { backgroundPicture } = menuType || {};
 
                                         return (
                                             <SwiperSlide
@@ -253,7 +254,9 @@ const MenusBlock = () => {
                                                 </div>
 
                                                 <div className="complexItemImg">
-                                                    <Image src={menuType.backgroundPicture} alt={name[language]} fill />
+                                                    {backgroundPicture && (
+                                                        <Image src={backgroundPicture} alt={name[language]} fill />
+                                                    )}
                                                 </div>
                                             </SwiperSlide>
                                         );

@@ -56,7 +56,7 @@ const ReviewItem: React.FC<Props> = ({ data }) => {
 
                     {isOverflowing && (
                         <button className={styles.reviewsItemTextFull} onClick={() => setSeeFull((prev) => !prev)}>
-                            {seeFull ? (language === 'ru' ? hideRu : hideHe) : language === 'he' ? showRu : showHe}
+                            {seeFull ? (language === 'ru' ? hideRu : hideHe) : language === 'ru' ? showRu : showHe}
                         </button>
                     )}
                 </div>
