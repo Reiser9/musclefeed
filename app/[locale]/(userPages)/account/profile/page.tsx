@@ -39,6 +39,8 @@ const AccountProfile = () => {
     const { data, isPending, isError } = useQuery({
         queryKey: ['user_addresses'],
         queryFn: getUserAddresses,
+        refetchOnMount: true,
+        staleTime: 0,
     });
 
     const { primary, addresses } = data || {};

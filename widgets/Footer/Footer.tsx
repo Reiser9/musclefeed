@@ -40,7 +40,7 @@ const Footer = () => {
                                             0515883719
                                         </a>
 
-                                        <button className={styles.footerContactButton}>{t('request_call')}</button>
+                                        {/* <button className={styles.footerContactButton}>{t('request_call')}</button> */}
                                     </div>
                                 </div>
 

@@ -36,7 +36,7 @@ const AdminRequestEdit = () => {
     const { allergies, email, phone, fullName } = order || {};
 
     const handleUpdateChangeRequest = () => {
-        updateChangeRequest(String(id), isProcessed, () => router.push(`/${language}/admin/request`));
+        updateChangeRequest(language, String(id), isProcessed, () => router.push(`/${language}/admin/request`));
     };
 
     React.useEffect(() => {

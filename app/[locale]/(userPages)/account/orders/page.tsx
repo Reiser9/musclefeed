@@ -44,7 +44,7 @@ const AccountOrders = () => {
     const createRequestHandler = () => {
         if (!orderId) return;
 
-        createOrderRequest(orderId, 'FREEZE', comment, () => {
+        createOrderRequest(language, orderId, 'FREEZE', comment, () => {
             setComment('');
             setChangeModal(false);
         });
@@ -152,23 +152,23 @@ const AccountOrders = () => {
                                         <Button href="/">{t('make_order')}</Button>
                                     </NotContent>
                                 )}
-                            </div>
 
-                            {!!data && data.totalPages > 1 && (
-                                <div className={styles.pagination}>
-                                    {[...Array(data.totalPages)].map((_, id) => (
-                                        <button
-                                            key={id}
-                                            className={cn(styles.paginationButton, {
-                                                [styles.active]: id + 1 === data.page,
-                                            })}
-                                            onClick={() => setPage(id + 1)}
-                                        >
-                                            {id + 1}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
+                                {!!data && data.totalPages > 1 && (
+                                    <div className={styles.pagination}>
+                                        {[...Array(data.totalPages)].map((_, id) => (
+                                            <button
+                                                key={id}
+                                                className={cn(styles.paginationButton, {
+                                                    [styles.active]: id + 1 === data.page,
+                                                })}
+                                                onClick={() => setPage(id + 1)}
+                                            >
+                                                {id + 1}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

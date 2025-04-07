@@ -208,7 +208,12 @@
         "ccals": "קלוריות:",
         "bel": "חלבונים:",
         "fat": "שומנים:",
-        "ugl": "פחמימות:"
+        "ugl": "פחמימות:",
+        "price": "price",
+        "paidAmount": "paid",
+        "promocodeDiscount": "promo",
+        "menuDiscount": "menu",
+        "finalPrice": "final"
     },
     "Menu": {
         "personal_title": "חופש הבחירה: צרו את מערך המנות המושלם שלכם",

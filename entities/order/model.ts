@@ -74,7 +74,11 @@ export type Order = {
         name: LanguageField;
         description: LanguageField;
         calories: number;
-        backgroundPicture?: string;
+        menuType: {
+            id: number;
+            name: LanguageField;
+            backgroundPicture?: string;
+        };
     };
     city: City;
     street: string;
@@ -92,6 +96,10 @@ export type Order = {
     isIndividual: boolean;
     count: number;
     giftDaysCount: number;
+    price: number;
+    paidAmount: number;
+    promocodeDiscount: number;
+    menuDiscount: number;
 };
 
 export type AdminOrder = {

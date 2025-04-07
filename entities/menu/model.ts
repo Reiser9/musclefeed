@@ -19,7 +19,11 @@ export type MenuTypeDTO = {
 export type MenuType = {
     id: number;
     adminName: string;
-    backgroundPicture: string;
+    menuType: {
+        id: number;
+        name: LanguageField;
+        backgroundPicture: string;
+    };
     order: number;
     isPublished: boolean;
     name: LanguageField;

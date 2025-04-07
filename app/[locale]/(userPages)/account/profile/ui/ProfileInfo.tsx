@@ -24,6 +24,8 @@ const ProfileInfo = () => {
     const { data, isPending, isError } = useQuery({
         queryKey: ['user_info'],
         queryFn: getShortInfo,
+        refetchOnMount: true,
+        gcTime: 0
     });
 
     const { firstName, allergies, lastName, phone, email } = data || {};

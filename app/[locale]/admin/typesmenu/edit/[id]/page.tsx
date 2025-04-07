@@ -40,7 +40,7 @@ const AdminTypeMenuEdit = () => {
         queryFn: () => getTypemenuById(String(id)),
         enabled: !!id,
         gcTime: 0,
-        refetchOnMount: true
+        refetchOnMount: true,
     });
 
     const onSubmit: SubmitHandler<MenuTypeDTO> = (data) => {
@@ -49,22 +49,13 @@ const AdminTypeMenuEdit = () => {
         updateTypemenu(String(id), menuTypeData, () => router.replace(`/${language}/admin/typesmenu`));
     };
 
-    const {
-        adminName,
-        backgroundPicture: menuBackgroundPicture,
-        description,
-        initialPrice,
-        isPublished,
-        name,
-        order,
-        shortDescription,
-    } = data || {};
+    const { adminName, menuType, description, initialPrice, isPublished, name, order, shortDescription } = data || {};
 
     React.useEffect(() => {
-        if (menuBackgroundPicture) {
-            setBackgroundPicture(menuBackgroundPicture);
+        if (menuType?.backgroundPicture) {
+            setBackgroundPicture(menuType?.backgroundPicture);
         }
-    }, [menuBackgroundPicture]);
+    }, [menuType?.backgroundPicture]);
 
     React.useEffect(() => {
         setPublish(!!isPublished);

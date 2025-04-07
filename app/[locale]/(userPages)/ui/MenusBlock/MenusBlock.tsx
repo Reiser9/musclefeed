@@ -232,8 +232,7 @@ const MenusBlock = () => {
                                     }}
                                 >
                                     {data.map((type) => {
-                                        const { id, name, shortDescription, backgroundPicture, initialPrice } =
-                                            type || {};
+                                        const { id, name, shortDescription, menuType, initialPrice } = type || {};
 
                                         return (
                                             <SwiperSlide
@@ -250,13 +249,11 @@ const MenusBlock = () => {
                                                         {shortDescription[language]}
                                                     </p>
 
-                                                    <p className={styles.complexTextPrice}>
-                                                        {initialPrice[language]} ₪
-                                                    </p>
+                                                    <p className={styles.complexTextPrice}>{initialPrice[language]}</p>
                                                 </div>
 
                                                 <div className="complexItemImg">
-                                                    <Image src={backgroundPicture} alt={name[language]} fill />
+                                                    <Image src={menuType.backgroundPicture} alt={name[language]} fill />
                                                 </div>
                                             </SwiperSlide>
                                         );

@@ -23,6 +23,8 @@ const OrderItem: React.FC<Props> = ({ data, freezeCallback = () => {} }) => {
     const language = useAppSelector((state) => state.app.language);
 
     const { daysLeft, daysCount, menu, id, isIndividual, startDate } = data || {};
+    const { menuType } = menu || {};
+    const { name, backgroundPicture } = menuType || {};
 
     const t = useTranslations('Orders');
     const m = useTranslations('Menu');
@@ -31,7 +33,7 @@ const OrderItem: React.FC<Props> = ({ data, freezeCallback = () => {} }) => {
         <div className={styles.ordersItem}>
             <div className={styles.ordersItemImg}>
                 <Image
-                    src={isIndividual ? '/img/review1.png' : menu.backgroundPicture || '/img/review1.png'}
+                    src={isIndividual ? '/img/review1.png' : backgroundPicture || '/img/review1.png'}
                     alt="order"
                     fill
                 />
@@ -47,11 +49,7 @@ const OrderItem: React.FC<Props> = ({ data, freezeCallback = () => {} }) => {
             <div className={styles.ordersItemContent}>
                 <div className={styles.ordersItemTextInner}>
                     <Text variant="h3" upper>
-                        {isIndividual
-                            ? language === 'ru'
-                                ? 'Персональный заказ'
-                                : 'הזמנה אישית'
-                            : menu?.name[language]}
+                        {isIndividual ? (language === 'ru' ? 'Персональный заказ' : 'הזמנה אישית') : name[language]}
                     </Text>
 
                     {!isIndividual && <p className={styles.ordersItemDesc}>{menu?.description[language]}</p>}

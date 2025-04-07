@@ -443,11 +443,16 @@
 	margin-top: 0.8rem;
 }
 
-.swapItemParams{
+.swapItemParams, .swapItemParamsMini{
 	width: 100%;
 	margin-top: 2.4rem;
 	display: flex;
 	flex-wrap: wrap;
+}
+
+.swapItemParamsMini{
+	margin: 0 0 2rem 0;
+	gap: 8px 0;
 }
 
 .swapItemParam{
@@ -456,6 +461,15 @@
 	justify-content: center;
 	border-right: 1px solid #777E90;
 	line-height: 1.5;
+}
+
+.swapItemParamsMini .swapItemParam{
+	font-size: 1.4rem;
+	width: calc(100% / 2);
+}
+
+.swapItemParamsMini .swapItemParam{
+	border: none;
 }
 
 @media (max-width: 450px) {
@@ -662,4 +676,32 @@
 	width: calc(100% / 4 - 36px / 4);
 	font-size: 1.8rem;
 	font-weight: 500;
+}
+
+.pagination{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    padding: 1.6rem 0;
+}
+
+.paginationButton{
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    text-align: center;
+    color: var(--main);
+    border: 1px solid var(--main);
+    font-weight: 600;
+}
+
+.paginationButton.active{
+    color: #fff;
+    background: var(--main);
 }

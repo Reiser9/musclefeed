@@ -413,7 +413,7 @@ const AdminOrderCreate = () => {
                     error={!!errors.giftDaysCount}
                     errorMessage={errors.giftDaysCount?.message}
                     full
-                    title={'Подарочных дней по промокоду'}
+                    title={'Подарочных дней'}
                     value={watch('giftDaysCount', `${giftDaysCount}`)}
                     type="number"
                 />

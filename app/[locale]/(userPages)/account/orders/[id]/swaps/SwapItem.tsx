@@ -12,6 +12,7 @@ import { useAppSelector } from '@/shared/hooks/useRedux';
 import { Button } from '@/shared/ui/Button';
 import { ConfirmModal } from '@/shared/ui/Modal';
 import { useOrder } from '@/features/order';
+import { useTranslations } from 'next-intl';
 
 type Props = {
     data: Dish;
@@ -22,9 +23,10 @@ type Props = {
 const SwapItem: React.FC<Props> = ({ data, dayId, isAdmin = false }) => {
     const [confirmSwap, setConfirmSwap] = React.useState(false);
     const queryClient = useQueryClient();
+    const t = useTranslations("Menu");
 
     const language = useAppSelector((state) => state.app.language);
-    const { picture, name, description, dishType, id } = data || {};
+    const { picture, name, description, dishType, id, fats, calories, carbohydrates, proteins } = data || {};
 
     const revalidateRequests = () => {
         if (isAdmin) {
@@ -42,11 +44,11 @@ const SwapItem: React.FC<Props> = ({ data, dayId, isAdmin = false }) => {
         if (!dishType.id || !id || !dayId) return;
 
         if (isAdmin) {
-            adminReplaceDish(dayId, dishType.id, id, revalidateRequests);
+            adminReplaceDish(language, dayId, dishType.id, id, revalidateRequests);
             return;
         }
 
-        replaceDish(dayId, dishType.id, id, revalidateRequests);
+        replaceDish(language, dayId, dishType.id, id, revalidateRequests);
     };
 
     return (
@@ -60,6 +62,16 @@ const SwapItem: React.FC<Props> = ({ data, dayId, isAdmin = false }) => {
                     <p className={styles.swapElemTitle}>{name[language]}</p>
 
                     <p className={styles.swapElemText}>{description[language]}</p>
+
+                    <div className={styles.swapItemParamsMini}>
+                        <p className={styles.swapItemParam}>{t("ccal")} {calories}</p>
+
+                        <p className={styles.swapItemParam}>{t("b")} {proteins}</p>
+
+                        <p className={styles.swapItemParam}>{t("j")} {fats}</p>
+
+                        <p className={styles.swapItemParam}>{t("u")} {carbohydrates}</p>
+                    </div>
 
                     <Button
                         small

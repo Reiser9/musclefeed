@@ -115,13 +115,15 @@ input:focus::placeholder{
 	opacity: 0;	
 }
 
-.rtl{
+.rtl, .rtl ~ *{
 	direction: rtl;
 	font-family: 'Assistant', sans-serif;
+	font-weight: 600;
 }
 
-.rtl a, .rtl button, .rtl input, .rtl textarea, .rtl select{
+.rtl a, .rtl button, .rtl input, .rtl textarea, .rtl select, .rtl ~ * input, .rtl ~ * button, .rtl ~ * a, .rtl ~ * textarea, .rtl ~ * select{
 	font-family: 'Assistant', sans-serif;
+	font-weight: 600;
 }
 
 .mainImg{
@@ -142,6 +144,20 @@ input:focus::placeholder{
 
 .mainImg img{
 	object-fit: contain;
+}
+
+.rtl ~ * .orderPromoApply{
+	left: 8px;
+	right: auto;
+}
+
+.rtl ~ * .inputWithIcon input{
+	padding: 1.6rem 4.8rem 1.6rem 3.2rem!important;
+}
+
+.rtl ~ * .inputWithIcon svg{
+	right: 16px;
+	left: auto;
 }
 
 @media (max-width: 1630px) {

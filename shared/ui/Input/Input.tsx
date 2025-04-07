@@ -18,6 +18,7 @@ type Props = {
     errorMessage?: string;
     full?: boolean;
     disabled?: boolean;
+    className?: string;
     component?: 'input' | 'textarea';
 } & (InputHTMLAttributes<HTMLInputElement> | InputHTMLAttributes<HTMLTextAreaElement>);
 
@@ -33,6 +34,7 @@ const Input: React.FC<Props> = ({
     full = false,
     disabled = false,
     component = 'input',
+    className,
     ...props
 }) => {
     return (
@@ -44,7 +46,7 @@ const Input: React.FC<Props> = ({
             {title && <p className={styles.inputTitle}>{title}</p>}
 
             <div
-                className={cn(styles.inputWrapper, {
+                className={cn(styles.inputWrapper, className, {
                     [styles.disabled]: disabled,
                 })}
             >

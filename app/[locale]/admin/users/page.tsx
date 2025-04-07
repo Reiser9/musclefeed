@@ -18,9 +18,9 @@ import { PrivateWrapper } from '@/shared/wrappers/PrivateWrapper';
 const AdminUsers = () => {
     const [page, setPage] = React.useState(1);
 
-    const { getUsers } = useUsers();
+    const { getUsers, deleteUser } = useUsers();
 
-    const { data, isPending, isError } = useQuery({
+    const { data, isPending, isError, refetch } = useQuery({
         queryKey: ['admin_users', page],
         queryFn: () => getUsers(page, 12),
         placeholderData: keepPreviousData,
@@ -45,7 +45,11 @@ const AdminUsers = () => {
                     {!!data && !!data.users.length ? (
                         <div className={styles.adminTeamItems}>
                             {data?.users.map((user) => (
-                                <UserAdminItem key={user.id} data={user} />
+                                <UserAdminItem
+                                    key={user.id}
+                                    data={user}
+                                    deleteCallback={() => deleteUser(user.id, refetch)}
+                                />
                             ))}
                         </div>
                     ) : (

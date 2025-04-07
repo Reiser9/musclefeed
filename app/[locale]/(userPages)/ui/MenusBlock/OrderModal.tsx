@@ -365,9 +365,13 @@ const OrderModal: React.FC<Props> = ({
                                         placeholder={c('promo_placeholder')}
                                         value={promo}
                                         setValue={setPromo}
+                                        className="inputWithIcon"
                                     />
 
-                                    <button className={styles.orderPromoApply} onClick={applyPromoHandler}>
+                                    <button
+                                        className={cn(styles.orderPromoApply, 'orderPromoApply')}
+                                        onClick={applyPromoHandler}
+                                    >
                                         <Check />
                                     </button>
                                 </div>

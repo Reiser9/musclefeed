@@ -51,8 +51,27 @@ const useUsers = () => {
             method: 'PATCH',
             data: {
                 isVerified,
-                roles
+                roles,
             },
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        successCallback();
+
+        if ('data' in response) {
+            return response.data.user;
+        }
+    };
+
+    const deleteUser = async (userId: string | number, successCallback = () => {}) => {
+        const response = await request<{ user: UserShortInfo }>({
+            url: `/admin/user/${userId}`,
+            isAuth: true,
+            method: 'DELETE',
         });
 
         if (catchRequestError(response)) {
@@ -71,6 +90,7 @@ const useUsers = () => {
         getUsers,
         getUserById,
         updateUserInfo,
+        deleteUser,
     };
 };
 

@@ -42,13 +42,29 @@ const UserOrderPage = () => {
     });
 
     const createRequestHandler = () => {
-        createOrderRequest(String(id), changeType, comment, () => {
+        createOrderRequest(language, String(id), changeType, comment, () => {
             setComment('');
             setChangeModal(false);
         });
     };
 
-    const { daysCount, endDate, startDate, menu, skippedWeekdays, allergies, isIndividual, giftDaysCount } = data || {};
+    const {
+        daysCount,
+        endDate,
+        startDate,
+        menu,
+        skippedWeekdays,
+        allergies,
+        isIndividual,
+        giftDaysCount,
+        price,
+        finalPrice,
+        paidAmount,
+        promocodeDiscount,
+        menuDiscount,
+    } = data || {};
+
+    const { menuType } = menu || {};
 
     if (isPending) {
         return <Preloader page />;
@@ -99,7 +115,7 @@ const UserOrderPage = () => {
                                     <div className={styles.configItem}>
                                         <p className={styles.configItemSuptext}>{t('racion')}</p>
 
-                                        <p className={styles.configItemTitle}>{menu?.name[language]}</p>
+                                        <p className={styles.configItemTitle}>{menuType?.name[language]}</p>
 
                                         <button
                                             className={styles.configItemButton}
@@ -156,7 +172,7 @@ const UserOrderPage = () => {
                                     <p className={styles.configItemSuptext}>{t('delivery')}</p>
 
                                     <p className={styles.configItemTitle}>
-                                        {!isIndividual && language === 'ru' ? 'Начало доставки' : 'תחילת המשלוח'}{' '}
+                                        {!isIndividual && (language === 'ru' ? 'Начало доставки' : 'תחילת המשלוח')}{' '}
                                         {dayjs(startDate).format('DD.MM.YYYY')}
                                     </p>
                                 </div>
@@ -208,6 +224,38 @@ const UserOrderPage = () => {
                                             {t('request_button')}
                                         </button>
                                     )}
+                                </div>
+
+                                <div className={styles.configItem}>
+                                    <p className={styles.configItemSuptext}>{t('price')}</p>
+
+                                    <p className={styles.configItemTitle}>{price ? price : '-'}</p>
+                                </div>
+
+                                <div className={styles.configItem}>
+                                    <p className={styles.configItemSuptext}>{t('paidAmount')}</p>
+
+                                    <p className={styles.configItemTitle}>{paidAmount ? paidAmount : '-'}</p>
+                                </div>
+
+                                <div className={styles.configItem}>
+                                    <p className={styles.configItemSuptext}>{t('promocodeDiscount')}</p>
+
+                                    <p className={styles.configItemTitle}>
+                                        {promocodeDiscount ? promocodeDiscount : '-'}
+                                    </p>
+                                </div>
+
+                                <div className={styles.configItem}>
+                                    <p className={styles.configItemSuptext}>{t('menuDiscount')}</p>
+
+                                    <p className={styles.configItemTitle}>{menuDiscount ? menuDiscount : '-'}</p>
+                                </div>
+
+                                <div className={styles.configItem}>
+                                    <p className={styles.configItemSuptext}>{t('finalPrice')}</p>
+
+                                    <p className={styles.configItemTitle}>{finalPrice ? finalPrice : '-'}</p>
                                 </div>
                             </div>
                         </div>

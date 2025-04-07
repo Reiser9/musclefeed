@@ -17,6 +17,9 @@ import type {
 import useAlert from '@/shared/hooks/useAlert';
 import useRequest from '@/shared/hooks/useRequest';
 
+const successTitleRu = "Успешно";
+const successTitleHe = "בהצלחה";
+
 const useOrder = () => {
     const { request, catchRequestError, errorController } = useRequest();
     const { alertNotify } = useAlert();
@@ -389,6 +392,7 @@ const useOrder = () => {
     };
 
     const replaceDish = async (
+        lang: 'ru' | 'he' = 'ru',
         dayId: number | string,
         dishTypeId: number | string,
         dishId: number | string,
@@ -411,7 +415,10 @@ const useOrder = () => {
         }
 
         successCallback();
-        alertNotify('Успешно', 'Блюдо заменено');
+        const title = lang === "ru" ? successTitleRu : successTitleHe;
+        const message = lang === "ru" ? "Блюдо заменено" : "המנה הוחלפה";
+
+        alertNotify(title, message);
 
         if ('data' in response) {
             return response.data.dish;
@@ -419,6 +426,7 @@ const useOrder = () => {
     };
 
     const adminReplaceDish = async (
+        lang: 'ru' | 'he' = 'ru',
         dayId: number | string,
         dishTypeId: number | string,
         dishId: number | string,
@@ -441,7 +449,11 @@ const useOrder = () => {
         }
 
         successCallback();
-        alertNotify('Успешно', 'Блюдо заменено');
+
+        const title = lang === "ru" ? successTitleRu : successTitleHe;
+        const message = lang === "ru" ? "Блюдо заменено" : "המנה הוחלפה";
+
+        alertNotify(title, message);
 
         if ('data' in response) {
             return response.data.dish;
@@ -497,6 +509,7 @@ const useOrder = () => {
     };
 
     const updateChangeRequest = async (
+        lang: "ru" | "he" = "ru",
         requestId: number | string,
         isProcessed: boolean,
         successCallback = () => {},
@@ -515,8 +528,12 @@ const useOrder = () => {
             return '';
         }
 
+        const title = lang === "ru" ? successTitleRu : successTitleHe;
+        const message = lang === "ru" ? "Заявка сохранена" : "הבקשה נשמרה";
+
+        alertNotify(title, message);
+
         successCallback();
-        alertNotify('Успешно', 'Заявка сохранена');
 
         if ('data' in response) {
             return response.data.orderChangeRequest;
@@ -524,6 +541,7 @@ const useOrder = () => {
     };
 
     const createOrderRequest = async (
+        lang: "ru" | "he" = "ru",
         orderId: number | string,
         orderChangeType: ORDER_CHANGE_TYPES,
         comment: string,
@@ -544,7 +562,10 @@ const useOrder = () => {
             return '';
         }
 
-        alertNotify('Успешно', 'Запрос на изменение отправлен, с вами свяжется администратор');
+        const title = lang === "ru" ? successTitleRu : successTitleHe;
+        const message = lang === "ru" ? "Запрос на изменение отправлен, с вами свяжется администратор" : "בקשת שינוי נשלחה, מנהל המערכת יצור איתך קשר";
+
+        alertNotify(title, message);
         successCallback();
 
         if ('data' in response) {

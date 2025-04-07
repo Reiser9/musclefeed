@@ -25,7 +25,7 @@ type Props = {
 
 const FileUpload: React.FC<Props> = ({
     id,
-    accept = 'image/png,image/jpeg',
+    accept = 'image/png,image/jpeg,image/webp',
     filePath,
     setFilePath,
     title,

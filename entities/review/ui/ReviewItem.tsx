@@ -13,6 +13,11 @@ type Props = {
     data: ReviewSend;
 };
 
+const showRu = 'Смотреть весь отзыв';
+const showHe = 'צפו בביקורת כולה';
+const hideRu = 'Скрыть';
+const hideHe = 'הסתר';
+
 const ReviewItem: React.FC<Props> = ({ data }) => {
     const [seeFull, setSeeFull] = React.useState(false);
     const [isOverflowing, setIsOverflowing] = React.useState(false);
@@ -51,7 +56,7 @@ const ReviewItem: React.FC<Props> = ({ data }) => {
 
                     {isOverflowing && (
                         <button className={styles.reviewsItemTextFull} onClick={() => setSeeFull((prev) => !prev)}>
-                            {seeFull ? 'Свернуть' : 'Смотреть весь отзыв'}
+                            {seeFull ? (language === 'ru' ? hideRu : hideHe) : language === 'he' ? showRu : showHe}
                         </button>
                     )}
                 </div>

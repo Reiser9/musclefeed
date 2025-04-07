@@ -33,29 +33,35 @@ const useRequest = () => {
             return;
         }
 
+        const defaultErrorTitle = language === "ru" ? 'Ошибка' : "שגיאה";
+        const defaultErrorText = language === "ru" ? 'Что-то поломалось, скоро починим': "משהו נשבר, נתקן אותו בקרוב";
+        const networkErrorText = language === "ru" ? 'Сервер временно не работает' : "השרת מושבת באופן זמני";
+        const accessErrorText = language === "ru" ? 'Доступ ограничен' : "הגישה מוגבלת";
+        const notauthErrorText = language === "ru" ? 'Пользователь неавторизован' : "המשתמש אינו מורשה";
+
         switch (response.response?.status) {
             case 500:
-                throw new Error('Сервер временно не работает');
+                throw new Error(networkErrorText);
             case 403:
-                alertNotify('Ошибка', 'Доступ ограничен', 'error');
-                throw new Error('Доступ ограничен');
+                alertNotify(defaultErrorTitle, accessErrorText, 'error');
+                throw new Error(accessErrorText);
             case 401:
-                throw new Error('Пользователь неавторизован');
+                throw new Error(notauthErrorText);
             default:
                 if (customLogic) {
                     customLogic();
                 } else {
                     alertNotify(
-                        'Ошибка',
+                        defaultErrorTitle,
                         errorMessage
                             ? errorMessage
                             : typeof response.response?.data.message === 'object'
-                            ? response.response?.data.message[language] || 'Что-то поломалось, скоро починим'
-                            : response.response?.data.message || 'Что-то поломалось, скоро починим',
+                            ? response.response?.data.message[language] || defaultErrorText
+                            : response.response?.data.message || defaultErrorText,
                         'error',
                     );
                 }
-                throw new Error('Что-то поломалось, скоро починим');
+                throw new Error(defaultErrorText);
         }
     };
 
