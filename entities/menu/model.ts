@@ -24,6 +24,7 @@ export type MenuType = {
         name: LanguageField;
         backgroundPicture: string;
     };
+    backgroundPicture: string;
     order: number;
     isPublished: boolean;
     name: LanguageField;

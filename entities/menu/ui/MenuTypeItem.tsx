@@ -22,13 +22,14 @@ const MenuTypeItem: React.FC<Props> = ({ data, deleteCallback = () => {} }) => {
     const [deleteModal, setDeleteModal] = React.useState(false);
 
     const { id, name, description, menuType, initialPrice, isPublished } = data || {};
+    const { backgroundPicture } = menuType || {};
     const language = useAppSelector((state) => state.app.language);
 
     return (
         <>
             <div className={styles.menuAdmin}>
                 <Link href={`/${language}/admin/typesmenu/edit/${id}`} className={styles.menuAdminImg}>
-                    <Image src={menuType.backgroundPicture} alt={name[language]} fill />
+                    <Image src={backgroundPicture} alt={name[language]} fill />
                 </Link>
 
                 <Text>{name.ru}</Text>

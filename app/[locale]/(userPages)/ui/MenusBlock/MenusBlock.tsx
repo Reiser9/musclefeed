@@ -232,8 +232,7 @@ const MenusBlock = () => {
                                     }}
                                 >
                                     {data.map((type) => {
-                                        const { id, name, shortDescription, menuType, initialPrice } = type || {};
-                                        const { backgroundPicture } = menuType || {};
+                                        const { id, name, shortDescription, backgroundPicture, initialPrice } = type || {};
 
                                         return (
                                             <SwiperSlide

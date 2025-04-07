@@ -50,12 +50,13 @@ const AdminTypeMenuEdit = () => {
     };
 
     const { adminName, menuType, description, initialPrice, isPublished, name, order, shortDescription } = data || {};
+    const { backgroundPicture: backPic } = menuType || {};
 
     React.useEffect(() => {
-        if (menuType?.backgroundPicture) {
-            setBackgroundPicture(menuType?.backgroundPicture);
+        if (backPic) {
+            setBackgroundPicture(backPic);
         }
-    }, [menuType?.backgroundPicture]);
+    }, [backPic]);
 
     React.useEffect(() => {
         setPublish(!!isPublished);
