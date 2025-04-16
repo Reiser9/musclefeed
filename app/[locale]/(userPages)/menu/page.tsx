@@ -6,17 +6,17 @@ import dayjs, { Dayjs } from 'dayjs';
 import { DatePicker } from 'antd';
 import { useTranslations } from 'next-intl';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { Element } from 'react-scroll';
 
 import styles from './index.module.scss';
 import base from '@/shared/styles/base.module.scss';
 
-import { DATE_OF_DELIVERY } from '@/shared/consts/DATE_OF_DELIVERY';
 import { ArrowRight, Date as DateIcon } from '@/shared/icons';
 import { Banner } from '@/widgets/Banner';
 import { Team } from '../ui/Team';
 import { Reviews } from '../ui/Reviews';
 import { Delivery } from '../ui/Delivery';
-import { useAdminDish } from '@/features/admin';
+import { useAdminDish, useAdminSettings } from '@/features/admin';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 import { usePersonal } from '@/features/personal';
 import IndiOrderModal from './IndiOrderModal';
@@ -28,17 +28,6 @@ import { NotContent } from '@/shared/ui/NotContent';
 import { Button } from '@/shared/ui/Button';
 import { Modal } from '@/shared/ui/Modal';
 import { Text } from '@/shared/ui/Text';
-import { Element } from 'react-scroll';
-
-const startDate = dayjs(DATE_OF_DELIVERY);
-const disabledDate = (current: Dayjs) => {
-    if (!current) return false;
-
-    const today = dayjs().startOf('day');
-    const diff = current.diff(startDate, 'day');
-
-    return current.isBefore(today, 'day') || (diff >= 0 && diff % 2 === 1);
-};
 
 const MenuPage = () => {
     const [page, setPage] = React.useState(1);
@@ -82,6 +71,7 @@ const MenuPage = () => {
     const language = useAppSelector((state) => state.app.language);
     const { getDishTypes } = useAdminDish();
     const { getDishesIndi } = usePersonal();
+    const { getCycleDate } = useAdminSettings();
 
     const {
         data: dishtypes,
@@ -98,6 +88,24 @@ const MenuPage = () => {
         enabled: !!activeDishTypeId,
         placeholderData: keepPreviousData,
     });
+
+    const {
+        data: cycleDate,
+    } = useQuery({
+        queryKey: ['get_cycle_date'],
+        queryFn: () => getCycleDate(),
+    });
+
+    const disabledDate = React.useCallback((current: Dayjs) => {
+        if (!current) return false;
+
+        const startDate = dayjs(cycleDate);
+
+        const today = dayjs().startOf('day');
+        const diff = current.diff(startDate, 'day');
+
+        return current.isBefore(today, 'day') || current.isSame(today, 'day') || (diff >= 0 && diff % 2 === 1);
+    }, [cycleDate]);
 
     const t = useTranslations('Menu');
 

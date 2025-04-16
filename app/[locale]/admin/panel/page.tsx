@@ -8,14 +8,18 @@ import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 
 import styles from './index.module.scss';
+
+import useAlert from '@/shared/hooks/useAlert';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 import { useOrder } from '@/features/order';
 import { useFiles } from '@/features/files';
-import useAlert from '@/shared/hooks/useAlert';
+import { useAdminSettings } from '@/features/admin';
+import { useUserInfo } from '@/features/user';
 
 import { Button } from '@/shared/ui/Button';
 import { Text } from '@/shared/ui/Text';
-import { useUserInfo } from '@/features/user';
+import { Preloader } from '@/shared/ui/Preloader';
+import { NotContent } from '@/shared/ui/NotContent';
 
 const { RangePicker } = DatePicker;
 
@@ -28,16 +32,30 @@ const AdminPanel = () => {
 
     const [dishListDate, setDishListDate] = React.useState('');
 
+    const [cycleDatePicker, setCycleDatePicker] = React.useState('');
+
     const router = useRouter();
     const { createOrderRoute, createOrderDish } = useOrder();
     const { alertNotify } = useAlert();
     const { uploadMap } = useFiles();
     const language = useAppSelector((state) => state.app.language);
     const { getShortInfo } = useUserInfo();
+    const { getCycleDate, updateCycleDate } = useAdminSettings();
 
     const { data } = useQuery({
         queryKey: ['user_info'],
         queryFn: getShortInfo,
+    });
+
+    const {
+        data: cycleDate,
+        isPending: cycleDateIsPending,
+        isError: cycleDateIsError,
+    } = useQuery({
+        queryKey: ['get_cycle_date'],
+        queryFn: () => getCycleDate(),
+        gcTime: 0,
+        refetchOnMount: true,
     });
 
     const { roles } = data || {};
@@ -76,6 +94,18 @@ const AdminPanel = () => {
             alert('Ошибка при загрузке файла');
         }
     };
+
+    const changeCycleDate = (date: string) => {
+        if (!date) return;
+
+        updateCycleDate(date, () => setCycleDatePicker(date));
+    };
+
+    React.useEffect(() => {
+        if (cycleDate) {
+            setCycleDatePicker(cycleDate);
+        }
+    }, [cycleDate]);
 
     return (
         <div className={styles.adminTeam}>
@@ -163,6 +193,24 @@ const AdminPanel = () => {
                         <input type="file" accept="image/png,image/jpeg" onChange={handleFileChange} />
                     </div>
                 )}
+
+                {roles?.includes('ADMIN') &&
+                    (cycleDateIsPending ? (
+                        <Preloader page small />
+                    ) : cycleDateIsError ? (
+                        <NotContent text="Произошла ошибка при получении даты" />
+                    ) : (
+                        <div className={styles.adminWrp}>
+                            <Text variant="text2">Дата доставок</Text>
+
+                            <DatePicker
+                                className={styles.modalCalendar}
+                                format={'DD.MM.YYYY'}
+                                value={cycleDatePicker ? dayjs(cycleDatePicker) : null}
+                                onChange={(date) => changeCycleDate(date.format('YYYY-MM-DD'))}
+                            />
+                        </div>
+                    ))}
             </div>
         </div>
     );

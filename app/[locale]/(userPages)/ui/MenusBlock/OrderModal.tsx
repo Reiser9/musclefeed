@@ -272,12 +272,12 @@ const OrderModal: React.FC<Props> = ({
                         <p className={styles.orderItemName}>{c('duration')}</p>
 
                         <p className={styles.orderItemTitle}>
-                            {getDayDeclension(activePrice?.daysCount)}{' '}
-                            {!!activePrice?.giftDaysCount && <span>+ {activePrice?.giftDaysCount} дня</span>}
+                            {getDayDeclension(activePrice?.daysCount, language)}{' '}
+                            {!!activePrice?.giftDaysCount && <span>+ {activePrice?.giftDaysCount} {language === "ru" ? "дня" : "יום"}</span>}
                         </p>
 
                         {!!activePrice?.giftDaysCount && (
-                            <p className={styles.orderItemSubtext}>{activePrice?.giftDaysCount} дня в подарок!</p>
+                            <p className={styles.orderItemSubtext}>{activePrice?.giftDaysCount} {language === "ru" ? "дня в подарок!" : "יום מתנה!"}</p>
                         )}
                     </div>
 

@@ -22,13 +22,13 @@ import { useMenu } from '@/features/menu';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 import CalcCaloriesForm from './CalcCaloriesForm';
 import OrderModal from './OrderModal';
-import { DATE_OF_DELIVERY } from '@/shared/consts/DATE_OF_DELIVERY';
 
 import { Button } from '@/shared/ui/Button';
 import { Modal } from '@/shared/ui/Modal';
 import { NotContent } from '@/shared/ui/NotContent';
 import { Preloader } from '@/shared/ui/Preloader';
 import { Text } from '@/shared/ui/Text';
+import { useAdminSettings } from '@/features/admin';
 
 const getNextWeek = (language: 'ru' | 'he'): { date: string; day: string; fullDate: string }[] => {
     const dates: { date: string; day: string; fullDate: string }[] = [];
@@ -50,16 +50,6 @@ const getNextWeek = (language: 'ru' | 'he'): { date: string; day: string; fullDa
     }
 
     return dates;
-};
-
-const startDate = dayjs(DATE_OF_DELIVERY);
-const disabledDate = (current: Dayjs) => {
-    if (!current) return false;
-
-    const today = dayjs().startOf('day');
-    const diff = current.diff(startDate, 'day');
-
-    return current.isBefore(today, 'day') || current.isSame(today, 'day') || (diff >= 0 && diff % 2 === 1);
 };
 
 const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0];
@@ -95,6 +85,7 @@ const MenusBlock = () => {
     const [selectedDay, setSelectedDay] = React.useState(tomorrow);
 
     const { getTypesmenuUser, getMenuUser, getMenuDishesUser, getSwapMenuDishesUser } = useMenu();
+    const { getCycleDate } = useAdminSettings();
     const language = useAppSelector((state) => state.app.language);
     const t = useTranslations('Menu');
 
@@ -159,6 +150,24 @@ const MenusBlock = () => {
         setSelectedDay(tomorrow);
         setOrderSuccessModal(true);
     };
+
+    const {
+        data: cycleDate,
+    } = useQuery({
+        queryKey: ['get_cycle_date'],
+        queryFn: () => getCycleDate(),
+    });
+
+    const disabledDate = React.useCallback((current: Dayjs) => {
+        if (!current) return false;
+
+        const startDate = dayjs(cycleDate);
+
+        const today = dayjs().startOf('day');
+        const diff = current.diff(startDate, 'day');
+
+        return current.isBefore(today, 'day') || current.isSame(today, 'day') || (diff >= 0 && diff % 2 === 1);
+    }, [cycleDate]);
 
     React.useEffect(() => {
         if (data && data.length) {
