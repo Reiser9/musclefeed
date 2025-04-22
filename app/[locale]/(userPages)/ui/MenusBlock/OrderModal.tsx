@@ -125,6 +125,13 @@ const OrderModal: React.FC<Props> = ({
     const createOrderHandler = () => {
         if (!paymentMethodId || !dateDelivery || !currentMenu) return;
 
+        if(!fullName){
+            return alert(language === "ru" ? "Введите полное имя" : "הזן את השם המלא");
+        }
+        else if(!phone){
+            return alert(language === "ru" ? "Введите номер телефона" : "הזן מספר טלפון");
+        }
+
         let address;
 
         if (isAuth) {
@@ -139,6 +146,16 @@ const OrderModal: React.FC<Props> = ({
                 apartment: choosedAddress.apartment,
             };
         } else {
+            if(!email){
+                return alert(language === "ru" ? "Введите адрес электронной почты" : "הזן כתובת דוא \" ל");
+            }
+            else if(!street){
+                return alert(language === "ru" ? "Введите улицу" : "הזן את הרחוב");
+            }
+            else if(!house){
+                return alert(language === "ru" ? "Введите дом" : "הזן את הבית");
+            }
+
             address = {
                 cityId: `${city}`,
                 street: street,
@@ -170,7 +187,7 @@ const OrderModal: React.FC<Props> = ({
     };
 
     const applyPromoHandler = async () => {
-        if (!promo) return;
+        if (!promo || appliedPromo !== null) return;
 
         const promoResult = await applyPromocode(promo, `${activePrice?.discountedPrice}`);
 

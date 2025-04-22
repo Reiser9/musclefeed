@@ -48,7 +48,7 @@ const AccountSafe = () => {
 
         setPasswordAgainError('');
 
-        changePassword(data, () => {
+        changePassword(language, data, () => {
             reset();
             setPasswordAgain('');
         });

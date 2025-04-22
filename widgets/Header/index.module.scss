@@ -86,7 +86,7 @@
 	text-transform: uppercase;
 	animation: pulse 2s linear infinite;
 	font-weight: 600;
-	font-size: 1.6rem;
+	font-size: 1.8rem;
 }
 
 @keyframes pulse {
@@ -327,6 +327,10 @@
 	font-size: 1.8rem;
 	line-height: 1.35;
 	font-weight: 500;
+}
+
+.menuMobileLink.highlight{
+	font-size: 2.4rem;
 }
 
 .menuMobileLink svg{

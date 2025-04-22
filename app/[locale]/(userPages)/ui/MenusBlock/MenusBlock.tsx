@@ -66,7 +66,7 @@ const MenusBlock = () => {
     // Выбранное кол-во дней
     const [activePrice, setActivePrice] = React.useState<PriceItem | null>(null);
     // Пропускаемые дни
-    const [disabledDays, setDisabledDays] = React.useState<number[]>([5]);
+    const [disabledDays, setDisabledDays] = React.useState<number[]>([]);
     // Дата начала доставки
     const [dateDelivery, setDateDelivery] = React.useState('');
     const [dateDeliveryPicker, setDateDeliveryPicker] = React.useState(false);

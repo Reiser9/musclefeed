@@ -106,7 +106,7 @@ const UserOrderSwaps = () => {
                             {t('title2')}
                         </Text>
 
-                        <BackLink href={`/${language}/account`} text={t('back_text')} />
+                        <BackLink href={`/${language}/account/orders`} text={t('back_orders')} />
 
                         <div className={styles.configContent}>
                             <div className={styles.configTextInner}>
@@ -129,7 +129,7 @@ const UserOrderSwaps = () => {
 
                                     <div className={styles.swapDateButtons}>
                                         <button
-                                            className={cn(styles.swapDateButton, styles.arrow)}
+                                            className={cn(styles.swapDateButton, styles.arrow, "swaps")}
                                             onClick={() => swiperIntance.current?.slidePrev()}
                                         >
                                             <svg
@@ -192,7 +192,7 @@ const UserOrderSwaps = () => {
                                         </Swiper>
 
                                         <button
-                                            className={cn(styles.swapDateButton, styles.arrow)}
+                                            className={cn(styles.swapDateButton, styles.arrow, "swaps")}
                                             onClick={() => swiperIntance.current?.slideNext()}
                                         >
                                             <svg

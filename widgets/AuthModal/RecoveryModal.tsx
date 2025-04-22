@@ -9,6 +9,7 @@ import styles from './index.module.scss';
 import { ArrowRight, Lock, Mail } from '@/shared/icons';
 import { useAuth } from '@/features/user';
 import { useValidationMessages } from '@/shared/consts/VALIDATIONS_FORM';
+import { useAppSelector } from '@/shared/hooks/useRedux';
 
 import { Text } from '@/shared/ui/Text';
 import { Input } from '@/shared/ui/Input';
@@ -34,6 +35,7 @@ const RecoveryModal: React.FC<Props> = ({ value, setValue, loginCallback = () =>
     const { sendRecoveryCode, verifyRecoveryCode, changeRecoveryPassword } = useAuth();
     const t = useTranslations('Recovery');
     const { CODE, EMAIL, PASSWORD } = useValidationMessages();
+    const language = useAppSelector(state => state.app.language);
 
     const {
         register,
@@ -48,15 +50,15 @@ const RecoveryModal: React.FC<Props> = ({ value, setValue, loginCallback = () =>
 
         if (step === 1) {
             setEmail(email);
-            sendRecoveryCode(email, () => setStep(2));
+            sendRecoveryCode(language, email, () => setStep(2));
         } else if (step === 2) {
-            const newCode = await verifyRecoveryCode(email, code, () => setStep(3));
+            const newCode = await verifyRecoveryCode(language, email, code, () => setStep(3));
 
             if (newCode) {
                 setVerifyCode(newCode);
             }
         } else if (step === 3) {
-            changeRecoveryPassword(email, verifyCode, password, () => {
+            changeRecoveryPassword(language, email, verifyCode, password, () => {
                 setValue(false);
                 setEmail('');
                 setVerifyCode('');
@@ -127,7 +129,7 @@ const RecoveryModal: React.FC<Props> = ({ value, setValue, loginCallback = () =>
                 </form>
 
                 {step === 2 && (
-                    <button className={styles.recoveryPassword} onClick={() => sendRecoveryCode(email)}>
+                    <button className={styles.recoveryPassword} onClick={() => sendRecoveryCode(language, email)}>
                         {t('resend_code')}
                     </button>
                 )}

@@ -54,7 +54,7 @@ const RegisterModal: React.FC<Props> = ({ value, setValue, loginCallback = () =>
 
         setPasswordAgainError('');
 
-        registerRequest({ ...data, language: (language.toUpperCase() as 'RU') || 'HE' }, () => setValue(false));
+        registerRequest(language, { ...data, language: (language.toUpperCase() as 'RU') || 'HE' }, () => setValue(false));
     };
 
     return (

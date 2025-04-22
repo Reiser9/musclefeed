@@ -8,6 +8,9 @@ import useAlert from '@/shared/hooks/useAlert';
 import { useAppDispatch } from '@/shared/hooks/useRedux';
 import { setIsAuth, setIsVerified } from '@/store/slices/app';
 
+const successTitleRu = "Успешно";
+const successTitleHe = "בהצלחה";
+
 const useAuth = () => {
     const [authIsLoading, setAuthIsLoading] = React.useState(false);
 
@@ -15,7 +18,7 @@ const useAuth = () => {
     const dispatch = useAppDispatch();
     const { alertNotify } = useAlert();
 
-    const register = async (data: RegisterDTO, successCallback = () => {}) => {
+    const register = async (lang: "ru" | "he" = "ru", data: RegisterDTO, successCallback = () => {}) => {
         setAuthIsLoading(true);
         const response = await request<AuthResponse>({ url: '/auth/register', method: 'POST', data }).finally(() => {
             setAuthIsLoading(false);
@@ -31,11 +34,14 @@ const useAuth = () => {
             localStorage.setItem('accessToken', response.data.accessToken);
         }
 
-        alertNotify('Успешно', 'Вы зарегистрировались');
+        const title = lang === "ru" ? successTitleRu : successTitleHe;
+        const message = lang === "ru" ? "Вы зарегистрировались" : "נרשמת";
+
+        alertNotify(title, message);
         successCallback();
     };
 
-    const login = async (data: LoginDTO, successCallback = () => {}) => {
+    const login = async (lang: "ru" | "he" = "ru", data: LoginDTO, successCallback = () => {}) => {
         setAuthIsLoading(true);
         const response = await request<AuthResponse>({ url: '/auth/login', method: 'POST', data }).finally(() => {
             setAuthIsLoading(false);
@@ -51,11 +57,14 @@ const useAuth = () => {
             localStorage.setItem('accessToken', response.data.accessToken);
         }
 
-        alertNotify('Успешно', 'Вы авторизовались');
+        const title = lang === "ru" ? successTitleRu : successTitleHe;
+        const message = lang === "ru" ? "Вы авторизовались" : "אתה מחובר";
+
+        alertNotify(title, message);
         successCallback();
     };
 
-    const verifyEmail = async (code: string, successCallback = () => {}) => {
+    const verifyEmail = async (lang: "ru" | "he" = "ru", code: string, successCallback = () => {}) => {
         setAuthIsLoading(true);
         const response = await request({
             url: '/auth/verify-email',
@@ -71,11 +80,15 @@ const useAuth = () => {
         }
 
         dispatch(setIsVerified(true));
-        alertNotify('Успешно', 'Вы верифицировали аккаунт');
+
+        const title = lang === "ru" ? successTitleRu : successTitleHe;
+        const message = lang === "ru" ? "Вы верифицировали аккаунт" : "אימתת את החשבון";
+
+        alertNotify(title, message);
         successCallback();
     };
 
-    const logout = async (successCallback = () => {}) => {
+    const logout = async (lang: "ru" | "he" = "ru", successCallback = () => {}) => {
         setAuthIsLoading(true);
         const response = await request<AuthResponse>({ url: '/auth/logout' }).finally(() => {
             setAuthIsLoading(false);
@@ -88,22 +101,28 @@ const useAuth = () => {
         dispatch(setIsAuth(false));
         dispatch(setIsVerified(false));
         localStorage.removeItem('accessToken');
-        alertNotify('Успешно', 'Вы вышли с аккаунта');
+        const title = lang === "ru" ? successTitleRu : successTitleHe;
+        const message = lang === "ru" ? "Вы вышли с аккаунта" : "יצאת מהחשבון";
+
+        alertNotify(title, message);
         successCallback();
     };
 
-    const resendVerifyCode = async (successCallback = () => {}) => {
+    const resendVerifyCode = async (lang: "ru" | "he" = "ru", successCallback = () => {}) => {
         const response = await request<AuthResponse>({ url: '/auth/resend-verification', isAuth: true });
 
         if (catchRequestError(response)) {
             return errorController(response);
         }
 
-        alertNotify('Успешно', 'Код верификации выслан повторно');
+        const title = lang === "ru" ? successTitleRu : successTitleHe;
+        const message = lang === "ru" ? "Код верификации выслан повторно" : "קוד האימות נשלח שוב";
+
+        alertNotify(title, message);
         successCallback();
     };
 
-    const sendRecoveryCode = async (email: string, successCallback = () => {}) => {
+    const sendRecoveryCode = async (lang: "ru" | "he" = "ru", email: string, successCallback = () => {}) => {
         const response = await request({
             url: '/auth/send-recovery',
             method: 'POST',
@@ -116,11 +135,14 @@ const useAuth = () => {
             return errorController(response);
         }
 
-        alertNotify('Успешно', 'Код для восстановления пароля отправлен');
+        const title = lang === "ru" ? successTitleRu : successTitleHe;
+        const message = lang === "ru" ? "Код для восстановления пароля отправлен" : "קוד לשחזור סיסמה נשלח";
+
+        alertNotify(title, message);
         successCallback();
     };
 
-    const verifyRecoveryCode = async (email: string, code: string, successCallback = () => {}) => {
+    const verifyRecoveryCode = async (lang: "ru" | "he" = "ru", email: string, code: string, successCallback = () => {}) => {
         const response = await request<{ code: string }>({
             url: '/auth/verify-recovery',
             method: 'POST',
@@ -134,7 +156,10 @@ const useAuth = () => {
             return errorController(response);
         }
 
-        alertNotify('Успешно', 'Код для восстановления пароля подтвержден');
+        const title = lang === "ru" ? successTitleRu : successTitleHe;
+        const message = lang === "ru" ? "Код для восстановления пароля подтвержден" : "קוד לשחזור סיסמה אושר";
+
+        alertNotify(title, message);
         successCallback();
 
         if ('data' in response) {
@@ -143,6 +168,7 @@ const useAuth = () => {
     };
 
     const changeRecoveryPassword = async (
+        lang: "ru" | "he" = "ru",
         email: string,
         code: string,
         password: string,
@@ -162,11 +188,14 @@ const useAuth = () => {
             return errorController(response);
         }
 
-        alertNotify('Успешно', 'Пароль успешно изменен');
+        const title = lang === "ru" ? successTitleRu : successTitleHe;
+        const message = lang === "ru" ? "Пароль успешно изменен" : "הסיסמה שונתה בהצלחה";
+
+        alertNotify(title, message);
         successCallback();
     };
 
-    const changePassword = async (data: ChangePasswordDTO, successCallback = () => {}) => {
+    const changePassword = async (lang: "ru" | "he" = "ru", data: ChangePasswordDTO, successCallback = () => {}) => {
         const response = await request({
             url: '/auth/change-password',
             method: 'POST',
@@ -178,7 +207,10 @@ const useAuth = () => {
             return errorController(response);
         }
 
-        alertNotify('Успешно', 'Пароль успешно изменен');
+        const title = lang === "ru" ? successTitleRu : successTitleHe;
+        const message = lang === "ru" ? "Пароль успешно изменен" : "הסיסמה שונתה בהצלחה";
+
+        alertNotify(title, message);
         successCallback();
     };
 

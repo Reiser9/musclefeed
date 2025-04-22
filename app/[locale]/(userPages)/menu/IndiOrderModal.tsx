@@ -38,7 +38,7 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
     const [step, setStep] = React.useState(1);
     const [promo, setPromo] = React.useState('');
     const [appliedPromo, setAppliedPromo] = React.useState<number | null>(null);
-    const [finalPrice, setFinalPrice] = React.useState<number | null>(123);
+    const [finalPrice, setFinalPrice] = React.useState<number | null>(0);
     const t = useTranslations('Profile');
     const c = useTranslations('Cart');
 
@@ -110,11 +110,18 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
     const { allergies, firstName, lastName, email: userEmail, phone: userPhone } = user || {};
 
     const getTotalPrice = () => {
-        return cart.reduce((total, item) => total + item.dish.price * item.quantity, 0);
+        return cart.reduce((total, item) => total + (item.dish.price * item.quantity), 0);
     };
 
     const createOrderHandler = () => {
         if (!paymentMethodId || !dateDelivery) return;
+
+        if(!fullName){
+            return alert(language === "ru" ? "Введите полное имя" : "הזן את השם המלא");
+        }
+        else if(!phone){
+            return alert(language === "ru" ? "Введите номер телефона" : "הזן מספר טלפון");
+        }
 
         let address;
 
@@ -130,6 +137,16 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
                 apartment: choosedAddress.apartment,
             };
         } else {
+            if(!email){
+                return alert(language === "ru" ? "Введите адрес электронной почты" : "הזן כתובת דוא \" ל");
+            }
+            else if(!street){
+                return alert(language === "ru" ? "Введите улицу" : "הזן את הרחוב");
+            }
+            else if(!house){
+                return alert(language === "ru" ? "Введите дом" : "הזן את הבית");
+            }
+
             address = {
                 cityId: `${city}`,
                 street: street,
@@ -164,15 +181,15 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
     };
 
     const applyPromoHandler = async () => {
-        if (!promo) return;
+        if (!promo || appliedPromo !== null) return;
 
-        const promoResult = await applyPromocode(promo, `${123}`);
+        const promoResult = await applyPromocode(promo, `${finalPrice}`);
 
         if (promoResult) {
             setFinalPrice(promoResult.finalPrice);
             setAppliedPromo(promoResult.promocode?.id);
         } else {
-            setFinalPrice(123);
+            setFinalPrice(getTotalPrice());
             setAppliedPromo(null);
         }
     };
@@ -226,11 +243,12 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
         }
     }, [cities]);
 
-    // React.useEffect(() => {
-    //     if (activePrice.price) {
-    //         setFinalPrice(activePrice.price);
-    //     }
-    // }, [activePrice.price]);
+    React.useEffect(() => {
+        if(cart){
+            const sum = getTotalPrice();
+            setFinalPrice(sum);
+        }
+    }, [cart]);
 
     return (
         <Modal value={value} setValue={setValue} size="big">

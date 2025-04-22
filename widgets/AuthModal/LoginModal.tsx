@@ -10,6 +10,7 @@ import type { LoginDTO } from '@/entities/user/auth';
 import { ArrowRight, Lock, Mail } from '@/shared/icons';
 import { useAuth } from '@/features/user';
 import { useValidationMessages } from '@/shared/consts/VALIDATIONS_FORM';
+import { useAppSelector } from '@/shared/hooks/useRedux';
 
 import { Text } from '@/shared/ui/Text';
 import { Input } from '@/shared/ui/Input';
@@ -34,9 +35,10 @@ const LoginModal: React.FC<Props> = ({ value, setValue, registerCallback = () =>
     const { login, authIsLoading } = useAuth();
     const t = useTranslations('Login');
     const { EMAIL, PASSWORD } = useValidationMessages();
+    const language = useAppSelector(state => state.app.language);
 
     const onSubmit: SubmitHandler<LoginDTO> = (data) => {
-        login(data, () => setValue(false));
+        login(language, data, () => setValue(false));
     };
 
     return (

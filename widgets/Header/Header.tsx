@@ -26,6 +26,7 @@ const Header = () => {
     const { isAuth, isVerified } = useAppSelector((state) => state.app);
     const appLanguage = useAppSelector((state) => state.app.language);
     const { authIsLoading, logout } = useAuth();
+    const language = useAppSelector(state => state.app.language);
     const router = useRouter();
 
     const t = useTranslations('Header');
@@ -155,7 +156,7 @@ const Header = () => {
                                             className={cn(styles.headerSocialLink, styles.orange, {
                                                 [styles.disabled]: authIsLoading,
                                             })}
-                                            onClick={() => logout()}
+                                            onClick={() => logout(language)}
                                         >
                                             <Exit />
                                         </button>

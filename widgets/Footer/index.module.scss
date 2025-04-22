@@ -66,6 +66,10 @@
 	width: 100%;
 	padding: 0.8rem 0;
 	background: #0F1209;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 16px;
 }
 
 .footerBottomInner{
@@ -77,11 +81,24 @@
 	flex-wrap: wrap;
 }
 
+.footerTextes{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+}
+
 .footerCopy, .footerText, .footerLink{
 	font-size: 1.2rem;
 	line-height: 1.5;
 	color: #F2F3EE;
 	font-family: "Roboto", serif;
+}
+
+.footerTextes .footerText{
+	width: 100%;
+	text-align: center;
 }
 
 @media (max-width: 450px) {

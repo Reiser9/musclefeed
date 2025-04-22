@@ -97,7 +97,7 @@ const UserOrderPage = () => {
                             {t('title2')}
                         </Text>
 
-                        <BackLink href={`/${language}/account`} text={t('back_text')} />
+                        <BackLink href={`/${language}/account/orders`} text={t('back_orders')} />
 
                         <div className={styles.configContent}>
                             <div className={styles.configTextInner}>

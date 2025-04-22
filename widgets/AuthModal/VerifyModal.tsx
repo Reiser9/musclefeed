@@ -9,6 +9,7 @@ import styles from './index.module.scss';
 import { ArrowRight, Mail } from '@/shared/icons';
 import { useAuth } from '@/features/user';
 import { useValidationMessages } from '@/shared/consts/VALIDATIONS_FORM';
+import { useAppSelector } from '@/shared/hooks/useRedux';
 
 import { Modal } from '@/shared/ui/Modal';
 import { Text } from '@/shared/ui/Text';
@@ -31,9 +32,10 @@ const VerifyModal: React.FC<Props> = ({ value, setValue }) => {
     const { verifyEmail, authIsLoading, logout, resendVerifyCode } = useAuth();
     const { CODE } = useValidationMessages();
     const t = useTranslations('Verify');
+    const language = useAppSelector(state => state.app.language);
 
     const onSubmit: SubmitHandler<{ code: string }> = (data) => {
-        verifyEmail(data.code);
+        verifyEmail(language, data.code);
     };
 
     return (
@@ -61,7 +63,7 @@ const VerifyModal: React.FC<Props> = ({ value, setValue }) => {
                     </Button>
                 </form>
 
-                <button className={styles.recoveryPassword} disabled={authIsLoading} onClick={() => resendVerifyCode()}>
+                <button className={styles.recoveryPassword} disabled={authIsLoading} onClick={() => resendVerifyCode(language)}>
                     {t('resend_code')}
                 </button>
 

@@ -21,8 +21,7 @@ type Props = {
 const MenuTypeItem: React.FC<Props> = ({ data, deleteCallback = () => {} }) => {
     const [deleteModal, setDeleteModal] = React.useState(false);
 
-    const { id, name, description, menuType, initialPrice, isPublished } = data || {};
-    const { backgroundPicture } = menuType || {};
+    const { id, name, description, initialPrice, isPublished, backgroundPicture } = data || {};
     const language = useAppSelector((state) => state.app.language);
 
     return (

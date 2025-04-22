@@ -541,6 +541,18 @@
 	border-radius: 50px;
 }
 
+@media (max-width: 768px) {
+	.foodSale{
+		height: 28px;
+		top: -16px;
+	}
+}
+@media (max-width: 450px) {
+	.foodSale{
+		font-size: 1.3rem;
+	}
+}
+
 .foodFormChoose.active{
 	border: 1px solid #00A31E;
 	color: #00A31E;

@@ -118,3 +118,9 @@
 .dishListPointItem p:last-child{
     font-weight: 400;
 }
+
+@media print{
+    .printButton{
+        display: none;
+    }
+}

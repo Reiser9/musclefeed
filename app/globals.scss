@@ -160,6 +160,10 @@ input:focus::placeholder{
 	left: auto;
 }
 
+.rtl .swaps{
+	transform: rotate(180deg);
+}
+
 @media (max-width: 1630px) {
 	.mainImg{
 		max-width: 600px;
