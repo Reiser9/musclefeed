@@ -11,97 +11,110 @@ import base from '@/shared/styles/base.module.scss';
 
 import { Email, Facebook, Instagram, Phone, Telegram, WhatsApp } from '@/shared/icons';
 import { useAppSelector } from '@/shared/hooks/useRedux';
+import { Modal } from '@/shared/ui/Modal';
 
 const Footer = () => {
     const t = useTranslations('Footer');
     const language = useAppSelector((state) => state.app.language);
 
+    const [offerModal, setOfferModal] = React.useState(false);
+    const [privacyModal, setPrivacyModal] = React.useState(false);
+
     return (
-        <footer className={styles.footer}>
-            <div className={styles.footerTop}>
-                <div className={base.container}>
-                    <div className={styles.footerTopInner}>
-                        <div className={cn(styles.footerItem, styles.footerContacts)}>
-                            <div className={styles.footerLogo}>
-                                <Image src="/img/logo.png" alt="logo" fill />
-                            </div>
+        <>
+            <footer className={styles.footer}>
+                <div className={styles.footerTop}>
+                    <div className={base.container}>
+                        <div className={styles.footerTopInner}>
+                            <div className={cn(styles.footerItem, styles.footerContacts)}>
+                                <div className={styles.footerLogo}>
+                                    <Image src="/img/logo.png" alt="logo" fill />
+                                </div>
 
-                            <div className={styles.footerContact}>
-                                <Phone />
+                                <div className={styles.footerContact}>
+                                    <Phone />
 
-                                <div className={styles.footerContactWrap}>
-                                    <p className={styles.footerContactSuptitle}>{t('our_phone')}</p>
+                                    <div className={styles.footerContactWrap}>
+                                        <p className={styles.footerContactSuptitle}>{t('our_phone')}</p>
 
-                                    <a href="tel:0515883719" className={styles.footerContactLink}>
-                                        0515883719
+                                        <a href="tel:0515883719" className={styles.footerContactLink}>
+                                            0515883719
+                                        </a>
+
+                                        {/* <button className={styles.footerContactButton}>{t('request_call')}</button> */}
+                                    </div>
+                                </div>
+
+                                <div className={styles.footerContact}>
+                                    <Email />
+
+                                    <div className={styles.footerContactWrap}>
+                                        <p className={styles.footerContactSuptitle}>{t('our_email')}</p>
+
+                                        <a href="mailto:info@muscle-feed.il" className={styles.footerContactLink}>
+                                            info@muscle-feed.il
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div className={styles.footerSocial}>
+                                    <a
+                                        href="https://wa.me/972515883719"
+                                        target="_blank"
+                                        className={cn(styles.footerSocialLink, styles.green)}
+                                    >
+                                        <WhatsApp />
                                     </a>
 
-                                    {/* <button className={styles.footerContactButton}>{t('request_call')}</button> */}
+                                    <a
+                                        href="https://facebook.com/musclefeed.il"
+                                        target="_blank"
+                                        className={styles.footerSocialLink}
+                                    >
+                                        <Facebook />
+                                    </a>
+
+                                    <a href="#" target="_blank" className={cn(styles.footerSocialLink, styles.blue)}>
+                                        <Telegram />
+                                    </a>
+
+                                    <a
+                                        href="https://instagram.com/_u/musclefd_il"
+                                        target="_blank"
+                                        className={styles.footerSocialLink}
+                                    >
+                                        <Instagram />
+                                    </a>
                                 </div>
                             </div>
 
-                            <div className={styles.footerContact}>
-                                <Email />
+                            <div className={styles.footerItem}>
+                                {/* <p className={styles.footerItemTitle}>Наши рационы</p> */}
 
-                                <div className={styles.footerContactWrap}>
-                                    <p className={styles.footerContactSuptitle}>{t('our_email')}</p>
+                                <nav className={styles.footerItemNav}>
+                                    <Link href={`/${language}/faq`} className={styles.footerItemNavLink}>
+                                        {t('link1')}
+                                    </Link>
 
-                                    <a href="mailto:info@muscle-feed.il" className={styles.footerContactLink}>
-                                        info@muscle-feed.il
-                                    </a>
-                                </div>
+                                    <Link href={`/${language}/`} className={styles.footerItemNavLink}>
+                                        {t('link2')}
+                                    </Link>
+
+                                    <Link href={`/${language}/reviews`} className={styles.footerItemNavLink}>
+                                        {t('link3')}
+                                    </Link>
+
+                                    <button className={styles.footerItemNavLink} onClick={() => setOfferModal(true)}>
+                                        {t('offer')}
+                                    </button>
+
+                                    <button className={styles.footerItemNavLink} onClick={() => setPrivacyModal(true)}>
+                                        {t('privacy')}
+                                    </button>
+                                </nav>
                             </div>
 
-                            <div className={styles.footerSocial}>
-                                <a
-                                    href="https://wa.me/972515883719"
-                                    target="_blank"
-                                    className={cn(styles.footerSocialLink, styles.green)}
-                                >
-                                    <WhatsApp />
-                                </a>
-
-                                <a
-                                    href="https://facebook.com/musclefeed.il"
-                                    target="_blank"
-                                    className={styles.footerSocialLink}
-                                >
-                                    <Facebook />
-                                </a>
-
-                                <a href="#" target="_blank" className={cn(styles.footerSocialLink, styles.blue)}>
-                                    <Telegram />
-                                </a>
-
-                                <a
-                                    href="https://instagram.com/_u/musclefd_il"
-                                    target="_blank"
-                                    className={styles.footerSocialLink}
-                                >
-                                    <Instagram />
-                                </a>
-                            </div>
-                        </div>
-
-                        <div className={styles.footerItem}>
-                            {/* <p className={styles.footerItemTitle}>Наши рационы</p> */}
-
-                            <nav className={styles.footerItemNav}>
-                                <Link href={`/${language}/faq`} className={styles.footerItemNavLink}>
-                                    {t('link1')}
-                                </Link>
-
-                                <Link href={`/${language}/`} className={styles.footerItemNavLink}>
-                                    {t('link2')}
-                                </Link>
-
-                                <Link href={`/${language}/reviews`} className={styles.footerItemNavLink}>
-                                    {t('link3')}
-                                </Link>
-                            </nav>
-                        </div>
-
-                        {/* <div className={styles.footerItem}>
+                            {/* <div className={styles.footerItem}>
                                 <p className={styles.footerItemTitle}>Информация</p>
 
                                 <nav className={styles.footerItemNav}>
@@ -141,38 +154,894 @@ const Footer = () => {
                                     </a>
                                 </nav>
                             </div> */}
-                    </div>
-                </div>
-            </div>
-
-            <div className={styles.footerBottom}>
-                <div className={base.container}>
-                    <div className={styles.footerBottomInner}>
-                        <p className={styles.footerCopy}>&copy; {t('copy')}</p>
-
-                        <p className={styles.footerText}>{t('photo')}</p>
-
-                        <div className={styles.footerLinks}>
-                            <a download target="_blank" href={`/agree-${language}.docx`} className={styles.footerLink}>
-                                {t('offer')}
-                            </a>
-
-                            <a download target="_blank" href={`/policy-${language}.docx`} className={styles.footerLink}>
-                                {t('privacy')}
-                            </a>
                         </div>
                     </div>
                 </div>
 
-                <div className={base.container}>
-                    <div className={styles.footerTextes}>
-                        <p className={styles.footerText}>{t('text1')}</p>
-                        <p className={styles.footerText}>{t('text2')}</p>
-                        <p className={styles.footerText}>{t('text3')}</p>
+                <div className={styles.footerBottom}>
+                    <div className={base.container}>
+                        <div className={styles.footerBottomInner}>
+                            <p className={styles.footerCopy}>&copy; {t('copy')}</p>
+
+                            <p className={styles.footerText}>{t('photo')}</p>
+
+                            <div className={styles.footerLinks}>
+                                <button onClick={() => setOfferModal(true)} className={styles.footerLink}>
+                                    {t('offer')}
+                                </button>
+
+                                <button onClick={() => setPrivacyModal(true)} className={styles.footerLink}>
+                                    {t('privacy')}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={base.container}>
+                        <div className={styles.footerTextes}>
+                            <p className={styles.footerText}>{t('text1')}</p>
+                            <p className={styles.footerText}>{t('text2')}</p>
+                            <p className={styles.footerText}>{t('text3')}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </footer>
+            </footer>
+
+            <Modal size='big' value={offerModal} setValue={setOfferModal}>
+                <>
+                    {language === "ru" ?
+                        <div className={styles.footerModal}>
+                            <p className={styles.bold}>
+                                Пользовательское соглашение по использованию сайта и сервиса доставки питания
+                            </p>
+        
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    1. Общие положения
+                                </p>
+        
+                                <p>
+                                    1.1. Настоящее соглашение регулирует условия использования сайта и услуг, предоставляемых הזנת שרירים, включая доставку готовых блюд.
+                                </p>
+        
+                                <p>
+                                    1.2. Использование сайта, оформление заказа по телефону или через WhatsApp означает полное и безусловное согласие клиента со всеми условиями настоящего соглашения.
+                                </p>
+        
+                                <p>
+                                    1.3. Компания оставляет за собой право вносить изменения в соглашение в любое время по собственному усмотрению, без предварительного уведомления. Обязанность клиента — проверять актуальную версию соглашения при каждом использовании.
+                                </p>
+        
+                                <p>
+                                    1.4. Оформление заказа является обязательством к оплате, включая заказы, оплачиваемые наличными. В случае неуплаты компания оставляет за собой право немедленно прекратить обслуживание.
+                                </p>
+                            </div>
+        
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    2. Оформление заказа
+                                </p>
+        
+                                <p>
+                                    2.1. Заказ может быть оформлен через сайт, WhatsApp или по телефону. Онлайн-оплата на сайте в настоящий момент недоступна.
+                                </p>
+        
+                                <p>
+                                    2.2. После оформления заказа клиенту предоставляется доступ в личный кабинет с информацией о заказе, датах начала и окончания, сумме к оплате, списке блюд и статусе платежа.
+                                </p>
+        
+                                <p>
+                                    2.3. Доступны программы на 2, 4, 6, 14 или 26 дней. Цена за день снижается при увеличении количества дней. Все цены включают НДС.
+                                </p>
+        
+                                <p>
+                                    2.4. Замена блюд возможна не позднее чем за 48 часов до доставки, <span>только из предложенного ассортимента</span>, доступного в личном кабинете на сайте.
+                                </p>
+        
+                                <p>
+                                    2.5. В дальнейшем, при обновлении функционала сайта, будет доступен заказ отдельных блюд при условии минимальной суммы заказа и регистрации в личном кабинете.
+                                </p>
+                            </div>
+        
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    3. Оплата
+                                </p>
+        
+                                <p>
+                                    3.1. Доступные способы оплаты: Bit, банковский перевод, оплата картой по телефону, а также наличными — только по предварительной договорённости и при отсутствии других вариантов.
+                                </p>
+        
+                                <p>
+                                    3.2. Автоматическое списание не производится. По окончании программы менеджер связывается с клиентом для уточнения дальнейших действий.
+                                </p>
+        
+                                <p>
+                                    3.3. Предоставление подтверждения оплаты не является обязательным, однако при оплате через Bit или банковским переводом рекомендуется отправить скриншот перевода.
+                                </p>
+        
+                                <p>
+                                    3.4. Счёт-фактура (חשבונית מס קבלה) оформляется и сохраняется в бухгалтерской системе в момент получения оплаты, в соответствии с законодательством Государства Израиль. Клиент вправе запросить копию счёта, и она будет предоставлена ему в разумный срок любым из указанных им способов связи (WhatsApp, Email, SMS). Отправка чека осуществляется по запросу.
+                                </p>
+                            </div>
+        
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    4. Доставка
+                                </p>
+        
+                                <p>
+                                    4.1. Доставка осуществляется каждые два дня, в вечернее время с 17:00 до 23:00. Клиенту известно, что возможны задержки по независящим от компании причинам (дорожные пробки, погодные условия, форс-мажорные обстоятельства, логистические сбои). В этих случаях компания не несёт ответственности за задержку или компенсацию.
+                                </p>
+        
+                                <p>
+                                    4.2. При отсутствии клиента по адресу доставки, по предварительной договорённости заказ может быть оставлен у двери, в шкафу электрощита или в другом согласованном месте, с обязательным фотографированием. Такие действия считаются завершением доставки.
+                                </p>
+        
+                                <p>
+                                    4.3. Доставка осуществляется в холодильных сумках. Ответственность за дальнейшее хранение (в холодильнике или морозильнике) полностью лежит на клиенте.
+                                </p>
+        
+                                <p>
+                                    4.4. Компания не несёт ответственности за порчу продукции вследствие ненадлежащего хранения у клиента, но при возможности предложит компенсацию. Продукция передаётся охлаждённой или замороженной.
+                                </p>
+                            </div>
+        
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    5. Отмена, возвраты и приостановка
+                                </p>
+        
+                                <p>
+                                    5.1. Отмена заказа возможна не позднее чем за 48 часов до даты доставки. В случае более поздней отмены компания оставляет за собой право отказать в возврате по своему усмотрению.
+                                </p>
+        
+                                <p>
+                                    5.2. Возврат производится на основе перерасчёта фактически использованных дней по актуальному тарифу для соответствующей продолжительности программы. <span>Деньги за уже доставленные блюда не возвращаются</span>, даже если они не были использованы. Пример: если клиент заказал 26-дневную программу, но отменил после 6 дней — возврат рассчитывается по цене 6-дневной программы.
+                                </p>
+        
+                                <p>
+                                    5.3. Клиент вправе приостановить программу на срок до 30 календарных дней, при условии предварительного согласования и письменного подтверждения от компании. Неиспользованные дни будут активированы с момента возобновления программы.
+                                </p>
+                            </div>
+        
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    6. Аллергии и здоровье
+                                </p>
+        
+                                <p>
+                                    6.1. Некоторые блюда могут содержать аллергены (глютен, кунжут, орехи, молочные продукты, рыбу и пр.).
+                                </p>
+        
+                                <p>
+                                    6.2. Клиент обязан заранее сообщить о любых пищевых ограничениях. Компания предпримет усилия для их учёта, но <span>не гарантирует полное исключение аллергенов.</span>
+                                </p>
+        
+                                <p>
+                                    6.3. Компания соблюдает строгие внутренние правила на кухне, однако не может исключить вероятность ошибок по причине человеческого фактора. Ответственность за выбор блюд и предотвращение контакта с аллергенами лежит исключительно на клиенте.
+                                </p>
+        
+                                <p>
+                                    6.4. Меню и рекомендации не являются медицинскими советами. Клиент подтверждает, что услуга не является медицинской и не контролируется медицинскими органами.
+                                </p>
+                            </div>
+        
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    7. Поведение клиентов
+                                </p>
+        
+                                <p>
+                                    7.1. Компания вправе прекратить обслуживание клиента, отказывающегося от оплаты или ведущего себя агрессивно, оскорбительно или угрожающе.
+                                </p>
+        
+                                <p>
+                                    7.2. Компания сохраняет переписку (WhatsApp, звонки) в пределах возможного для собственной правовой защиты.
+                                </p>
+                            </div>
+        
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    8. Конфиденциальность и платежи
+                                </p>
+        
+                                <p>
+                                    8.1. Данные банковских карт не сохраняются. Оплата осуществляется в режиме реального времени с представителем.
+                                </p>
+        
+                                <p>
+                                    8.2. Процесс оплаты проводится в зашифрованной системе. <span>Фотография чека высылается по запросу клиента.</span>
+                                </p>
+        
+                                <p>
+                                    8.3. Оформляя заказ, клиент даёт согласие на получение уведомлений, информации о сервисе, акциях и специальных предложениях по указанным каналам связи (WhatsApp, SMS, Email). Отказ от уведомлений возможен в любой момент.
+                                </p>
+                            </div>
+        
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    9. Применимое право и юрисдикция
+                                </p>
+        
+                                <p>
+                                    9.1. Настоящее соглашение регулируется исключительно законодательством Государства Израиль.
+                                </p>
+        
+                                <p>
+                                    9.2. Все споры и разногласия подлежат рассмотрению исключительно в суде города Хайфа.
+                                </p>
+        
+                                <p>
+                                    9.3. Компания осуществляет доставку также по пятницам, в шаббат и в праздничные дни, если не указано иное.
+                                </p>
+                            </div>
+                        </div>
+                    : <div className={styles.footerModal}>
+                        <p className={styles.bold}>
+                            תקנון שימוש באתר ובשירות משלוחי ארוחות
+                        </p>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                1. כללי
+                            </p>
+
+                            <p>
+                                1.1. תקנון זה נועד להסדיר את תנאי השימוש באתר והשירותים המוצעים על ידי הזנת שרירים, לרבות שירות משלוחי ארוחות.
+                            </p>
+
+                            <p>
+                                1.2. השימוש באתר, ביצוע הזמנה טלפונית, דרך WhatsApp או באמצעות האתר מהווים אישור והסכמה מצד הלקוח לכל תנאי התקנון.
+                            </p>
+
+                            <p>
+                                1.3. המפעיל רשאי לעדכן את התקנון בכל עת לפי שיקול דעתו הבלעדי, ללא צורך במתן הודעה מראש. האחריות להתעדכן בתקנון בכל שימוש – על הלקוח.
+                            </p>
+
+                            <p>
+                                1.4. ביצוע ההזמנה מהווה התחייבות לתשלום, לרבות במקרים בהם הוסכם על תשלום במזומן. במקרה בו לא בוצע תשלום בפועל – החברה שומרת לעצמה את הזכות להפסיק את השירות באופן מיידי.
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                2. אופן ההזמנה
+                            </p>
+
+                            <p>
+                                2.1. ניתן לבצע הזמנות דרך האתר, WhatsApp או טלפונית. אין אפשרות לתשלום מקוון באתר בשלב זה.
+                            </p>
+
+                            <p>
+                                2.2. בעת ההרשמה נפתח ללקוח חשבון אישי הכולל את פרטי ההזמנה, התוכנית, סכום לתשלום, תאריכי התחלה וסיום, רשימת המנות וסטטוס תשלום.
+                            </p>
+
+                            <p>
+                                2.3. ההזמנות ניתנות ל-2, 4, 6, 14 או 26 ימים, כאשר המחיר היומי יורד ככל שמספר הימים גבוה יותר. כל המחירים כוללים מע&quote;מ כחוק.
+                            </p>
+
+                            <p>
+                                2.4. תפריט המנות קבוע מראש, אך ניתן לבצע החלפות עד 48 שעות לפני מועד האספקה מתוך המבחר הזמין באזור האישי באתר בלבד.
+                            </p>
+
+                            <p>
+                                2.5. במועד עתידי, בהתאם לעדכון באתר, תתאפשר הזמנת מנות בודדות מתוך התפריט, בכפוף לסכום הזמנה מינימלי ובכפוף לרישום באזור האישי.
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                3. תשלום
+                            </p>
+
+                            <p>
+                                3.1. אפשרויות תשלום: Bit, העברה בנקאית, תשלום טלפוני בכרטיס אשראי, ומזומן – רק בתיאום מראש ורק אם לא קיימת אפשרות אחרת.
+                            </p>
+
+                            <p>
+                                3.2. לא מתבצע חיוב אוטומטי. עם סיום התוכנית יוצרת החברה קשר עם הלקוח לבדיקת המשך השירות.
+                            </p>
+
+                            <p>
+                                3.3. אין דרישה לאישור תשלום מראש, אך במקרה של תשלום ב-Bit או בהעברה בנקאית – מומלץ לשלוח צילום מסך לאימות.
+                            </p>
+
+                            <p>
+                                3.4. חשבונית מס קבלה מונפקת ונשמרת במערכת הנהלת החשבונות עם קבלת התשלום, בהתאם לדרישות החוק במדינת ישראל. הלקוח רשאי לבקש העתק של החשבונית והיא תימסר לו תוך זמן סביר, באמצעות אחד מאמצעי ההתקשרות שמסר WhatsApp, דוא&quote;ל, SMS שליחת החשבונית תתבצע לפי בקשה בלבד.
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                4. אספקה ומשלוחים
+                            </p>
+
+                            <p>
+                                4.1. האספקה מתבצעת כל יומיים בין השעות 17:00–23:00. ידוע ללקוח כי ייתכנו עיכובים במסירה בשל נסיבות שאינן תלויות בחברה (כגון עומסי תנועה, מזג אוויר, כוח עליון או תקלות לוגיסטיות). במקרה כזה – לא תחול אחריות על החברה לעיכוב ו/או לפיצוי בגינו.
+                            </p>
+
+                            <p>
+                                4.2. במידה והלקוח לא נמצא בבית – ניתן להשאיר את המשלוח ליד הדלת, בארון חשמל או במקום אחר בתיאום מראש, בצירוף צילום. השארת משלוח במקום חלופי לפי בקשת הלקוח תיחשב כהשלמה מלאה.
+                            </p>
+
+                            <p>
+                                4.3. המזון מסופק בתיקים מקררים. האחריות לשמירת המנות בקירור/הקפאה לאחר מסירתן – חלה על הלקוח בלבד.
+                            </p>
+
+                            <p>
+                                4.4. החברה אינה אחראית על קלקול המזון עקב אחסון לקוי אצל הלקוח, אך תפעל מתוך שירותיות ומתן פתרון במידת האפשר. המזון נמסר כשהוא מקורר או מצונן, והאחריות לשמירתו בטמפרטורה מתאימה חלה על הלקוח בלבד.
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                5. ביטולים, החזרים והקפאות
+                            </p>
+
+                            <p>
+                                5.1. ניתן לבטל הזמנה עד 48 שעות לפני מועד האספקה המתוכנן. במקרה של ביטול מאוחר יותר – תיבחן אפשרות החזר לפי שיקול דעת החברה.
+                            </p>
+
+                            <p>
+                                5.2. החזר יתבצע על בסיס חישוב מחדש לפי כמות הימים שנצרכו בפועל, במחיר היומי הרלוונטי לתקופת צריכה זו. לא יינתן החזר כספי עבור מנות שסופקו, גם אם לא נעשה בהן שימוש בפועל .לדוגמה: לקוח שרכש מנוי ל-26 ימים אך הפסיק לאחר 6 ימים, יחויב לפי מחיר יומי של תוכנית ל-6 ימים.
+                            </p>
+
+                            <p>
+                                5.3. הלקוח רשאי להקפיא את התוכנית לתקופה של עד 30 ימים קלנדריים, בתיאום מראש עם החברה ובאישור מפורש. יתרת הימים שלא נוצלו תיזקף לטובתו ותופעל ממועד החידוש, בכפוף לתיאום מראש.
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                6. אלרגיות ואחריות רפואית
+                            </p>
+
+                            <p>
+                                6.1. חלק מהמנות עלולות להכיל אלרגנים (גלוטן, שומשום, אגוזים, חלב, דגים וכד').
+                            </p>
+
+                            <p>
+                                6.2. הלקוח נדרש לעדכן מראש בכל רגישות או מגבלה. החברה תעשה מאמץ להתאים את המנות, אך אינה מתחייבת להוצאת אלרגנים.
+                            </p>
+
+                            <p>
+                                6.3. החברה פועלת בהתאם לנהלים מחמירים במטבח, אך אינה יכולה להתחייב לאי קיומן של טעויות אנוש. האחריות המלאה לזיהוי והימנעות מחשיפה לרכיבים אלרגניים – חלה על הלקוח בלבד.
+                            </p>
+
+                            <p>
+                                6.4. התפריטים והשירותים אינם מהווים ייעוץ רפואי או תחליף לטיפול תזונתי. הלקוח מאשר כי השירות אינו מפוקח רפואית.
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                7. התנהלות מול לקוחות
+                            </p>
+
+                            <p>
+                                7.1. החברה שומרת לעצמה את הזכות להפסיק שירות ללקוח שבחר שלא לשלם או שהתנהל באופן מאיים/פוגעני.
+                            </p>
+
+                            <p>
+                                7.2. החברה שומרת תיעוד התכתבויות והודעות WhatsApp/שיחות ככל הניתן לצורכי הגנה משפטית.
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                8. פרטיות ותשלומים
+                            </p>
+
+                            <p>
+                                8.1. פרטי אשראי מוזנים בשיחה טלפונית עם נציג ולא נשמרים על ידי החברה.
+                            </p>
+
+                            <p>
+                                8.2. תהליך הגבייה מתבצע באופן חד-פעמי ומאובטח בלבד. שליחת צילום הקבלה תתבצע לפי בקשת הלקוח.
+                            </p>
+
+                            <p>
+                                8.3. לקוח המבצע הזמנה נותן בזאת הסכמה לקבלת עדכונים, הודעות שירות, הטבות ומבצעים עתידיים באמצעי ההתקשרות שמסר (WhatsApp / SMS / דוא"ל). ניתן לבקש הפסקת קבלת הודעות בכל עת.
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                9. סמכות שיפוט
+                            </p>
+
+                            <p>
+                                9.1. בכל מחלוקת יחולו דיני מדינת ישראל בלבד.
+                            </p>
+
+                            <p>
+                                9.2. סמכות השיפוט המקומית הבלעדית – לבית המשפט בחיפה בלבד.
+                            </p>
+
+                            <p>
+                                9.3. החברה מבצעת אספקות גם בימי שישי, שבת ובחגים – אלא אם צויין אחרת.
+                            </p>
+                        </div>
+                    </div>}
+                </>
+            </Modal>
+
+            <Modal size='big' value={privacyModal} setValue={setPrivacyModal}>
+            <>
+                    {language === "ru" ?
+                        <div className={styles.footerModal}>
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    Политика конфиденциальности
+                                </p>
+
+                                <p>
+                                    <span>Дата вступления в силу:</span> 05.06.2023
+                                </p>
+
+                                <p>
+                                    <span>Название компании:</span> הזנת שרירים
+                                </p>
+
+                                <p>
+                                    <span>Форма регистрации:</span> עוסק מורשה
+                                </p>
+                                
+                                <p>
+                                    <span>Местонахождение и деятельность:</span> исключительно на территории Государства Израиль
+                                </p>
+                            </div>
+        
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    1. Общие положения
+                                </p>
+        
+                                <p>
+                                    Настоящая политика описывает, какие персональные данные мы собираем, как мы их используем, храним, передаём и защищаем, а также какие права есть у клиентов в соответствии с законодательством Государства Израиль, включая Закон о защите персональных данных (חוק הגנת הפרטיות, תשמ"א-1981).
+                                </p>
+        
+                                <p>
+                                    Используя наш сайт, оформляя заказ, вступая с нами в контакт по телефону или через WhatsApp, вы соглашаетесь с данной политикой.
+                                </p>
+                            </div>
+        
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    2. Какие данные мы собираем
+                                </p>
+        
+                                <p>
+                                    Мы собираем следующие данные, предоставленные вами добровольно:
+                                </p>
+
+                                <ul>
+                                    <li>Имя и фамилия</li>
+                                    <li>Телефон</li>
+                                    <li>Адрес электронной почты</li>
+                                    <li>Адрес доставки</li>
+                                    <li>Пол и возраст</li>
+                                    <li>Пищевые предпочтения и ограничения</li>
+                                    <li>Информация об оплатах</li>
+                                    <li>При оплате по телефону: данные банковской карты (не сохраняются)</li>
+                                </ul>
+        
+                                <p>
+                                    Также автоматически собирается техническая информация с помощью Meta Pixel (Facebook/Instagram), в том числе:
+                                </p>
+
+                                <p>
+                                    – IP-адрес,
+                                </p>
+
+                                <p>
+                                    – источник перехода,
+                                </p>
+
+                                <p>
+                                    – действия на сайте (в рамках рекламной аналитики).
+                                </p>
+                            </div>
+
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    3. Где и как хранятся данные
+                                </p>
+        
+                                <p>
+                                    Все данные хранятся на защищённом сервере и в CRM-системе, к которой имеет доступ только владелец бизнеса.
+                                </p>
+        
+                                <p>
+                                    Данные также могут временно храниться в электронных таблицах (Google Sheets, Word/Excel) в рамках операционной деятельности.
+                                </p>
+                            </div>
+
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    4. Кто имеет доступ к данным
+                                </p>
+        
+                                <ul>
+                                    <li>Владелец бизнеса имеет доступ ко всей информации.</li>
+                                    <li>Курьеры получают только необходимый минимум: имя, адрес доставки, номер заказа и телефон клиента.</li>
+                                    <li>Бухгалтер получает информацию, связанную с оплатами и счётами (без других персональных данных).</li>
+                                </ul>
+                            </div>
+
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    5. Цели использования данных
+                                </p>
+
+                                <p>
+                                    Мы используем персональные данные только для следующих целей:
+                                </p>
+        
+                                <ul>
+                                    <li>оформление и доставка заказов,</li>
+                                    <li>персональная коммуникация,</li>
+                                    <li>управление учётной записью клиента,</li>
+                                    <li>выставление счетов и отчётность,</li>
+                                    <li>улучшение качества сервиса и внутренней аналитики,</li>
+                                    <li>отправка персональных уведомлений или информационных сообщений.</li>
+                                </ul>
+
+                                <p>
+                                    Мы не продаём и не передаём ваши данные третьим лицам без законного основания.
+                                </p>
+                            </div>
+
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    6. Связь с клиентами
+                                </p>
+
+                                <p>
+                                    Мы используем WhatsApp, телефон и Email для:
+                                </p>
+        
+                                <ul>
+                                    <li>подтверждения заказов,</li>
+                                    <li>ответов на запросы,</li>
+                                    <li>отправки персонализированных уведомлений,</li>
+                                    <li>информирования об изменениях, скидках или новинках.</li>
+                                </ul>
+
+                                <p>
+                                    Если вы не желаете получать сообщения, вы можете в любой момент написать нам и отказаться от получения информации.
+                                </p>
+                            </div>
+
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    7. Доступ, изменение и удаление данных
+                                </p>
+
+                                <p>
+                                    Любой клиент вправе:
+                                </p>
+        
+                                <ul>
+                                    <li>запросить копию своих персональных данных,</li>
+                                    <li>потребовать исправление неверной информации,</li>
+                                    <li>попросить об удалении своих данных (в случае отсутствия законных обязательств по их хранению).</li>
+                                </ul>
+
+                                <p>
+                                    Запрос можно направить через:
+                                </p>
+
+                                <ul>
+                                    <li>WhatsApp</li>
+                                    <li>Email</li>
+                                    <li>или в письменной форме по номеру телефона, указанному на сайте.</li>
+                                </ul>
+                            </div>
+
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    8. Cookies и трекинг
+
+                                </p>
+
+                                <p>
+                                    На сайте используется Meta Pixel (пиксель Facebook/Instagram), который отслеживает действия пользователей в рамках рекламной аналитики. Мы не используем cookies напрямую, но сторонние инструменты могут создавать их.
+                                </p>
+        
+                                <p>
+                                    Клиент может отключить трекинг через настройки браузера или блокировщик рекламы.
+                                </p>
+                            </div>
+
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    9. Безопасность информации
+                                </p>
+
+                                <p>
+                                    Мы применяем стандартные меры информационной безопасности, включая:
+                                </p>
+
+                                <ul>
+                                    <li>хостинг на защищённом сервере,</li>
+                                    <li>ограниченный доступ,</li>
+                                    <li>отсутствие хранения банковских данных в системе.</li>
+                                </ul>
+        
+                                <p>
+                                    Оплата по карте осуществляется в реальном времени и не сохраняется ни в каком виде.
+                                </p>
+                            </div>
+
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    10. Несовершеннолетние пользователи
+                                </p>
+
+                                <p>
+                                    Если клиент младше 18 лет — для оформления заказа требуется разрешение от родителя или законного представителя. Мы вправе запросить подтверждение такого согласия.
+                                </p>
+                            </div>
+
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    11. Изменения политики
+                                </p>
+
+                                <p>
+                                    Компания оставляет за собой право вносить изменения в настоящую политику в любое время. Обновлённая версия вступает в силу с момента её публикации на сайте.
+                                </p>
+                            </div>
+
+                            <div className={styles.footerModalBlock}>
+                                <p className={styles.bold}>
+                                    12. Контакты
+                                </p>
+
+                                <p>
+                                    Если у вас есть вопросы по поводу конфиденциальности или обработки данных — свяжитесь с нами через WhatsApp или Email, указанные на сайте.
+                                </p>
+                            </div>
+                        </div>
+                    : <div className={styles.footerModal}>
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                מדיניות פרטיות
+                            </p>
+
+                            <p>
+                                <span>תאריך כניסה לתוקף</span>: 30.03.2023
+                            </p>
+
+                            <p>
+                                <span>שם העסק</span>: הזנת שרירים
+                            </p>
+
+                            <p>
+                                <span>סוג ההתאגדות</span>: עוסק מורשה
+                            </p>
+                            
+                            <p>
+                                <span>תחום פעילות</span>: שירותים ניתנים בתחומי מדינת ישראל בלבד
+                            </p>
+                        </div>
+    
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                1. כללי
+                            </p>
+    
+                            <p>
+                                מסמך זה מפרט את אופן איסוף, שימוש, שמירה, העברה והגנה על מידע אישי של לקוחות, בהתאם לדין במדינת ישראל, לרבות חוק הגנת הפרטיות, התשמ"א–1981 ותקנות הגנת הפרטיות.
+                            </p>
+    
+                            <p>
+                                השימוש באתר, יצירת קשר עמנו או ביצוע הזמנה מהווים הסכמה למדיניות זו.
+                            </p>
+                        </div>
+    
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                2. מידע שנאסף
+                            </p>
+    
+                            <p>
+                                אנו אוספים את המידע האישי הבא מלקוחות אשר נמסר לנו באופן יזום:
+                            </p>
+
+                            <ul>
+                                <li>שם מלא</li>
+                                <li>מספר טלפון</li>
+                                <li>כתובת דוא"ל</li>
+                                <li>כתובת למשלוח</li>
+                                <li>מגדר וגיל</li>
+                                <li>העדפות תזונתיות ורגישויות</li>
+                                <li>מידע בנוגע לתשלום</li>
+                                <li>בעת תשלום טלפוני – פרטי כרטיס אשראי (לא נשמרים)</li>
+                            </ul>
+    
+                            <p>
+                                בנוסף, נאסף מידע טכני באמצעות Meta Pixel, הכולל:
+                            </p>
+
+                            <p>
+                                כתובת IP
+                            </p>
+
+                            <p>
+                                מקור ההפניה
+                            </p>
+
+                            <p>
+                                פעילות באתר לצורכי אנליטיקה פרסומית
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                3. אחסון ואבטחת מידע
+                            </p>
+    
+                            <p>
+                                המידע נשמר על שרת מאובטח וכן במערכת CRM פנימית. חלק מהמידע עשוי להישמר זמנית במסמכים אלקטרוניים כגון Google Sheets או קבצי Excel כחלק מפעילות תפעולית.
+                            </p>
+    
+                            <p>
+                                הגישה למידע מוגבלת אך ורק לבעל העסק.
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                4. גישה למידע על ידי צדדים שלישיים
+                            </p>
+    
+                            <ul>
+                                <li>רק בעל העסק מחזיק בגישה מלאה למידע.</li>
+                                <li>שליחים מקבלים מידע מינימלי הדרוש לביצוע משלוח: שם הלקוח, כתובת, מספר טלפון ומספר הזמנה.</li>
+                                <li>הנהלת חשבונות מקבלת מידע הנדרש להפקת חשבוניות בלבד – ללא נתונים אישיים מעבר לכך.</li>
+                            </ul>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                5. מטרות השימוש במידע
+                            </p>
+
+                            <p>
+                                אנו עושים שימוש במידע האישי למטרות הבאות בלבד:
+                            </p>
+    
+                            <ul>
+                                <li>עיבוד הזמנות ואספקה</li>
+                                <li>תקשורת עם הלקוח</li>
+                                <li>ניהול חשבון משתמש</li>
+                                <li>הפקת חשבוניות ודיווחים לרשויות</li>
+                                <li>שיפור השירות וניתוח פנימי</li>
+                                <li>משלוח הודעות אישיות או עדכונים בנוגע לשירות</li>
+                            </ul>
+
+                            <p>
+                                המידע לא יועבר או יימכר לגורמים חיצוניים, למעט כנדרש בחוק.
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                6. תקשורת עם לקוחות
+                            </p>
+
+                            <p>
+                                אנו משתמשים ב-WhatsApp, טלפון ודוא"ל למטרות:
+                            </p>
+    
+                            <ul>
+                                <li>אישור הזמנות</li>
+                                <li>מענה לפניות</li>
+                                <li>משלוח הודעות ועדכונים</li>
+                                <li>מידע על מבצעים או שינויים בשירות</li>
+                            </ul>
+
+                            <p>
+                                לקוח שאינו מעוניין בקבלת הודעות יכול לבקש הסרה מרשימת התפוצה בכל עת.
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                7. עיון, תיקון ומחיקת מידע
+                            </p>
+
+                            <p>
+                                כל לקוח זכאי:
+                            </p>
+    
+                            <ul>
+                                <li>לעיין במידע האישי שנשמר אודותיו</li>
+                                <li>לדרוש תיקון פרטים שגויים</li>
+                                <li>לבקש את מחיקת המידע (בכפוף לחוק)</li>
+                            </ul>
+
+                            <p>
+                                בקשות ניתן לשלוח באמצעות:
+                            </p>
+
+                            <ul>
+                                <li>WhatsApp</li>
+                                <li>דוא"ל</li>
+                                <li>או בטלפון, כפי שמופיע באתר</li>
+                            </ul>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                8. קבצי Cookies וכלי ניטור
+                            </p>
+
+                            <p>
+                                באתר נעשה שימוש ב־Meta Pixel בלבד, לצורכי אנליטיקה ופרסום. איננו משתמשים ישירות בקבצי cookies, אך ייתכן שכלים חיצוניים יוצרים אותם.
+                            </p>
+    
+                            <p>
+                                הלקוח רשאי לחסום cookies דרך הגדרות הדפדפן או שימוש בתוסף חוסם פרסומות.
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                9. אבטחת מידע
+                            </p>
+
+                            <p>
+                                אנו נוקטים באמצעי אבטחה מקובלים, הכוללים:
+                            </p>
+
+                            <ul>
+                                <li>שרת מאובטח</li>
+                                <li>גישה מוגבלת למורשים בלבד</li>
+                                <li>אי-שמירת פרטי כרטיסי אשראי</li>
+                            </ul>
+    
+                            <p>
+                                התשלום הטלפוני מתבצע בזמן אמת ונמחק מיד לאחר מכן.
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                10. קטינים
+                            </p>
+
+                            <p>
+                                במקרה של פנייה מלקוח מתחת לגיל 18 – נדרשת הסכמת הורה או אפוטרופוס חוקי. אנו שומרים לעצמנו את הזכות לדרוש הוכחה להסכמה זו.
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                11. שינויים במדיניות
+                            </p>
+
+                            <p>
+                                אנו שומרים לעצמנו את הזכות לשנות ולעדכן מדיניות זו בכל עת. הגרסה המעודכנת תיכנס לתוקף עם פרסומה באתר.
+                            </p>
+                        </div>
+
+                        <div className={styles.footerModalBlock}>
+                            <p className={styles.bold}>
+                                12. יצירת קשר
+                            </p>
+
+                            <p>
+                                לכל שאלה או בקשה בנוגע לפרטיות – ניתן לפנות אלינו ב-WhatsApp או בדוא"ל, כמפורט באתר.
+                            </p>
+                        </div>
+                    </div>}
+                </>
+            </Modal>
+        </>
     );
 };
 

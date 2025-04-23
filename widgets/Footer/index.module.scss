@@ -155,6 +155,7 @@
 .footerItemNavLink{
 	color: #0F1209;
 	line-height: 1.5;
+	padding: 0;
 }
 
 .footerLogo{
@@ -262,6 +263,39 @@
 	color: #777E90;
 	font-size: 1.4rem;
 	line-height: 1.5;
+}
+
+.footerModal{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 32px;
+}
+
+.footerModalBlock{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.bold, .footerModal p span{
+	font-weight: 600;
+}
+
+.footerModal ul{
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	align-items: flex-start;
+	gap: 6px;
+	padding-left: 2rem;
+}
+
+.footerModal ul li{
+	list-style-type: disc;
 }
 
 @media (any-hover: hover) {

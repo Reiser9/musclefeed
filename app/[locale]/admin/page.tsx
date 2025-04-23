@@ -52,6 +52,12 @@ const AdminMain = () => {
         individualCount,
     } = orderStats || {};
 
+    React.useEffect(() => {
+        if(status){
+            setPage(1);
+        }
+    }, [status]);
+
     if (isPending) {
         return <Preloader page />;
     }
@@ -147,7 +153,7 @@ const AdminMain = () => {
                 </div>
 
                 <div className={styles.titleWrap}>
-                    <Text>Заказы {!!data && !!data.orders.length && `(${data.orders.length})`}</Text>
+                    <Text>Заказы {!!data && !!data.totalCount && `(${data.totalCount})`}</Text>
 
                     <Button href={`/${language}/admin/order/create`} small>
                         Создать
