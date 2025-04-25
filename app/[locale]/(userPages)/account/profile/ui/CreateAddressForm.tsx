@@ -63,7 +63,7 @@ const CreateAddressForm = ({ successCallback = () => {} }: { successCallback?: (
     }, [data]);
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form className={styles.createAddressForm} onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.addAddressForm}>
                 {isPending ? (
                     <Preloader page small offIndent />

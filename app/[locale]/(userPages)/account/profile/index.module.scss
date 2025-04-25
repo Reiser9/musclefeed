@@ -121,6 +121,10 @@
 	color: #00A31E;
 }
 
+.createAddressForm{
+	width: 100%;
+}
+
 .addAddressForm{
 	width: 100%;
 	margin: 2.4rem 0;
@@ -194,6 +198,7 @@
 	align-items: center;
 	justify-content: center;
 	color: #00A31E;
+	color: #E6E8EC;
 }
 
 .profileAddressButton svg{
@@ -203,7 +208,7 @@
 }
 
 .profileAddressButton.disabled{
-	color: #E6E8EC;
+	color: #00A31E;
     pointer-events: none;
 }
 
