@@ -11,6 +11,7 @@ import styles from './index.module.scss';
 
 import { Cross, Menu } from '@/shared/icons';
 import { useUserInfo } from '@/features/user';
+import { useOrder } from '@/features/order';
 
 const AdminSidebar = () => {
     const [showSidebar, setShowSidebar] = React.useState(false);
@@ -18,10 +19,16 @@ const AdminSidebar = () => {
     const locale = React.useMemo(() => (pathname.split('/')[1] === 'he' ? 'he' : 'ru'), [pathname]);
 
     const { getShortInfo } = useUserInfo();
+    const { getUnprocessedCount } = useOrder();
 
     const { data } = useQuery({
         queryKey: ['user_info'],
         queryFn: getShortInfo,
+    });
+
+    const { data: unprocessedCount } = useQuery({
+        queryKey: ['unproccessed_count'],
+        queryFn: getUnprocessedCount
     });
 
     const { roles } = data || {};
@@ -61,7 +68,7 @@ const AdminSidebar = () => {
                         })}
                         onClick={() => setShowSidebar(false)}
                     >
-                        Запросы изменений
+                        Запросы изменений ({unprocessedCount})
                     </Link>
 
                     <Link

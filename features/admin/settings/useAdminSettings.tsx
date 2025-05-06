@@ -1,13 +1,16 @@
 'use client';
 
+import type { Settings } from '@/entities/settings';
+import useAlert from '@/shared/hooks/useAlert';
 import useRequest from '@/shared/hooks/useRequest';
 
 const useAdminSettings = () => {
     const { request, catchRequestError, errorController } = useRequest();
+    const { alertNotify } = useAlert();
 
-    const getCycleDate = async () => {
-        const response = await request<{ cycleStartDate: string }>({
-            url: '/settings/cycle-start-date',
+    const getSettings = async () => {
+        const response = await request<{ settings: Settings }>({
+            url: '/settings',
             isAuth: true,
         });
 
@@ -17,13 +20,13 @@ const useAdminSettings = () => {
         }
 
         if ('data' in response) {
-            return response.data.cycleStartDate;
+            return response.data.settings;
         }
     };
 
     const updateCycleDate = async (cycleStartDate: string, successCallback = () => {}) => {
-        const response = await request<{ settings: { id: number; cycleStartDate: string } }>({
-            url: `/admin/settings/`,
+        const response = await request<{ settings: Settings }>({
+            url: `/admin/settings/cycle-start-date`,
             method: 'PATCH',
             data: {
                 cycleStartDate,
@@ -43,9 +46,40 @@ const useAdminSettings = () => {
         }
     };
 
+    const updateContacts = async (
+        phoneNumber: string,
+        email: string,
+        socials: { name: string; link: string; icon: string }[],
+        successCallback = () => {},
+    ) => {
+        const response = await request<{ settings: Settings }>({
+            url: `/admin/settings/contact`,
+            method: 'PATCH',
+            data: {
+                phoneNumber,
+                email,
+                socials,
+            },
+            isAuth: true,
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        successCallback();
+        alertNotify('Успешно', 'Данные сохранены');
+
+        if ('data' in response) {
+            return response.data.settings;
+        }
+    };
+
     return {
-        getCycleDate,
+        getSettings,
         updateCycleDate,
+        updateContacts,
     };
 };
 

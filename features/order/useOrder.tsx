@@ -17,8 +17,8 @@ import type {
 import useAlert from '@/shared/hooks/useAlert';
 import useRequest from '@/shared/hooks/useRequest';
 
-const successTitleRu = "Успешно";
-const successTitleHe = "בהצלחה";
+const successTitleRu = 'Успешно';
+const successTitleHe = 'בהצלחה';
 
 const useOrder = () => {
     const { request, catchRequestError, errorController } = useRequest();
@@ -155,9 +155,9 @@ const useOrder = () => {
         }
     };
 
-    const getAdminOrders = async (page: number, limit = 10, status: string) => {
+    const getAdminOrders = async (page: number, limit = 10, status: string, search = '') => {
         const response = await request<OrderPagination>({
-            url: `/admin/order?page=${page}&limit=${limit}&status=${status}`,
+            url: `/admin/order?page=${page}&limit=${limit}&status=${status}&search=${search}`,
             isAuth: true,
         });
 
@@ -415,8 +415,8 @@ const useOrder = () => {
         }
 
         successCallback();
-        const title = lang === "ru" ? successTitleRu : successTitleHe;
-        const message = lang === "ru" ? "Блюдо заменено" : "המנה הוחלפה";
+        const title = lang === 'ru' ? successTitleRu : successTitleHe;
+        const message = lang === 'ru' ? 'Блюдо заменено' : 'המנה הוחלפה';
 
         alertNotify(title, message);
 
@@ -450,8 +450,8 @@ const useOrder = () => {
 
         successCallback();
 
-        const title = lang === "ru" ? successTitleRu : successTitleHe;
-        const message = lang === "ru" ? "Блюдо заменено" : "המנה הוחלפה";
+        const title = lang === 'ru' ? successTitleRu : successTitleHe;
+        const message = lang === 'ru' ? 'Блюдо заменено' : 'המנה הוחלפה';
 
         alertNotify(title, message);
 
@@ -509,7 +509,7 @@ const useOrder = () => {
     };
 
     const updateChangeRequest = async (
-        lang: "ru" | "he" = "ru",
+        lang: 'ru' | 'he' = 'ru',
         requestId: number | string,
         isProcessed: boolean,
         successCallback = () => {},
@@ -528,8 +528,8 @@ const useOrder = () => {
             return '';
         }
 
-        const title = lang === "ru" ? successTitleRu : successTitleHe;
-        const message = lang === "ru" ? "Заявка сохранена" : "הבקשה נשמרה";
+        const title = lang === 'ru' ? successTitleRu : successTitleHe;
+        const message = lang === 'ru' ? 'Заявка сохранена' : 'הבקשה נשמרה';
 
         alertNotify(title, message);
 
@@ -541,7 +541,7 @@ const useOrder = () => {
     };
 
     const createOrderRequest = async (
-        lang: "ru" | "he" = "ru",
+        lang: 'ru' | 'he' = 'ru',
         orderId: number | string,
         orderChangeType: ORDER_CHANGE_TYPES,
         comment: string,
@@ -562,14 +562,33 @@ const useOrder = () => {
             return '';
         }
 
-        const title = lang === "ru" ? successTitleRu : successTitleHe;
-        const message = lang === "ru" ? "Запрос на изменение отправлен, с вами свяжется администратор" : "בקשת שינוי נשלחה, מנהל המערכת יצור איתך קשר";
+        const title = lang === 'ru' ? successTitleRu : successTitleHe;
+        const message =
+            lang === 'ru'
+                ? 'Запрос на изменение отправлен, с вами свяжется администратор'
+                : 'בקשת שינוי נשלחה, מנהל המערכת יצור איתך קשר';
 
         alertNotify(title, message);
         successCallback();
 
         if ('data' in response) {
             return response.data.orderChangeRequest;
+        }
+    };
+
+    const getUnprocessedCount = async () => {
+        const response = await request<{ count: number }>({
+            url: `/admin/order/change-request/unprocessed-count`,
+            isAuth: true,
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        if ('data' in response) {
+            return response.data.count;
         }
     };
 
@@ -599,6 +618,7 @@ const useOrder = () => {
         getAdminDayDishes,
         getAdminReplacementDishes,
         adminReplaceDish,
+        getUnprocessedCount,
     };
 };
 

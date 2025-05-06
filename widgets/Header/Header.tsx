@@ -6,6 +6,7 @@ import cn from 'classnames';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 
 import styles from './index.module.scss';
 import base from '@/shared/styles/base.module.scss';
@@ -13,6 +14,7 @@ import base from '@/shared/styles/base.module.scss';
 import { ArrowBottom, Cross, Exit, Menu, Phone, Telegram, UserLogin, WhatsApp } from '@/shared/icons';
 import { LoginModal, RecoveryModal, RegisterModal, VerifyModal } from '../AuthModal';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/useRedux';
+import { useAdminSettings } from '@/features/admin';
 import { useAuth } from '@/features/user';
 import { setLanguage } from '@/store/slices/app';
 
@@ -26,8 +28,19 @@ const Header = () => {
     const { isAuth, isVerified } = useAppSelector((state) => state.app);
     const appLanguage = useAppSelector((state) => state.app.language);
     const { authIsLoading, logout } = useAuth();
-    const language = useAppSelector(state => state.app.language);
+    const language = useAppSelector((state) => state.app.language);
     const router = useRouter();
+
+    const { getSettings } = useAdminSettings();
+
+    const { data: settings } = useQuery({
+        queryKey: ['settings'],
+        queryFn: () => getSettings(),
+        gcTime: 0,
+        refetchOnMount: true,
+    });
+
+    const { socials, phoneNumber } = settings || {};
 
     const t = useTranslations('Header');
 
@@ -61,9 +74,9 @@ const Header = () => {
                                 <ArrowBottom />
                             </div>
 
-                            <a href="tel:0515883719" className={styles.headerPhone}>
+                            <a href={`tel:${phoneNumber}`} className={styles.headerPhone}>
                                 <Phone />
-                                0515883719
+                                {phoneNumber}
                             </a>
                         </div>
                     </div>
@@ -232,6 +245,17 @@ const Header = () => {
                 </div>
 
                 <div className={styles.headerSocialLinkMenu}>
+                    {socials?.map((data) => (
+                        <a
+                            key={data.id}
+                            href={data.link}
+                            target="_blank"
+                            className={cn(styles.headerSocialLink, styles.green)}
+                        >
+                            <Image src={data.icon} alt={data.name} />
+                        </a>
+                    ))}
+
                     <a href="#" target="_blank" className={cn(styles.headerSocialLink, styles.blue)}>
                         <Telegram />
                     </a>

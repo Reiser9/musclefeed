@@ -85,7 +85,7 @@ const MenusBlock = () => {
     const [selectedDay, setSelectedDay] = React.useState(tomorrow);
 
     const { getTypesmenuUser, getMenuUser, getMenuDishesUser, getSwapMenuDishesUser } = useMenu();
-    const { getCycleDate } = useAdminSettings();
+    const { getSettings } = useAdminSettings();
     const language = useAppSelector((state) => state.app.language);
     const t = useTranslations('Menu');
 
@@ -151,23 +151,26 @@ const MenusBlock = () => {
         setOrderSuccessModal(true);
     };
 
-    const {
-        data: cycleDate,
-    } = useQuery({
-        queryKey: ['get_cycle_date'],
-        queryFn: () => getCycleDate(),
+    const { data: settings } = useQuery({
+        queryKey: ['settings'],
+        queryFn: () => getSettings(),
     });
 
-    const disabledDate = React.useCallback((current: Dayjs) => {
-        if (!current) return false;
+    const { cycleStartDate } = settings || {};
 
-        const startDate = dayjs(cycleDate);
+    const disabledDate = React.useCallback(
+        (current: Dayjs) => {
+            if (!current) return false;
 
-        const today = dayjs().startOf('day');
-        const diff = current.diff(startDate, 'day');
+            const startDate = dayjs(cycleStartDate);
 
-        return current.isBefore(today, 'day') || current.isSame(today, 'day') || (diff >= 0 && diff % 2 === 1);
-    }, [cycleDate]);
+            const today = dayjs().startOf('day');
+            const diff = current.diff(startDate, 'day');
+
+            return current.isBefore(today, 'day') || current.isSame(today, 'day') || (diff >= 0 && diff % 2 === 1);
+        },
+        [cycleStartDate],
+    );
 
     React.useEffect(() => {
         if (data && data.length) {
@@ -241,7 +244,8 @@ const MenusBlock = () => {
                                     }}
                                 >
                                     {data.map((type) => {
-                                        const { id, name, shortDescription, backgroundPicture, initialPrice } = type || {};
+                                        const { id, name, shortDescription, backgroundPicture, initialPrice } =
+                                            type || {};
 
                                         return (
                                             <SwiperSlide

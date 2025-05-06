@@ -16,8 +16,8 @@ import { Banner } from '@/widgets/Banner';
 import { Team } from '../ui/Team';
 import { Reviews } from '../ui/Reviews';
 import { Delivery } from '../ui/Delivery';
-import { useAdminDish, useAdminSettings } from '@/features/admin';
-import { useAppSelector } from '@/shared/hooks/useRedux';
+import { useAdminSettings } from '@/features/admin';
+// import { useAppSelector } from '@/shared/hooks/useRedux';
 import { usePersonal } from '@/features/personal';
 import IndiOrderModal from './IndiOrderModal';
 import DishIndiItem from './DishIndiItem';
@@ -36,7 +36,7 @@ const MenuPage = () => {
     const [deliveryModal, setDeliveryModal] = React.useState(false);
     const [orderModal, setOrderModal] = React.useState(false);
     const [orderSuccessModal, setOrderSuccessModal] = React.useState(false);
-    const [activeDishTypeId, setActiveDishTypeId] = React.useState<number | null>(null);
+    // const [activeDishTypeId, setActiveDishTypeId] = React.useState<number | null>(null);
 
     const [cart, setCart] = React.useState<{ quantity: number; dish: Dish }[]>([]);
 
@@ -68,44 +68,46 @@ const MenuPage = () => {
         });
     };
 
-    const language = useAppSelector((state) => state.app.language);
-    const { getDishTypes } = useAdminDish();
+    // const language = useAppSelector((state) => state.app.language);
+    // const { getDishTypes } = useAdminDish();
     const { getDishesIndi } = usePersonal();
-    const { getCycleDate } = useAdminSettings();
+    const { getSettings } = useAdminSettings();
 
-    const {
-        data: dishtypes,
-        isPending: dishtypesIsPending,
-        isError: dishtypesIsError,
-    } = useQuery({
-        queryKey: ['dish_types'],
-        queryFn: getDishTypes,
-    });
+    // const {
+    //     data: dishtypes,
+    //     isPending: dishtypesIsPending,
+    //     isError: dishtypesIsError,
+    // } = useQuery({
+    //     queryKey: ['dish_types'],
+    //     queryFn: getDishTypes,
+    // });
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['indi_foods', page, activeDishTypeId],
-        queryFn: () => getDishesIndi(page, 15, '', activeDishTypeId ? activeDishTypeId : ''),
-        enabled: !!activeDishTypeId,
+        queryKey: ['indi_foods', page],
+        queryFn: () => getDishesIndi(page, 15, ''),
+        // enabled: !!activeDishTypeId,
         placeholderData: keepPreviousData,
     });
 
     const {
-        data: cycleDate,
+        data: settings,
     } = useQuery({
-        queryKey: ['get_cycle_date'],
-        queryFn: () => getCycleDate(),
+        queryKey: ['settings'],
+        queryFn: () => getSettings(),
     });
+
+    const { cycleStartDate } = settings || {};
 
     const disabledDate = React.useCallback((current: Dayjs) => {
         if (!current) return false;
 
-        const startDate = dayjs(cycleDate);
+        const startDate = dayjs(cycleStartDate);
 
         const today = dayjs().startOf('day');
         const diff = current.diff(startDate, 'day');
 
         return current.isBefore(today, 'day') || current.isSame(today, 'day') || (diff >= 0 && diff % 2 === 1);
-    }, [cycleDate]);
+    }, [cycleStartDate]);
 
     const t = useTranslations('Menu');
 
@@ -113,11 +115,11 @@ const MenuPage = () => {
         return cart.reduce((total, item) => total + item.dish.price * item.quantity, 0);
     };
 
-    React.useEffect(() => {
-        if (!!dishtypes) {
-            setActiveDishTypeId(dishtypes[0].id);
-        }
-    }, [dishtypes]);
+    // React.useEffect(() => {
+    //     if (!!dishtypes) {
+    //         setActiveDishTypeId(dishtypes[0].id);
+    //     }
+    // }, [dishtypes]);
 
     return (
         <>
@@ -179,7 +181,7 @@ const MenuPage = () => {
                                         </div>
                                     </div>
 
-                                    {dishtypesIsPending ? (
+                                    {/* {dishtypesIsPending ? (
                                         <Preloader small offIndent page />
                                     ) : dishtypesIsError ? (
                                         <NotContent />
@@ -205,7 +207,7 @@ const MenuPage = () => {
                                                 </div>
                                             )}
                                         </div>
-                                    )}
+                                    )} */}
                                 </div>
 
                                 {isLoading ? (

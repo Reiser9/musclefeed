@@ -81,6 +81,10 @@ const OrderAdminItem: React.FC<Props> = ({ data, deleteCallback = () => {} }) =>
                     {show ? 'Скрыть' : 'Показать'}
                 </Button>
 
+                <Button color='green' full small>
+                    Продлить
+                </Button>
+
                 <button className={styles.teamAdminDelete} onClick={() => setDeleteModal(true)}>
                     <Delete />
                 </button>

@@ -9,15 +9,20 @@ import styles from './index.module.scss';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 import { OrderAdminItem } from '@/entities/order/ui';
 import { useOrder } from '@/features/order';
+import { useDebounce } from '@/shared/hooks/useDebounce';
 
 import { Preloader } from '@/shared/ui/Preloader';
 import { Button } from '@/shared/ui/Button';
 import { Text } from '@/shared/ui/Text';
 import { NotContent } from '@/shared/ui/NotContent';
+import { Input } from '@/shared/ui/Input';
 
 const AdminMain = () => {
     const [status, setStatus] = React.useState('all');
     const [page, setPage] = React.useState(1);
+    const [search, setSearch] = React.useState('');
+
+    const searchDebounce = useDebounce(search, 500);
 
     const queryClient = useQueryClient();
     const language = useAppSelector((state) => state.app.language);
@@ -30,8 +35,8 @@ const AdminMain = () => {
     const { getAdminOrders, getOrderStats, deleteOrder } = useOrder();
 
     const { data, isPending, isError } = useQuery({
-        queryKey: ['admin_orders', page, 12, status],
-        queryFn: () => getAdminOrders(page, 12, status),
+        queryKey: ['admin_orders', page, 12, status, searchDebounce],
+        queryFn: () => getAdminOrders(page, 12, status, searchDebounce),
         placeholderData: keepPreviousData,
     });
 
@@ -53,10 +58,14 @@ const AdminMain = () => {
     } = orderStats || {};
 
     React.useEffect(() => {
-        if(status){
+        if (status) {
             setPage(1);
         }
     }, [status]);
+
+    React.useEffect(() => {
+        setPage(1);
+    }, [searchDebounce]);
 
     if (isPending) {
         return <Preloader page />;
@@ -154,6 +163,10 @@ const AdminMain = () => {
 
                 <div className={styles.titleWrap}>
                     <Text>Заказы {!!data && !!data.totalCount && `(${data.totalCount})`}</Text>
+
+                    <div className={styles.adminDishSearch}>
+                        <Input placeholder="Поиск" value={search} setValue={setSearch} full />
+                    </div>
 
                     <Button href={`/${language}/admin/order/create`} small>
                         Создать

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import styles from '../../index.module.scss';
 
@@ -25,6 +25,7 @@ const AdminRequestEdit = () => {
 
     const { getAdminChangeRequestById, updateChangeRequest } = useOrder();
     const router = useRouter();
+    const queryClient = useQueryClient();
 
     const { data, isPending, isError } = useQuery({
         queryKey: ['request_by_id', id],
@@ -36,7 +37,10 @@ const AdminRequestEdit = () => {
     const { allergies, email, phone, fullName } = order || {};
 
     const handleUpdateChangeRequest = () => {
-        updateChangeRequest(language, String(id), isProcessed, () => router.push(`/${language}/admin/request`));
+        updateChangeRequest(language, String(id), isProcessed, () => {
+            router.push(`/${language}/admin/request`);
+            queryClient.invalidateQueries({ queryKey: ['unproccessed_count'] });
+        });
     };
 
     React.useEffect(() => {

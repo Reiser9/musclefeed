@@ -20,6 +20,10 @@ import { Button } from '@/shared/ui/Button';
 import { Text } from '@/shared/ui/Text';
 import { Preloader } from '@/shared/ui/Preloader';
 import { NotContent } from '@/shared/ui/NotContent';
+import { Input } from '@/shared/ui/Input';
+import { Social } from '@/entities/settings/model';
+import { FileUpload } from '@/shared/ui/FileUpload';
+import { Delete } from '@/shared/icons';
 
 const { RangePicker } = DatePicker;
 
@@ -34,13 +38,18 @@ const AdminPanel = () => {
 
     const [cycleDatePicker, setCycleDatePicker] = React.useState('');
 
+    // Контактная информация
+    const [phone, setPhone] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [socials, setSocials] = React.useState<Social[]>([]);
+
     const router = useRouter();
     const { createOrderRoute, createOrderDish } = useOrder();
     const { alertNotify } = useAlert();
     const { uploadMap } = useFiles();
     const language = useAppSelector((state) => state.app.language);
     const { getShortInfo } = useUserInfo();
-    const { getCycleDate, updateCycleDate } = useAdminSettings();
+    const { getSettings, updateCycleDate, updateContacts } = useAdminSettings();
 
     const { data } = useQuery({
         queryKey: ['user_info'],
@@ -48,17 +57,18 @@ const AdminPanel = () => {
     });
 
     const {
-        data: cycleDate,
-        isPending: cycleDateIsPending,
-        isError: cycleDateIsError,
+        data: settings,
+        isPending: settingsIsPending,
+        isError: settingsIsError,
     } = useQuery({
-        queryKey: ['get_cycle_date'],
-        queryFn: () => getCycleDate(),
+        queryKey: ['settings'],
+        queryFn: () => getSettings(),
         gcTime: 0,
         refetchOnMount: true,
     });
 
     const { roles } = data || {};
+    const { cycleStartDate, email: contactEmail, phoneNumber, socials: contactSocials } = settings || {};
 
     const handleRouteList = () => {
         if (!routeStartDate || !routeEndDate) return;
@@ -101,11 +111,45 @@ const AdminPanel = () => {
         updateCycleDate(date, () => setCycleDatePicker(date));
     };
 
+    const saveContacts = () => {
+        updateContacts(phone, email, socials);
+    };
+
+    const addSocial = () => {
+        setSocials((prev) => [
+            ...prev,
+            {
+                id: Date.now(),
+                name: '',
+                link: '',
+                icon: '',
+            },
+        ]);
+    };
+
     React.useEffect(() => {
-        if (cycleDate) {
-            setCycleDatePicker(cycleDate);
+        if (cycleStartDate) {
+            setCycleDatePicker(cycleStartDate);
         }
-    }, [cycleDate]);
+    }, [cycleStartDate]);
+
+    React.useEffect(() => {
+        if (contactEmail) {
+            setEmail(contactEmail);
+        }
+    }, [contactEmail]);
+
+    React.useEffect(() => {
+        if (phoneNumber) {
+            setPhone(phoneNumber);
+        }
+    }, [phoneNumber]);
+
+    React.useEffect(() => {
+        if (contactSocials) {
+            setSocials(contactSocials);
+        }
+    }, [contactSocials]);
 
     return (
         <div className={styles.adminTeam}>
@@ -195,9 +239,9 @@ const AdminPanel = () => {
                 )}
 
                 {roles?.includes('ADMIN') &&
-                    (cycleDateIsPending ? (
+                    (settingsIsPending ? (
                         <Preloader page small />
-                    ) : cycleDateIsError ? (
+                    ) : settingsIsError ? (
                         <NotContent text="Произошла ошибка при получении даты" />
                     ) : (
                         <div className={styles.adminWrp}>
@@ -207,10 +251,50 @@ const AdminPanel = () => {
                                 className={styles.modalCalendar}
                                 format={'DD.MM.YYYY'}
                                 value={cycleDatePicker ? dayjs(cycleDatePicker) : null}
-                                onChange={(date) => changeCycleDate(date.format('YYYY-MM-DD'))}
+                                onChange={(date) => changeCycleDate(date ? date.format('YYYY-MM-DD') : '')}
                             />
                         </div>
                     ))}
+
+                {roles?.includes('ADMIN') && (
+                    <div className={styles.contactBlock}>
+                        <Input full value={phone} setValue={setPhone} placeholder="Номер телефона" />
+                        <Input full value={email} setValue={setEmail} placeholder="Email" />
+
+                        <div className={styles.contactSocials}>
+                            <Text variant="text3">Социальные сети ({socials.length})</Text>
+
+                            {socials.map((data) => (
+                                <div key={data.id} className={styles.contactSocialItem}>
+                                    <FileUpload
+                                        accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                                        id={`social_${data.id}`}
+                                        filePath={data.icon}
+                                        setFilePath={() => {}}
+                                    />
+
+                                    <Input full value={data.link} placeholder="Ссылка" />
+                                    <Input full value={data.name} placeholder="Название" />
+
+                                    <button
+                                        className={styles.deleteButton}
+                                        onClick={() => setSocials((prev) => prev.filter((elem) => data.id !== elem.id))}
+                                    >
+                                        <Delete />
+                                    </button>
+                                </div>
+                            ))}
+
+                            <Button full color="green" small onClick={addSocial}>
+                                Добавить соц. сеть
+                            </Button>
+                        </div>
+
+                        <Button small full onClick={saveContacts}>
+                            Сохранить
+                        </Button>
+                    </div>
+                )}
             </div>
         </div>
     );

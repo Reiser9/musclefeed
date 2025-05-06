@@ -7,7 +7,7 @@ import useRequest from '@/shared/hooks/useRequest';
 const usePersonal = () => {
     const { request, catchRequestError, errorController } = useRequest();
 
-    const getDishesIndi = async (page: number, limit = 10, search: string, dishTypeId: number | string) => {
+    const getDishesIndi = async (page: number, limit = 10, search: string, dishTypeId?: number | string) => {
         const response = await request<DishPagination>({
             url: `/dish?page=${page}&limit=${limit}&search=${search}&dish_type_id=${dishTypeId}`,
             method: 'GET',
