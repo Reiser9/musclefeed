@@ -190,7 +190,7 @@ export type OrderShort = {
     comment: string;
 };
 
-export type ORDER_CHANGE_TYPES = 'MENU' | 'CALORIES' | 'DURATION' | 'FORMAT' | 'FREEZE' | 'OTHER';
+export type ORDER_CHANGE_TYPES = 'MENU' | 'CALORIES' | 'DURATION' | 'FORMAT' | 'FREEZE' | 'PROLONGATION' | 'OTHER';
 
 export type OrderRequest = {
     id: number;

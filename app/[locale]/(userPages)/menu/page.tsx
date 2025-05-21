@@ -83,10 +83,11 @@ const MenuPage = () => {
     // });
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['indi_foods', page],
-        queryFn: () => getDishesIndi(page, 15, ''),
+        queryKey: ['indi_foods', dateDelivery, page],
+        queryFn: () => getDishesIndi(dateDelivery, page, 15, ''),
         // enabled: !!activeDishTypeId,
         placeholderData: keepPreviousData,
+        enabled: !!dateDelivery
     });
 
     const {

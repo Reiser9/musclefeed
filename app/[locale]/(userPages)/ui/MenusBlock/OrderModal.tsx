@@ -97,6 +97,7 @@ const OrderModal: React.FC<Props> = ({
     const { data: user } = useQuery({
         queryKey: ['user_info'],
         queryFn: getShortInfo,
+        enabled: !!isAuth,
     });
 
     const {

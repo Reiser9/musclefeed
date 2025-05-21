@@ -1,1 +1,1 @@
-export type { Settings } from './model';
+export type { Settings, Social } from './model';

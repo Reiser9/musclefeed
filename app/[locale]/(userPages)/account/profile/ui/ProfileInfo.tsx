@@ -10,6 +10,7 @@ import styles from '../index.module.scss';
 import { ArrowRight, Foods, Mail, Phone, User } from '@/shared/icons';
 import { useUserInfo } from '@/features/user';
 import { UserShortInfoDTO } from '@/entities/user/auth';
+import { useAppSelector } from '@/shared/hooks/useRedux';
 
 import { Input } from '@/shared/ui/Input';
 import { Text } from '@/shared/ui/Text';
@@ -19,13 +20,15 @@ import { NotContent } from '@/shared/ui/NotContent';
 
 const ProfileInfo = () => {
     const { getShortInfo, updateUserInfo } = useUserInfo();
-    const t = useTranslations("Profile");
+    const t = useTranslations('Profile');
+    const isAuth = useAppSelector((state) => state.app.isAuth);
 
     const { data, isPending, isError } = useQuery({
         queryKey: ['user_info'],
         queryFn: getShortInfo,
         refetchOnMount: true,
-        gcTime: 0
+        gcTime: 0,
+        enabled: !!isAuth,
     });
 
     const { firstName, allergies, lastName, phone, email } = data || {};
@@ -61,7 +64,7 @@ const ProfileInfo = () => {
                             title={t('input_name')}
                             icon={<User />}
                             full
-                            value={watch('firstName', firstName || "")}
+                            value={watch('firstName', firstName || '')}
                         />
 
                         <Input
@@ -71,7 +74,7 @@ const ProfileInfo = () => {
                             title={t('input_surname')}
                             icon={<User />}
                             full
-                            value={watch('lastName', lastName || "")}
+                            value={watch('lastName', lastName || '')}
                         />
 
                         <Input
@@ -81,7 +84,7 @@ const ProfileInfo = () => {
                             title={t('input_allerg')}
                             icon={<Foods />}
                             full
-                            value={watch('allergies', allergies || "")}
+                            value={watch('allergies', allergies || '')}
                         />
 
                         <Input
@@ -91,7 +94,7 @@ const ProfileInfo = () => {
                             title={t('input_phone')}
                             icon={<Phone />}
                             full
-                            value={watch('phone', phone || "")}
+                            value={watch('phone', phone || '')}
                         />
 
                         <Input title={t('input_email')} icon={<Mail />} full disabled value={email} />

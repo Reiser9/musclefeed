@@ -78,37 +78,9 @@ const Footer = () => {
                                             target="_blank"
                                             className={styles.footerSocialLink}
                                         >
-                                            <Image src={data.icon} alt={data.name} />
+                                            <Image src={data.icon} alt={data.name} fill />
                                         </a>
                                     ))}
-
-                                    <a
-                                        href="https://wa.me/972515883719"
-                                        target="_blank"
-                                        className={cn(styles.footerSocialLink, styles.green)}
-                                    >
-                                        <WhatsApp />
-                                    </a>
-
-                                    <a
-                                        href="https://facebook.com/musclefeed.il"
-                                        target="_blank"
-                                        className={styles.footerSocialLink}
-                                    >
-                                        <Facebook />
-                                    </a>
-
-                                    <a href="#" target="_blank" className={cn(styles.footerSocialLink, styles.blue)}>
-                                        <Telegram />
-                                    </a>
-
-                                    <a
-                                        href="https://instagram.com/_u/musclefd_il"
-                                        target="_blank"
-                                        className={styles.footerSocialLink}
-                                    >
-                                        <Instagram />
-                                    </a>
                                 </div>
                             </div>
 

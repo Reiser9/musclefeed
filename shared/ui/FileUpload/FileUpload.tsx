@@ -15,7 +15,7 @@ import { Text } from '../Text';
 type Props = {
     id: string;
     filePath: string;
-    setFilePath: React.Dispatch<React.SetStateAction<string>>;
+    setFilePath: (value: string) => void;
     title?: string;
     accept?: string;
     isAdmin?: boolean;

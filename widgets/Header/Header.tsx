@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import styles from './index.module.scss';
 import base from '@/shared/styles/base.module.scss';
 
-import { ArrowBottom, Cross, Exit, Menu, Phone, Telegram, UserLogin, WhatsApp } from '@/shared/icons';
+import { ArrowBottom, Cross, Exit, Menu, Phone, UserLogin } from '@/shared/icons';
 import { LoginModal, RecoveryModal, RegisterModal, VerifyModal } from '../AuthModal';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/useRedux';
 import { useAdminSettings } from '@/features/admin';
@@ -134,17 +134,16 @@ const Header = () => {
                             </nav>
 
                             <div className={styles.headerSocial}>
-                                <a href="#" target="_blank" className={cn(styles.headerSocialLink, styles.blue)}>
-                                    <Telegram />
-                                </a>
-
-                                <a
-                                    href="https://wa.me/972515883719"
-                                    target="_blank"
-                                    className={cn(styles.headerSocialLink, styles.green)}
-                                >
-                                    <WhatsApp />
-                                </a>
+                                {socials?.slice(0, 2).map((data) => (
+                                    <a
+                                        key={data.id}
+                                        href={data.link}
+                                        target="_blank"
+                                        className={cn(styles.headerSocialLink, styles.green)}
+                                    >
+                                        <Image src={data.icon} alt={data.name} fill />
+                                    </a>
+                                ))}
 
                                 {!isAuth && (
                                     <button
@@ -252,21 +251,9 @@ const Header = () => {
                             target="_blank"
                             className={cn(styles.headerSocialLink, styles.green)}
                         >
-                            <Image src={data.icon} alt={data.name} />
+                            <Image src={data.icon} alt={data.name} fill />
                         </a>
                     ))}
-
-                    <a href="#" target="_blank" className={cn(styles.headerSocialLink, styles.blue)}>
-                        <Telegram />
-                    </a>
-
-                    <a
-                        href="https://wa.me/972515883719"
-                        target="_blank"
-                        className={cn(styles.headerSocialLink, styles.green)}
-                    >
-                        <WhatsApp />
-                    </a>
                 </div>
             </div>
 

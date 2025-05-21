@@ -32,7 +32,7 @@ const AdminMain = () => {
         queryClient.invalidateQueries({ queryKey: ['admin_orders_stats'] });
     };
 
-    const { getAdminOrders, getOrderStats, deleteOrder } = useOrder();
+    const { getAdminOrders, getOrderStats, deleteOrder, adminProlongationOrder } = useOrder();
 
     const { data, isPending, isError } = useQuery({
         queryKey: ['admin_orders', page, 12, status, searchDebounce],
@@ -180,6 +180,7 @@ const AdminMain = () => {
                                 key={order.id}
                                 data={order}
                                 deleteCallback={() => deleteOrder(order.id, revalidateRequests)}
+                                prolongCallback={() => adminProlongationOrder(order.id, revalidateRequests)}
                             />
                         ))}
                     </div>

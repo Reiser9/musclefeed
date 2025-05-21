@@ -185,6 +185,16 @@ const UserOrderPage = () => {
                                             {language === 'ru' ? 'Дата окончания' : 'תאריך סיום'}{' '}
                                             {dayjs(endDate).format('DD.MM.YYYY')}
                                         </p>
+
+                                        <button
+                                            className={styles.configItemButton}
+                                            onClick={() => {
+                                                setChangeModal(true);
+                                                setChangeType('PROLONGATION');
+                                            }}
+                                        >
+                                            {t('request_button')}
+                                        </button>
                                     </div>
                                 )}
 

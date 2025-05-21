@@ -17,10 +17,12 @@ import { Button } from '@/shared/ui/Button';
 type Props = {
     data: Order;
     deleteCallback: () => void;
+    prolongCallback: () => void;
 };
 
-const OrderAdminItem: React.FC<Props> = ({ data, deleteCallback = () => {} }) => {
+const OrderAdminItem: React.FC<Props> = ({ data, deleteCallback = () => {}, prolongCallback = () => {} }) => {
     const [deleteModal, setDeleteModal] = React.useState(false);
+    const [prolongModal, setProlongModal] = React.useState(false);
     const [show, setShow] = React.useState(false);
 
     const language = useAppSelector((state) => state.app.language);
@@ -44,7 +46,7 @@ const OrderAdminItem: React.FC<Props> = ({ data, deleteCallback = () => {} }) =>
         phone,
         createdAt,
         menu,
-        isIndividual
+        isIndividual,
     } = data || {};
 
     const { name } = menu || {};
@@ -81,7 +83,7 @@ const OrderAdminItem: React.FC<Props> = ({ data, deleteCallback = () => {} }) =>
                     {show ? 'Скрыть' : 'Показать'}
                 </Button>
 
-                <Button color='green' full small>
+                <Button color="green" full small onClick={() => setProlongModal(true)}>
                     Продлить
                 </Button>
 
@@ -95,6 +97,13 @@ const OrderAdminItem: React.FC<Props> = ({ data, deleteCallback = () => {} }) =>
                 setValue={setDeleteModal}
                 callback={deleteCallback}
                 title={`Вы действительно хотите удалить заказ #${id}?`}
+            />
+
+            <ConfirmModal
+                value={prolongModal}
+                setValue={setProlongModal}
+                callback={prolongCallback}
+                title={`Вы действительно хотите продлить заказ #${id}?`}
             />
         </>
     );

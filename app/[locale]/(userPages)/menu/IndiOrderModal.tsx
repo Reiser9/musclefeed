@@ -84,6 +84,7 @@ const IndiOrderModal: React.FC<Props> = ({ value, setValue, dateDelivery, resetO
     const { data: user } = useQuery({
         queryKey: ['user_info'],
         queryFn: getShortInfo,
+        enabled: !!isAuth,
     });
 
     const {

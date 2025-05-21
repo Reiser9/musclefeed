@@ -10,6 +10,8 @@ export const getOrderChangeLabel = (changeType?: string) => {
             return 'Формат';
         case 'FREEZE':
             return 'Заморозка';
+        case 'PROLONGATION':
+            return 'Продление заказа';
         default:
             return 'Связаться для выяснения';
     }

@@ -592,6 +592,30 @@ const useOrder = () => {
         }
     };
 
+    const adminProlongationOrder = async (
+        orderId: number,
+        successCallback = () => {},
+    ) => {
+        const response = await request<{ order: Order }>({
+            url: `/admin/order/${orderId}/prolongation`,
+            isAuth: true,
+            method: 'POST',
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        successCallback();
+
+        alertNotify("Успешно", "Заказ продлен");
+
+        if ('data' in response) {
+            return response.data.order;
+        }
+    };
+
     return {
         getPaymentMethods,
         createOrder,
@@ -619,6 +643,7 @@ const useOrder = () => {
         getAdminReplacementDishes,
         adminReplaceDish,
         getUnprocessedCount,
+        adminProlongationOrder
     };
 };
 

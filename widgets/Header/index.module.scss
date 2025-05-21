@@ -127,6 +127,16 @@
 	align-items: center;
 	justify-content: center;
 	color: #fff;
+	position: relative;
+}
+
+.headerSocialLink img{
+	object-fit: contain;
+	max-width: 75%;
+	max-height: 75%;
+	top: 50%!important;
+	left: 50%!important;
+	transform: translate(-50%, -50%);
 }
 
 .headerSocialLink.disabled{

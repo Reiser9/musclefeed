@@ -10,20 +10,20 @@ import { useQuery } from '@tanstack/react-query';
 import styles from './index.module.scss';
 
 import useAlert from '@/shared/hooks/useAlert';
+import type { Social } from '@/entities/settings';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 import { useOrder } from '@/features/order';
 import { useFiles } from '@/features/files';
 import { useAdminSettings } from '@/features/admin';
 import { useUserInfo } from '@/features/user';
+import { Delete } from '@/shared/icons';
 
 import { Button } from '@/shared/ui/Button';
 import { Text } from '@/shared/ui/Text';
 import { Preloader } from '@/shared/ui/Preloader';
 import { NotContent } from '@/shared/ui/NotContent';
 import { Input } from '@/shared/ui/Input';
-import { Social } from '@/entities/settings/model';
 import { FileUpload } from '@/shared/ui/FileUpload';
-import { Delete } from '@/shared/icons';
 
 const { RangePicker } = DatePicker;
 
@@ -112,7 +112,15 @@ const AdminPanel = () => {
     };
 
     const saveContacts = () => {
-        updateContacts(phone, email, socials);
+        updateContacts(
+            phone,
+            email,
+            socials.map((elem) => ({
+                name: elem.name,
+                link: elem.link,
+                icon: elem.icon,
+            })),
+        );
     };
 
     const addSocial = () => {
@@ -125,6 +133,10 @@ const AdminPanel = () => {
                 icon: '',
             },
         ]);
+    };
+
+    const handleChange = <K extends keyof Social>(id: number, field: K, value: Social[K]) => {
+        setSocials((prev) => prev.map((social) => (social.id === id ? { ...social, [field]: value } : social)));
     };
 
     React.useEffect(() => {
@@ -144,6 +156,12 @@ const AdminPanel = () => {
             setPhone(phoneNumber);
         }
     }, [phoneNumber]);
+
+    React.useEffect(() => {
+        if (socials) {
+            setSocials(socials);
+        }
+    }, [socials]);
 
     React.useEffect(() => {
         if (contactSocials) {
@@ -270,11 +288,27 @@ const AdminPanel = () => {
                                         accept="image/png,image/jpeg,image/webp,image/svg+xml"
                                         id={`social_${data.id}`}
                                         filePath={data.icon}
-                                        setFilePath={() => {}}
+                                        setFilePath={(value: string) => handleChange(data.id, 'icon', value)}
+                                        isAdmin
                                     />
 
-                                    <Input full value={data.link} placeholder="Ссылка" />
-                                    <Input full value={data.name} placeholder="Название" />
+                                    <Input
+                                        full
+                                        value={data.link}
+                                        placeholder="Ссылка"
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                            handleChange(data.id, 'link', e.target.value)
+                                        }
+                                    />
+
+                                    <Input
+                                        full
+                                        value={data.name}
+                                        placeholder="Название"
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                            handleChange(data.id, 'name', e.target.value)
+                                        }
+                                    />
 
                                     <button
                                         className={styles.deleteButton}
