@@ -139,7 +139,7 @@ const Header = () => {
                                         key={data.id}
                                         href={data.link}
                                         target="_blank"
-                                        className={cn(styles.headerSocialLink, styles.green)}
+                                        className={cn(styles.headerSocialLink, styles.headerSocialNav, styles.green)}
                                     >
                                         <Image src={data.icon} alt={data.name} fill />
                                     </a>
