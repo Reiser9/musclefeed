@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 import styles from './index.module.scss';
 
@@ -12,7 +13,6 @@ import { useAppSelector } from '@/shared/hooks/useRedux';
 import { Button } from '@/shared/ui/Button';
 import { Text } from '@/shared/ui/Text';
 import { Modal } from '@/shared/ui/Modal';
-import { useTranslations } from 'next-intl';
 
 type Props = {
     data: Dish;

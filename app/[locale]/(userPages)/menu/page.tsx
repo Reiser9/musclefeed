@@ -30,7 +30,6 @@ import { Modal } from '@/shared/ui/Modal';
 import { Text } from '@/shared/ui/Text';
 
 const MenuPage = () => {
-    const [page, setPage] = React.useState(1);
     const [dateDelivery, setDateDelivery] = React.useState('');
     const [dateDeliveryPicker, setDateDeliveryPicker] = React.useState(false);
     const [deliveryModal, setDeliveryModal] = React.useState(false);
@@ -83,32 +82,33 @@ const MenuPage = () => {
     // });
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['indi_foods', dateDelivery, page],
-        queryFn: () => getDishesIndi(dateDelivery, page, 15, ''),
+        queryKey: ['indi_foods', dateDelivery],
+        queryFn: () => getDishesIndi(dateDelivery, ''),
         // enabled: !!activeDishTypeId,
         placeholderData: keepPreviousData,
-        enabled: !!dateDelivery
+        enabled: !!dateDelivery,
     });
 
-    const {
-        data: settings,
-    } = useQuery({
+    const { data: settings } = useQuery({
         queryKey: ['settings'],
         queryFn: () => getSettings(),
     });
 
     const { cycleStartDate } = settings || {};
 
-    const disabledDate = React.useCallback((current: Dayjs) => {
-        if (!current) return false;
+    const disabledDate = React.useCallback(
+        (current: Dayjs) => {
+            if (!current) return false;
 
-        const startDate = dayjs(cycleStartDate);
+            const startDate = dayjs(cycleStartDate);
 
-        const today = dayjs().startOf('day');
-        const diff = current.diff(startDate, 'day');
+            const today = dayjs().startOf('day');
+            const diff = current.diff(startDate, 'day');
 
-        return current.isBefore(today, 'day') || current.isSame(today, 'day') || (diff >= 0 && diff % 2 === 1);
-    }, [cycleStartDate]);
+            return current.isBefore(today, 'day') || current.isSame(today, 'day') || (diff >= 0 && diff % 2 === 1);
+        },
+        [cycleStartDate],
+    );
 
     const t = useTranslations('Menu');
 
@@ -215,9 +215,9 @@ const MenuPage = () => {
                                     <Preloader page small />
                                 ) : isError ? (
                                     <NotContent />
-                                ) : !!data && !!data.dishes && !!data.dishes.length ? (
+                                ) : !!data && !!data.length ? (
                                     <div className={styles.personalDishes}>
-                                        {data.dishes.map((dish) => (
+                                        {data.map((dish) => (
                                             <DishIndiItem
                                                 key={dish.id}
                                                 data={dish}
@@ -230,22 +230,6 @@ const MenuPage = () => {
                                     </div>
                                 ) : (
                                     <NotContent text={t('dish_empty')} />
-                                )}
-
-                                {!!data && data.totalPages > 1 && (
-                                    <div className={styles.pagination}>
-                                        {[...Array(data.totalPages)].map((_, id) => (
-                                            <button
-                                                key={id}
-                                                className={cn(styles.paginationButton, {
-                                                    [styles.active]: id + 1 === data.page,
-                                                })}
-                                                onClick={() => setPage(id + 1)}
-                                            >
-                                                {id + 1}
-                                            </button>
-                                        ))}
-                                    </div>
                                 )}
                             </div>
                         </div>
@@ -262,7 +246,9 @@ const MenuPage = () => {
                     <div className={styles.cartInner}>
                         <div className={styles.cartPriceInner}>
                             <div className={styles.cartPriceWrap}>
-                                <p className={styles.cartPrice}>{t('total')} {getTotalPrice()} ₪</p>
+                                <p className={styles.cartPrice}>
+                                    {t('total')} {getTotalPrice()} ₪
+                                </p>
                             </div>
 
                             <Button className={styles.cartButton} onClick={() => setOrderModal(true)}>

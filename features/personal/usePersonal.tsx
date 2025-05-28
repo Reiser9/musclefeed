@@ -1,15 +1,15 @@
 'use client';
 
-import { DishPagination } from '@/entities/dish';
+import { Dish } from '@/entities/dish';
 import type { Order, OrderIndiDTO, OrderPagination } from '@/entities/order';
 import useRequest from '@/shared/hooks/useRequest';
 
 const usePersonal = () => {
     const { request, catchRequestError, errorController } = useRequest();
 
-    const getDishesIndi = async (date: string, page: number, limit = 10, search: string, dishTypeId?: number | string) => {
-        const response = await request<DishPagination>({
-            url: `/dish?individual_order_date=${date}&page=${page}&limit=${limit}&search=${search}&dish_type_id=${dishTypeId}`,
+    const getDishesIndi = async (date: string, search: string) => {
+        const response = await request<{dishes: Dish[]}>({
+            url: `/menu/personal?date=${date}&search=${search}`,
             method: 'GET',
             isAuth: true,
         });
@@ -20,7 +20,7 @@ const usePersonal = () => {
         }
 
         if ('data' in response) {
-            return response.data;
+            return response.data.dishes;
         }
     };
 
