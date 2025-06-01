@@ -105,7 +105,7 @@ const MenuPage = () => {
             const today = dayjs().startOf('day');
             const diff = current.diff(startDate, 'day');
 
-            return current.isBefore(today, 'day') || current.isSame(today, 'day') || (diff >= 0 && diff % 2 === 1);
+            return current.isBefore(today, 'day') || current.isSame(today, 'day') || (diff >= 0 && diff % 2 === 0);
         },
         [cycleStartDate],
     );
