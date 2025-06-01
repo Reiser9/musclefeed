@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import styles from './index.module.scss';
 import base from '@/shared/styles/base.module.scss';
 
-import { ArrowBottom, Cross, Exit, Menu, Phone, UserLogin } from '@/shared/icons';
+import { ArrowBottom, Cross, Login, Menu, Phone, UserLogin } from '@/shared/icons';
 import { LoginModal, RecoveryModal, RegisterModal, VerifyModal } from '../AuthModal';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/useRedux';
 import { useAdminSettings } from '@/features/admin';
@@ -150,7 +150,7 @@ const Header = () => {
                                         className={cn(styles.headerSocialLink, styles.orange)}
                                         onClick={() => setLoginModal(true)}
                                     >
-                                        <UserLogin />
+                                        <Login />
                                     </button>
                                 )}
 
@@ -165,12 +165,12 @@ const Header = () => {
                                         </Link>
 
                                         <button
-                                            className={cn(styles.headerSocialLink, styles.orange, {
+                                            className={cn(styles.headerSocialLink, styles.exit, {
                                                 [styles.disabled]: authIsLoading,
                                             })}
                                             onClick={() => logout(language)}
                                         >
-                                            <Exit />
+                                            Esc
                                         </button>
                                     </>
                                 )}

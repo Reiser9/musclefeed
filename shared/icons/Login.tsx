@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const UserLogin = ({ ...props }) => {
+export const Login = ({ ...props }) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -12,8 +12,9 @@ export const UserLogin = ({ ...props }) => {
             strokeLinejoin="round"
             {...props}
         >
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
+            <path d="m10 17 5-5-5-5" />
+            <path d="M15 12H3" />
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
         </svg>
     );
 };

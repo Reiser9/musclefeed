@@ -18,9 +18,15 @@ type Props = {
     data: Order;
     deleteCallback: () => void;
     prolongCallback: () => void;
+    isAdmin?: boolean;
 };
 
-const OrderAdminItem: React.FC<Props> = ({ data, deleteCallback = () => {}, prolongCallback = () => {} }) => {
+const OrderAdminItem: React.FC<Props> = ({
+    data,
+    deleteCallback = () => {},
+    prolongCallback = () => {},
+    isAdmin = false,
+}) => {
     const [deleteModal, setDeleteModal] = React.useState(false);
     const [prolongModal, setProlongModal] = React.useState(false);
     const [show, setShow] = React.useState(false);
@@ -87,9 +93,11 @@ const OrderAdminItem: React.FC<Props> = ({ data, deleteCallback = () => {}, prol
                     Продлить
                 </Button>
 
-                <button className={styles.teamAdminDelete} onClick={() => setDeleteModal(true)}>
-                    <Delete />
-                </button>
+                {isAdmin && (
+                    <button className={styles.teamAdminDelete} onClick={() => setDeleteModal(true)}>
+                        <Delete />
+                    </button>
+                )}
             </div>
 
             <ConfirmModal

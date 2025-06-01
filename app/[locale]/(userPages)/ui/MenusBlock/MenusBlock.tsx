@@ -496,7 +496,13 @@ const MenusBlock = () => {
                                                             className={cn(styles.foodFormChoose, {
                                                                 [styles.active]: selectedDay === item.fullDate,
                                                             })}
-                                                            onClick={() => setSelectedDay(item.fullDate)}
+                                                            onClick={() => {
+                                                                if(selectedDay !== item.fullDate){
+                                                                    swiperIntance.current?.slideTo(0);
+                                                                }
+
+                                                                setSelectedDay(item.fullDate);
+                                                            }}
                                                         >
                                                             {item.day} {item.date}
                                                         </button>

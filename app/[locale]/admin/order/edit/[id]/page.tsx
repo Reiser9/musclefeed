@@ -25,6 +25,7 @@ import { Checkbox } from '@/shared/ui/Checkbox';
 import { Select } from '@/shared/ui/Select';
 import { Preloader } from '@/shared/ui/Preloader';
 import { NotContent } from '@/shared/ui/NotContent';
+import { useUserInfo } from '@/features/user';
 
 const { RangePicker } = DatePicker;
 
@@ -57,6 +58,7 @@ const AdminOrderCreate = () => {
     const language = useAppSelector((state) => state.app.language);
     const router = useRouter();
     const { getUsers } = useUsers();
+    const { getShortInfo } = useUserInfo();
 
     const {
         data: order,
@@ -69,6 +71,13 @@ const AdminOrderCreate = () => {
         gcTime: 0,
         refetchOnMount: true,
     });
+
+    const { data: userInfo } = useQuery({
+        queryKey: ['user_info'],
+        queryFn: getShortInfo,
+    });
+
+    const { roles } = userInfo || {};
 
     const {
         allergies,
@@ -548,6 +557,7 @@ const AdminOrderCreate = () => {
                     title={'Цена'}
                     value={watch('price', `${price}`)}
                     type="number"
+                    disabled={!roles?.includes("ADMIN")}
                 />
 
                 <Input
@@ -558,6 +568,7 @@ const AdminOrderCreate = () => {
                     title={'Сколько уже заплатил'}
                     value={watch('paidAmount', `${paidAmount}`)}
                     type="number"
+                    disabled={!roles?.includes("ADMIN")}
                 />
 
                 <Input
@@ -568,6 +579,7 @@ const AdminOrderCreate = () => {
                     title={'Скидка по промокоду'}
                     value={watch('promocodeDiscount', `${promocodeDiscount}`)}
                     type="number"
+                    disabled={!roles?.includes("ADMIN")}
                 />
 
                 <Input
@@ -578,6 +590,7 @@ const AdminOrderCreate = () => {
                     title={'Скидка при выборе меню'}
                     value={watch('menuDiscount', `${menuDiscount}`)}
                     type="number"
+                    disabled={!roles?.includes("ADMIN")}
                 />
 
                 <Input
@@ -588,6 +601,7 @@ const AdminOrderCreate = () => {
                     title={'Конечная цена'}
                     value={watch('finalPrice', `${finalPrice}`)}
                     type="number"
+                    disabled={!roles?.includes("ADMIN")}
                 />
 
                 <Button full>Сохранить</Button>
