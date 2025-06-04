@@ -72,6 +72,16 @@ const AdminSidebar = () => {
                     </Link>
 
                     <Link
+                        href={`/${locale}/admin/calendar`}
+                        className={cn(styles.sidebarNavLink, {
+                            [styles.active]: pathname === `/${locale}/admin/calendar`,
+                        })}
+                        onClick={() => setShowSidebar(false)}
+                    >
+                        Календарь
+                    </Link>
+
+                    <Link
                         href={`/${locale}/admin/panel`}
                         className={cn(styles.sidebarNavLink, {
                             [styles.active]: pathname === `/${locale}/admin/panel`,

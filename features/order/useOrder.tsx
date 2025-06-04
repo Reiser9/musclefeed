@@ -14,6 +14,7 @@ import type {
     OrderRequestPagination,
     PaymentMethod,
 } from '@/entities/order';
+import { CalendarOrders } from '@/entities/order/model';
 import useAlert from '@/shared/hooks/useAlert';
 import useRequest from '@/shared/hooks/useRequest';
 
@@ -592,10 +593,7 @@ const useOrder = () => {
         }
     };
 
-    const adminProlongationOrder = async (
-        orderId: number,
-        successCallback = () => {},
-    ) => {
+    const adminProlongationOrder = async (orderId: number, successCallback = () => {}) => {
         const response = await request<{ order: Order }>({
             url: `/admin/order/${orderId}/prolongation`,
             isAuth: true,
@@ -609,10 +607,26 @@ const useOrder = () => {
 
         successCallback();
 
-        alertNotify("Успешно", "Заказ продлен");
+        alertNotify('Успешно', 'Заказ продлен');
 
         if ('data' in response) {
             return response.data.order;
+        }
+    };
+
+    const getCalendar = async (startDate: string, endDate: string) => {
+        const response = await request<CalendarOrders>({
+            url: `/admin/order/calendar?limit=1000&page=1&start_date=${startDate}&end_date=${endDate}`,
+            isAuth: true,
+        });
+
+        if (catchRequestError(response)) {
+            errorController(response);
+            return '';
+        }
+
+        if ('data' in response) {
+            return response.data;
         }
     };
 
@@ -643,7 +657,8 @@ const useOrder = () => {
         getAdminReplacementDishes,
         adminReplaceDish,
         getUnprocessedCount,
-        adminProlongationOrder
+        adminProlongationOrder,
+        getCalendar,
     };
 };
 

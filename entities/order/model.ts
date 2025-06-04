@@ -139,13 +139,29 @@ export type AdminOrder = {
     endDate: Date;
     skippedWeekdays: number[];
     isCompleted: boolean;
-    freezeStartDate: Date;
-    freezeEndDate: Date;
+    freezes: {
+        id: number;
+        startDate: string;
+        endDate: string;
+    }[];
     isIndividual: boolean;
 };
 
 export type OrderPagination = Pagination & {
     orders: Order[];
+};
+
+export type CalendarOrders = Pagination & {
+    orders: {
+        id: number;
+        fullName: string;
+        orderDays: {
+            id: number;
+            date: string;
+            isSkipped: boolean;
+            daySkipType: 'WEEKDAY_SKIPPED' | 'FROZEN' | 'DELIVERY_ONLY';
+        }[];
+    }[];
 };
 
 export type OrderDishList = {
@@ -169,7 +185,7 @@ export type Day = {
     id: number;
     date: Date;
     isSkipped: boolean;
-    daySkipType: 'WEEKDAY_SKIPPED' | 'FROZEN';
+    daySkipType: 'WEEKDAY_SKIPPED' | 'FROZEN' | 'DELIVERY_ONLY';
 };
 
 export type OrderShort = {

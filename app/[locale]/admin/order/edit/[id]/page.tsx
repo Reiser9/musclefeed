@@ -12,7 +12,7 @@ import styles from '../../index.module.scss';
 
 import type { OrderAdminDTO } from '@/entities/order';
 import { useAppSelector } from '@/shared/hooks/useRedux';
-import { Foods, Home } from '@/shared/icons';
+import { Delete, Foods, Home } from '@/shared/icons';
 import { useCities } from '@/features/city';
 import { useMenu } from '@/features/menu';
 import { useOrder } from '@/features/order';
@@ -29,6 +29,15 @@ import { useUserInfo } from '@/features/user';
 
 const { RangePicker } = DatePicker;
 
+const removeObjectAtIndexFilter = (arr: { startDate: string; endDate: string }[], index: number) => {
+    if (index < 0 || index >= arr.length) {
+        return arr;
+    }
+
+    const newArr = arr.filter((_, i) => i !== index);
+    return newArr;
+};
+
 const AdminOrderCreate = () => {
     const { id } = useParams();
 
@@ -38,11 +47,32 @@ const AdminOrderCreate = () => {
     const [endDate, setEndDate] = React.useState('');
     const [skippedDays, setSkippedDays] = React.useState<number[]>([]);
 
+    const [freezeDates, setFreezeDates] = React.useState<{ startDate: string; endDate: string }[]>([]);
     const [freezeStartDate, setFreezeStartDate] = React.useState('');
     const [freezeEndDate, setFreezeEndDate] = React.useState('');
 
     const handleSkipDay = (day: number) => {
         setSkippedDays((prev) => (prev.includes(day) ? prev.filter((n) => n !== day) : [...prev, day]));
+    };
+
+    const addFreeze = () => {
+        if (!freezeStartDate || !freezeEndDate) return;
+
+        setFreezeDates((prev) => [
+            ...prev,
+            {
+                startDate: freezeStartDate,
+                endDate: freezeEndDate,
+            },
+        ]);
+
+        setFreezeStartDate('');
+        setFreezeEndDate('');
+    };
+
+    const removeFreeze = (index: number) => {
+        const newArr = removeObjectAtIndexFilter(freezeDates, index);
+        setFreezeDates(newArr);
     };
 
     const {
@@ -105,8 +135,7 @@ const AdminOrderCreate = () => {
         menu,
         user,
         isCompleted,
-        freezeStartDate: frozenStart,
-        freezeEndDate: frozenEnd,
+        freezes,
         isIndividual,
         giftDaysCount,
         menuDiscount,
@@ -151,14 +180,24 @@ const AdminOrderCreate = () => {
     const onSubmit: SubmitHandler<OrderAdminDTO> = (data) => {
         if (!startDate) return;
 
+        const finalFreezes =
+            freezeStartDate && freezeEndDate
+                ? [
+                      ...freezeDates,
+                      {
+                          startDate: freezeStartDate,
+                          endDate: freezeEndDate,
+                      },
+                  ]
+                : freezeDates;
+
         const orderData = {
             ...data,
             skippedWeekdays: skippedDays,
             startDate,
+            freezes: finalFreezes,
             ...(!isIndividual && { menuId: activeMenuId }),
             ...(userId && { userId: `${userId}` }),
-            ...(freezeStartDate && { freezeStartDate }),
-            ...(freezeEndDate && { freezeEndDate }),
         };
 
         updateAdminOrder(String(id), orderData, () => router.replace(`/${language}/admin`));
@@ -197,16 +236,10 @@ const AdminOrderCreate = () => {
     }, [menu]);
 
     React.useEffect(() => {
-        if (frozenStart) {
-            setFreezeStartDate(dayjs(frozenStart).format('YYYY-MM-DD'));
+        if (freezes) {
+            setFreezeDates(freezes);
         }
-    }, [frozenStart]);
-
-    React.useEffect(() => {
-        if (frozenEnd) {
-            setFreezeEndDate(dayjs(frozenEnd).format('YYYY-MM-DD'));
-        }
-    }, [frozenEnd]);
+    }, [freezes]);
 
     if (orderIsPending) {
         return <Preloader page />;
@@ -249,6 +282,29 @@ const AdminOrderCreate = () => {
                     <div className={styles.skippedButtonsWrap}>
                         <Text variant="text3">Период заморозки</Text>
 
+                        {freezeDates.map((element, id) => (
+                            <div key={id} className={styles.orderDateElem}>
+                                <RangePicker
+                                    className={styles.orderDate}
+                                    value={[
+                                        element.startDate ? dayjs(element.startDate) : null,
+                                        element.endDate ? dayjs(element.endDate) : null,
+                                    ]}
+                                    disabled
+                                />
+
+                                <button
+                                    className={styles.orderDateDelete}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        removeFreeze(id);
+                                    }}
+                                >
+                                    <Delete />
+                                </button>
+                            </div>
+                        ))}
+
                         <RangePicker
                             className={styles.orderDate}
                             value={[
@@ -266,6 +322,16 @@ const AdminOrderCreate = () => {
                                 setFreezeEndDate(dates[1].format('YYYY-MM-DD'));
                             }}
                         />
+
+                        <Button
+                            full
+                            onClick={(e) => {
+                                e.preventDefault();
+                                addFreeze();
+                            }}
+                        >
+                            Добавить период заморозку
+                        </Button>
                     </div>
                 )}
 
@@ -557,7 +623,7 @@ const AdminOrderCreate = () => {
                     title={'Цена'}
                     value={watch('price', `${price}`)}
                     type="number"
-                    disabled={!roles?.includes("ADMIN")}
+                    disabled={!roles?.includes('ADMIN')}
                 />
 
                 <Input
@@ -568,7 +634,7 @@ const AdminOrderCreate = () => {
                     title={'Сколько уже заплатил'}
                     value={watch('paidAmount', `${paidAmount}`)}
                     type="number"
-                    disabled={!roles?.includes("ADMIN")}
+                    disabled={!roles?.includes('ADMIN')}
                 />
 
                 <Input
@@ -579,7 +645,7 @@ const AdminOrderCreate = () => {
                     title={'Скидка по промокоду'}
                     value={watch('promocodeDiscount', `${promocodeDiscount}`)}
                     type="number"
-                    disabled={!roles?.includes("ADMIN")}
+                    disabled={!roles?.includes('ADMIN')}
                 />
 
                 <Input
@@ -590,7 +656,7 @@ const AdminOrderCreate = () => {
                     title={'Скидка при выборе меню'}
                     value={watch('menuDiscount', `${menuDiscount}`)}
                     type="number"
-                    disabled={!roles?.includes("ADMIN")}
+                    disabled={!roles?.includes('ADMIN')}
                 />
 
                 <Input
@@ -601,7 +667,7 @@ const AdminOrderCreate = () => {
                     title={'Конечная цена'}
                     value={watch('finalPrice', `${finalPrice}`)}
                     type="number"
-                    disabled={!roles?.includes("ADMIN")}
+                    disabled={!roles?.includes('ADMIN')}
                 />
 
                 <Button full>Сохранить</Button>
