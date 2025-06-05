@@ -9,6 +9,7 @@ import React from 'react';
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { useTranslations } from 'next-intl';
 import { Element } from 'react-scroll';
+import { useRouter } from 'next/navigation';
 
 import 'swiper/css';
 
@@ -22,13 +23,13 @@ import { useMenu } from '@/features/menu';
 import { useAppSelector } from '@/shared/hooks/useRedux';
 import CalcCaloriesForm from './CalcCaloriesForm';
 import OrderModal from './OrderModal';
+import { useAdminSettings } from '@/features/admin';
 
 import { Button } from '@/shared/ui/Button';
 import { Modal } from '@/shared/ui/Modal';
 import { NotContent } from '@/shared/ui/NotContent';
 import { Preloader } from '@/shared/ui/Preloader';
 import { Text } from '@/shared/ui/Text';
-import { useAdminSettings } from '@/features/admin';
 
 const getNextWeek = (language: 'ru' | 'he'): { date: string; day: string; fullDate: string }[] => {
     const dates: { date: string; day: string; fullDate: string }[] = [];
@@ -88,6 +89,7 @@ const MenusBlock = () => {
     const { getSettings } = useAdminSettings();
     const language = useAppSelector((state) => state.app.language);
     const t = useTranslations('Menu');
+    const router = useRouter();
 
     const { data, isPending, isError } = useQuery({
         queryKey: ['typesmenu'],
@@ -273,6 +275,23 @@ const MenusBlock = () => {
                                             </SwiperSlide>
                                         );
                                     })}
+
+                                    <SwiperSlide
+                                        className={styles.complexItem}
+                                        onClick={() => router.push(`/${language}/menu`)}
+                                    >
+                                        <div className={styles.complexTextInner}>
+                                            <p className={styles.complexTextTitle}>{t('personal')}</p>
+
+                                            <p className={styles.complexTextText}>{t('personal_desc')}</p>
+
+                                            <p className={styles.complexTextPrice}>{t('personal_price')}</p>
+                                        </div>
+
+                                        <div className="complexItemImg">
+                                            <Image src="./img/complex3.png" alt="img" fill />
+                                        </div>
+                                    </SwiperSlide>
                                 </Swiper>
                             ) : (
                                 <NotContent
@@ -497,7 +516,7 @@ const MenusBlock = () => {
                                                                 [styles.active]: selectedDay === item.fullDate,
                                                             })}
                                                             onClick={() => {
-                                                                if(selectedDay !== item.fullDate){
+                                                                if (selectedDay !== item.fullDate) {
                                                                     swiperIntance.current?.slideTo(0);
                                                                 }
 
