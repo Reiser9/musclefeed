@@ -74,7 +74,7 @@ const OrderItem: React.FC<Props> = ({ data, freezeCallback = () => {} }) => {
                 </Button>
 
                 <Button full small color="green" href={`/${language}/account/orders/${id}/swaps`}>
-                    {t('dishes_swap')}
+                    {isIndividual ? (language === 'ru' ? 'Просмотр блюд' : 'צפייה במנות') : t('dishes_swap')}
                 </Button>
 
                 {!isIndividual && (

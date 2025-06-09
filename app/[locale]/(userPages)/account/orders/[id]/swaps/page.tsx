@@ -35,7 +35,19 @@ const UserOrderSwaps = () => {
     const t = useTranslations('Orders');
     const language = useAppSelector((state) => state.app.language);
 
-    const { getOrderDays, getDayDishes } = useOrder();
+    const { getOrderDays, getDayDishes, getUserOrderById } = useOrder();
+
+    const {
+        data: order,
+        isPending: orderIsPending,
+        isError: orderIsError,
+    } = useQuery({
+        queryKey: ['user_order_by_id', id],
+        queryFn: () => getUserOrderById(String(id)),
+        enabled: !!id,
+    });
+
+    const { isIndividual } = order || {};
 
     const {
         data: days,
@@ -108,140 +120,167 @@ const UserOrderSwaps = () => {
 
                         <BackLink href={`/${language}/account/orders`} text={t('back_orders')} />
 
-                        <div className={styles.configContent}>
-                            <div className={styles.configTextInner}>
-                                <Text upper variant="h3">
-                                    {t('conf_title')}
-                                </Text>
+                        {orderIsPending ? (
+                            <Preloader small page />
+                        ) : orderIsError ? (
+                            <NotContent />
+                        ) : (
+                            <div className={styles.configContent}>
+                                <div className={styles.configTextInner}>
+                                    <Text upper variant="h3">
+                                        {isIndividual
+                                            ? language === 'ru'
+                                                ? 'Персональный заказ'
+                                                : 'הזמנה אישית'
+                                            : t('conf_title')}
+                                    </Text>
 
-                                <p className={styles.configText}>
-                                    {t('conf_text')} <span>{t('conf_highlight')}</span>
-                                </p>
-                            </div>
-
-                            {daysIsPending ? (
-                                <Preloader page small />
-                            ) : daysIsError ? (
-                                <NotContent />
-                            ) : (
-                                <div className={styles.swapDateInner}>
-                                    <p className={styles.swapDateTitle}>{t('swaps')}</p>
-
-                                    <div className={styles.swapDateButtons}>
-                                        <button
-                                            className={cn(styles.swapDateButton, styles.arrow, "swaps")}
-                                            onClick={() => swiperIntance.current?.slidePrev()}
-                                        >
-                                            <svg
-                                                width="25"
-                                                height="24"
-                                                viewBox="0 0 25 24"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    d="M19.75 12H5.75M5.75 12L12.75 19M5.75 12L12.75 5"
-                                                    stroke="currentColor"
-                                                    strokeWidth="2"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                />
-                                            </svg>
-                                        </button>
-
-                                        <Swiper
-                                            spaceBetween={16}
-                                            slidesPerView={6}
-                                            className={styles.swapDaysSlider}
-                                            onSwiper={(swiper) => {
-                                                swiperIntance.current = swiper;
-                                            }}
-                                            breakpoints={{
-                                                0: {
-                                                    slidesPerView: 2,
-                                                    spaceBetween: 8,
-                                                },
-                                                420: {
-                                                    slidesPerView: 3,
-                                                    spaceBetween: 8,
-                                                },
-                                                768: {
-                                                    slidesPerView: 4,
-                                                    spaceBetween: 16,
-                                                },
-                                                1270: {
-                                                    slidesPerView: 5,
-                                                    spaceBetween: 16,
-                                                },
-                                                1630: {
-                                                    slidesPerView: 6,
-                                                    spaceBetween: 16,
-                                                },
-                                            }}
-                                        >
-                                            {!!days &&
-                                                days.map((day) => (
-                                                    <SwiperSlide key={day.id}>
-                                                        <DayButton
-                                                            data={day}
-                                                            isActive={activeDate?.id === day.id}
-                                                            onClick={() => setActiveDate(day)}
-                                                        />
-                                                    </SwiperSlide>
-                                                ))}
-                                        </Swiper>
-
-                                        <button
-                                            className={cn(styles.swapDateButton, styles.arrow, "swaps")}
-                                            onClick={() => swiperIntance.current?.slideNext()}
-                                        >
-                                            <svg
-                                                width="25"
-                                                height="24"
-                                                viewBox="0 0 25 24"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    d="M4.25 12H20.25M20.25 12L14.25 6M20.25 12L14.25 18"
-                                                    stroke="currentColor"
-                                                    strokeWidth="2"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                />
-                                            </svg>
-                                        </button>
-                                    </div>
+                                    <p className={styles.configText}>
+                                        {t('conf_text')} <span>{t('conf_highlight')}</span>
+                                    </p>
                                 </div>
-                            )}
 
-                            {dishesIsPending ? (
-                                <Preloader page small />
-                            ) : dishesIsError ? (
-                                <NotContent />
-                            ) : !!dishes && !!dishes.dishes ? (
-                                <div className={styles.swapItems}>
-                                    {dishes.dishes.map((dish) => (
-                                        <DishItem key={dish.id} data={dish} dayId={activeDate?.id} day={activeDate} />
+                                {!isIndividual &&
+                                    (daysIsPending ? (
+                                        <Preloader page small />
+                                    ) : daysIsError ? (
+                                        <NotContent />
+                                    ) : (
+                                        <div className={styles.swapDateInner}>
+                                            <p className={styles.swapDateTitle}>{t('swaps')}</p>
+
+                                            <div className={styles.swapDateButtons}>
+                                                <button
+                                                    className={cn(styles.swapDateButton, styles.arrow, 'swaps')}
+                                                    onClick={() => swiperIntance.current?.slidePrev()}
+                                                >
+                                                    <svg
+                                                        width="25"
+                                                        height="24"
+                                                        viewBox="0 0 25 24"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    >
+                                                        <path
+                                                            d="M19.75 12H5.75M5.75 12L12.75 19M5.75 12L12.75 5"
+                                                            stroke="currentColor"
+                                                            strokeWidth="2"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                        />
+                                                    </svg>
+                                                </button>
+
+                                                <Swiper
+                                                    spaceBetween={16}
+                                                    slidesPerView={6}
+                                                    className={styles.swapDaysSlider}
+                                                    onSwiper={(swiper) => {
+                                                        swiperIntance.current = swiper;
+                                                    }}
+                                                    breakpoints={{
+                                                        0: {
+                                                            slidesPerView: 2,
+                                                            spaceBetween: 8,
+                                                        },
+                                                        420: {
+                                                            slidesPerView: 3,
+                                                            spaceBetween: 8,
+                                                        },
+                                                        768: {
+                                                            slidesPerView: 4,
+                                                            spaceBetween: 16,
+                                                        },
+                                                        1270: {
+                                                            slidesPerView: 5,
+                                                            spaceBetween: 16,
+                                                        },
+                                                        1630: {
+                                                            slidesPerView: 6,
+                                                            spaceBetween: 16,
+                                                        },
+                                                    }}
+                                                >
+                                                    {!!days &&
+                                                        days.map((day) => (
+                                                            <SwiperSlide key={day.id}>
+                                                                <DayButton
+                                                                    data={day}
+                                                                    isActive={activeDate?.id === day.id}
+                                                                    onClick={() => setActiveDate(day)}
+                                                                />
+                                                            </SwiperSlide>
+                                                        ))}
+                                                </Swiper>
+
+                                                <button
+                                                    className={cn(styles.swapDateButton, styles.arrow, 'swaps')}
+                                                    onClick={() => swiperIntance.current?.slideNext()}
+                                                >
+                                                    <svg
+                                                        width="25"
+                                                        height="24"
+                                                        viewBox="0 0 25 24"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    >
+                                                        <path
+                                                            d="M4.25 12H20.25M20.25 12L14.25 6M20.25 12L14.25 18"
+                                                            stroke="currentColor"
+                                                            strokeWidth="2"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                        />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
                                     ))}
 
-                                    <div className={styles.dishTotal}>
-                                        <Text fontWeight={600} upper>
-                                            {t('total')}
-                                        </Text>
+                                {dishesIsPending ? (
+                                    <Preloader page small />
+                                ) : dishesIsError ? (
+                                    <NotContent />
+                                ) : !!dishes && !!dishes.dishes ? (
+                                    <div className={styles.swapItems}>
+                                        {dishes.dishes.map((dish) => (
+                                            <DishItem
+                                                key={dish.id}
+                                                data={dish}
+                                                dayId={activeDate?.id}
+                                                day={activeDate}
+                                                disableSwap={isIndividual}
+                                            />
+                                        ))}
 
-                                        <div className={styles.dishTotalPoints}>
-                                            <p>{t('ccals')} {dishes.total.calories}</p>
-                                            <p>{t('bel')} {dishes.total.proteins}</p>
-                                            <p>{t('fat')} {dishes.total.fats}</p>
-                                            <p>{t('ugl')} {dishes.total.carbohydrates}</p>
+                                        <div className={styles.dishTotal}>
+                                            {!isIndividual && (
+                                                <Text fontWeight={600} upper>
+                                                    {t('total')}
+                                                </Text>
+                                            )}
+
+                                            <div className={styles.dishTotalPoints}>
+                                                <p>
+                                                    {t('ccals')} {dishes.total.calories}
+                                                </p>
+                                                <p>
+                                                    {t('bel')} {dishes.total.proteins}
+                                                </p>
+                                                <p>
+                                                    {t('fat')} {dishes.total.fats}
+                                                </p>
+                                                <p>
+                                                    {t('ugl')} {dishes.total.carbohydrates}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ) : (
-                                <NotContent text="Блюда не найдены" />
-                            )}
-                        </div>
+                                ) : (
+                                    <NotContent text="Блюда не найдены" />
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

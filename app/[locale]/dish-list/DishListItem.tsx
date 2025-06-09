@@ -26,43 +26,53 @@ const DishListItem: React.FC<Props> = ({ data }) => {
                     </div>
 
                     <div className={styles.dishListItemTexts}>
-                        <p className={styles.dishListItemTitle}>{menu.name.ru}</p>
+                        {menu ? (
+                            <>
+                                <p className={styles.dishListItemTitle}>{menu.name.ru}</p>
 
-                        <p className={styles.dishListItemText}>{menu.description.ru}</p>
+                                <p className={styles.dishListItemText}>{menu.description.ru}</p>
+                            </>
+                        ) : (
+                            <p className={styles.dishListItemTitle}>Индивидуальный заказ</p>
+                        )}
                     </div>
 
                     <div className={styles.dishListPoints}>
-                        {dishes.map((dish, index) => (
-                            <div key={dish.id} className={styles.dishListPoint}>
-                                <Text upper fontWeight={600}>
-                                    {index + 1}. {dish.name.ru}
-                                </Text>
+                        {dishes.map((dish, index) => {
+                            const { id, count, name, calories, proteins, fats, carbohydrates, description } = dish || {};
 
-                                <div className={styles.dishListPointItems}>
-                                    <div className={styles.dishListPointItem}>
-                                        <p>Калории</p>
-                                        <p>{dish.calories}</p>
+                            return (
+                                <div key={id} className={styles.dishListPoint}>
+                                    <Text upper fontWeight={600}>
+                                        {index + 1}. {name.ru} {count && count > 1 && `x${count}`}
+                                    </Text>
+
+                                    <div className={styles.dishListPointItems}>
+                                        <div className={styles.dishListPointItem}>
+                                            <p>Калории</p>
+                                            <p>{calories}</p>
+                                        </div>
+
+                                        <div className={styles.dishListPointItem}>
+                                            <p>Белки</p>
+                                            <p>{proteins}</p>
+                                        </div>
+
+                                        <div className={styles.dishListPointItem}>
+                                            <p>Жиры</p>
+                                            <p>{fats}</p>
+                                        </div>
+
+                                        <div className={styles.dishListPointItem}>
+                                            <p>Углеводы</p>
+                                            <p>{carbohydrates}</p>
+                                        </div>
                                     </div>
 
-                                    <div className={styles.dishListPointItem}>
-                                        <p>Белки</p>
-                                        <p>{dish.proteins}</p>
-                                    </div>
-
-                                    <div className={styles.dishListPointItem}>
-                                        <p>Жиры</p>
-                                        <p>{dish.fats}</p>
-                                    </div>
-
-                                    <div className={styles.dishListPointItem}>
-                                        <p>Углеводы</p>
-                                        <p>{dish.carbohydrates}</p>
-                                    </div>
+                                    <Text variant="text2">{description.ru}</Text>
                                 </div>
-
-                                <Text variant="text2">{dish.description.ru}</Text>
-                            </div>
-                        ))}
+                            );
+                        })}
 
                         <div className={styles.dishListPoint}>
                             <Text upper fontWeight={600}>
@@ -104,43 +114,53 @@ const DishListItem: React.FC<Props> = ({ data }) => {
                     </div>
 
                     <div className={styles.dishListItemTexts}>
-                        <p className={styles.dishListItemTitle}>{menu.name.he}</p>
+                        {menu ? (
+                            <>
+                                <p className={styles.dishListItemTitle}>{menu.name.he}</p>
 
-                        <p className={styles.dishListItemText}>{menu.description.he}</p>
+                                <p className={styles.dishListItemText}>{menu.description.he}</p>
+                            </>
+                        ) : (
+                            <p className={styles.dishListItemTitle}>הזמנה אישית</p>
+                        )}
                     </div>
 
                     <div className={styles.dishListPoints}>
-                        {dishes.map((dish, index) => (
-                            <div key={dish.id} className={styles.dishListPoint}>
-                                <Text upper fontWeight={600}>
-                                    {index + 1}. {dish.name.he}
-                                </Text>
+                        {dishes.map((dish, index) => {
+                            const { id, count, name, calories, proteins, fats, carbohydrates, description } = dish || {};
 
-                                <div className={styles.dishListPointItems}>
-                                    <div className={styles.dishListPointItem}>
-                                        <p>קלוריות</p>
-                                        <p>{dish.calories}</p>
+                            return (
+                                <div key={id} className={styles.dishListPoint}>
+                                    <Text upper fontWeight={600}>
+                                        {index + 1}. {name.he} {count && count > 1 && `x${count}`}
+                                    </Text>
+
+                                    <div className={styles.dishListPointItems}>
+                                        <div className={styles.dishListPointItem}>
+                                            <p>קלוריות</p>
+                                            <p>{calories}</p>
+                                        </div>
+
+                                        <div className={styles.dishListPointItem}>
+                                            <p>חלבונים</p>
+                                            <p>{proteins}</p>
+                                        </div>
+
+                                        <div className={styles.dishListPointItem}>
+                                            <p>שומנים</p>
+                                            <p>{fats}</p>
+                                        </div>
+
+                                        <div className={styles.dishListPointItem}>
+                                            <p>פחמימות</p>
+                                            <p>{carbohydrates}</p>
+                                        </div>
                                     </div>
 
-                                    <div className={styles.dishListPointItem}>
-                                        <p>חלבונים</p>
-                                        <p>{dish.proteins}</p>
-                                    </div>
-
-                                    <div className={styles.dishListPointItem}>
-                                        <p>שומנים</p>
-                                        <p>{dish.fats}</p>
-                                    </div>
-
-                                    <div className={styles.dishListPointItem}>
-                                        <p>פחמימות</p>
-                                        <p>{dish.carbohydrates}</p>
-                                    </div>
+                                    <Text variant="text2">{description.he}</Text>
                                 </div>
-
-                                <Text variant="text2">{dish.description.he}</Text>
-                            </div>
-                        ))}
+                            );
+                        })}
 
                         <div className={styles.dishListPoint}>
                             <Text upper fontWeight={600}>

@@ -21,6 +21,7 @@ type Props = {
     data: Dish;
     day: Day | null;
     dayId?: number;
+    disableSwap?: boolean;
 };
 
 const isPastOrToday = (days?: Date) => {
@@ -36,14 +37,14 @@ const isPastOrToday = (days?: Date) => {
     return inputDate <= today;
 };
 
-const DishItem: React.FC<Props> = ({ data, dayId, day }) => {
+const DishItem: React.FC<Props> = ({ data, dayId, day, disableSwap = false }) => {
     const { date } = day || {};
     const [swapsShowed, setSwapsShowed] = React.useState(false);
 
     const language = useAppSelector((state) => state.app.language);
     const { picture, name, description, calories, carbohydrates, fats, dishType, proteins, count } = data || {};
 
-    const t = useTranslations("Menu");
+    const t = useTranslations('Menu');
 
     const { getReplacementDishes } = useOrder();
 
@@ -75,24 +76,34 @@ const DishItem: React.FC<Props> = ({ data, dayId, day }) => {
                         <p className={styles.swapItemText}>{description[language]}</p>
 
                         <div className={styles.swapItemParams}>
-                            <p className={styles.swapItemParam}>{t("ccal")} {calories}</p>
+                            <p className={styles.swapItemParam}>
+                                {t('ccal')} {calories}
+                            </p>
 
-                            <p className={styles.swapItemParam}>{t("b")} {proteins}</p>
+                            <p className={styles.swapItemParam}>
+                                {t('b')} {proteins}
+                            </p>
 
-                            <p className={styles.swapItemParam}>{t("j")} {fats}</p>
+                            <p className={styles.swapItemParam}>
+                                {t('j')} {fats}
+                            </p>
 
-                            <p className={styles.swapItemParam}>{t("u")} {carbohydrates}</p>
+                            <p className={styles.swapItemParam}>
+                                {t('u')} {carbohydrates}
+                            </p>
                         </div>
                     </div>
 
-                    <Button
-                        small
-                        disabled={isPastOrToday(date)}
-                        className={styles.swapItemButton}
-                        onClick={() => setSwapsShowed((prev) => !prev)}
-                    >
-                        {t("swap_dish")}
-                    </Button>
+                    {!disableSwap && (
+                        <Button
+                            small
+                            disabled={isPastOrToday(date)}
+                            className={styles.swapItemButton}
+                            onClick={() => setSwapsShowed((prev) => !prev)}
+                        >
+                            {t('swap_dish')}
+                        </Button>
+                    )}
                 </div>
             </div>
 
@@ -105,7 +116,7 @@ const DishItem: React.FC<Props> = ({ data, dayId, day }) => {
                     ) : !!swaps && !!swaps.length ? (
                         swaps.map((swap) => <SwapItem key={swap.id} data={swap} dayId={dayId} />)
                     ) : (
-                        <NotContent text={t("swaps_empty")} />
+                        <NotContent text={t('swaps_empty')} />
                     )}
                 </div>
             )}
