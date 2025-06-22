@@ -200,7 +200,7 @@ const AdminOrderCreate = () => {
             ...(userId && { userId: `${userId}` }),
         };
 
-        updateAdminOrder(String(id), orderData, () => router.replace(`/${language}/admin`));
+        updateAdminOrder(String(id), orderData, () => router.back());
     };
 
     React.useEffect(() => {
