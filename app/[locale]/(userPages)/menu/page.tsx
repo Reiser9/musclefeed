@@ -163,7 +163,10 @@ const MenuPage = () => {
                                                     disabledDate={disabledDate}
                                                     format={'DD.MM.YYYY'}
                                                     value={dateDelivery ? dayjs(dateDelivery) : null}
-                                                    onChange={(date) => setDateDelivery(date.format('YYYY-MM-DD'))}
+                                                    onChange={(date) => {
+                                                        setDateDelivery(date.format('YYYY-MM-DD'));
+                                                        setCart([]);
+                                                    }}
                                                     open={dateDeliveryPicker}
                                                     onOpenChange={(isOpen) => setDateDeliveryPicker(isOpen)}
                                                 />
