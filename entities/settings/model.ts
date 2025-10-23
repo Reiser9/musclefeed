@@ -4,6 +4,7 @@ export type Settings = {
     phoneNumber: string;
     email: string;
     socials: Social[];
+    deliveryWeekdays: number[];
 };
 
 export type Social = {

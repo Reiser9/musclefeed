@@ -18,7 +18,7 @@ type Props = {
 const CityAdminItem: React.FC<Props> = ({ data, deleteCallback }) => {
     const [deleteModal, setDeleteModal] = React.useState(false);
 
-    const { id, name } = data || {};
+    const { id, name, code } = data || {};
 
     const language = useAppSelector((state) => state.app.language);
 
@@ -26,6 +26,8 @@ const CityAdminItem: React.FC<Props> = ({ data, deleteCallback }) => {
         <>
             <div className={styles.cityAdminItem}>
                 <Link href={`/${language}/admin/cities/edit/${id}`}>{name[language]}</Link>
+
+                {code && <p>{code}</p>}
 
                 <button className={styles.cityAdminItemDelete} onClick={() => setDeleteModal(true)}>
                     <Delete />

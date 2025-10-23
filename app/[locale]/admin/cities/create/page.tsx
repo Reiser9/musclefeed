@@ -53,6 +53,15 @@ const AdminCityCreate = () => {
                     value={watch('nameHe', '')}
                 />
 
+                <Input
+                    {...register('code')}
+                    error={!!errors.code}
+                    errorMessage={errors.code?.message}
+                    full
+                    title={'Код'}
+                    value={watch('code', '')}
+                />
+
                 <Button full>Создать</Button>
             </form>
         </div>

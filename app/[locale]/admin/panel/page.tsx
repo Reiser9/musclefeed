@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import dayjs from 'dayjs';
+import cn from 'classnames';
 import { DatePicker } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
@@ -27,6 +28,37 @@ import { FileUpload } from '@/shared/ui/FileUpload';
 
 const { RangePicker } = DatePicker;
 
+const weekDays = [
+    {
+        name: 'Пн',
+        number: 1,
+    },
+    {
+        name: 'Вт',
+        number: 2,
+    },
+    {
+        name: 'Ср',
+        number: 3,
+    },
+    {
+        name: 'Чт',
+        number: 4,
+    },
+    {
+        name: 'Пт',
+        number: 5,
+    },
+    {
+        name: 'Сб',
+        number: 6,
+    },
+    {
+        name: 'Вс',
+        number: 7,
+    },
+];
+
 const AdminPanel = () => {
     const [routeStartDate, setRouteStartDate] = React.useState('');
     const [routeEndDate, setRouteEndDate] = React.useState('');
@@ -36,7 +68,7 @@ const AdminPanel = () => {
 
     const [dishListDate, setDishListDate] = React.useState('');
 
-    const [cycleDatePicker, setCycleDatePicker] = React.useState('');
+    const [weekDaysPicker, setWeekDaysPicker] = React.useState<number[]>([]);
 
     // Контактная информация
     const [phone, setPhone] = React.useState('');
@@ -49,7 +81,7 @@ const AdminPanel = () => {
     const { uploadMap } = useFiles();
     const language = useAppSelector((state) => state.app.language);
     const { getShortInfo } = useUserInfo();
-    const { getSettings, updateCycleDate, updateContacts } = useAdminSettings();
+    const { getSettings, updateWeekDays, updateContacts } = useAdminSettings();
 
     const { data } = useQuery({
         queryKey: ['user_info'],
@@ -68,7 +100,7 @@ const AdminPanel = () => {
     });
 
     const { roles } = data || {};
-    const { cycleStartDate, email: contactEmail, phoneNumber, socials: contactSocials } = settings || {};
+    const { email: contactEmail, phoneNumber, socials: contactSocials, deliveryWeekdays } = settings || {};
 
     const handleRouteList = () => {
         if (!routeStartDate || !routeEndDate) return;
@@ -105,10 +137,14 @@ const AdminPanel = () => {
         }
     };
 
-    const changeCycleDate = (date: string) => {
-        if (!date) return;
+    const changeWeekDay = (weekNumber: number) => {
+        if (!weekNumber) return;
 
-        updateCycleDate(date, () => setCycleDatePicker(date));
+        if (weekDaysPicker.includes(weekNumber)) {
+            setWeekDaysPicker((prev) => prev.filter((num) => num !== weekNumber));
+        } else {
+            setWeekDaysPicker((prev) => [...prev, weekNumber]);
+        }
     };
 
     const saveContacts = () => {
@@ -139,11 +175,15 @@ const AdminPanel = () => {
         setSocials((prev) => prev.map((social) => (social.id === id ? { ...social, [field]: value } : social)));
     };
 
+    const saveWeekDays = () => {
+        updateWeekDays(weekDaysPicker);
+    };
+
     React.useEffect(() => {
-        if (cycleStartDate) {
-            setCycleDatePicker(cycleStartDate);
+        if (deliveryWeekdays) {
+            setWeekDaysPicker(deliveryWeekdays);
         }
-    }, [cycleStartDate]);
+    }, [deliveryWeekdays]);
 
     React.useEffect(() => {
         if (contactEmail) {
@@ -263,14 +303,25 @@ const AdminPanel = () => {
                         <NotContent text="Произошла ошибка при получении даты" />
                     ) : (
                         <div className={styles.adminWrp}>
-                            <Text variant="text2">Дата доставок</Text>
+                            <Text variant="text2">Дни недели доставок:</Text>
 
-                            <DatePicker
-                                className={styles.modalCalendar}
-                                format={'DD.MM.YYYY'}
-                                value={cycleDatePicker ? dayjs(cycleDatePicker) : null}
-                                onChange={(date) => changeCycleDate(date ? date.format('YYYY-MM-DD') : '')}
-                            />
+                            <div className={styles.adminWeekDays}>
+                                {weekDays.map((data, id) => (
+                                    <button
+                                        key={id}
+                                        className={cn(styles.adminWeekDay, {
+                                            [styles.active]: weekDaysPicker?.includes(data.number),
+                                        })}
+                                        onClick={() => changeWeekDay(data.number)}
+                                    >
+                                        {data.name}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <Button small onClick={saveWeekDays}>
+                                Сохранить
+                            </Button>
                         </div>
                     ))}
 

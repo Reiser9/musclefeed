@@ -158,20 +158,19 @@ const MenusBlock = () => {
         queryFn: () => getSettings(),
     });
 
-    const { cycleStartDate } = settings || {};
+    const { deliveryWeekdays } = settings || {};
 
     const disabledDate = React.useCallback(
         (current: Dayjs) => {
-            if (!current) return false;
-
-            const startDate = dayjs(cycleStartDate);
+            if (!current || !deliveryWeekdays) return false;
 
             const today = dayjs().startOf('day');
-            const diff = current.diff(startDate, 'day');
+            const dayOfWeek = current.day() === 0 ? 7 : current.day();
+            const isPastOrToday = current.isBefore(today) || current.isSame(today);
 
-            return current.isBefore(today, 'day') || (diff >= 0 && diff % 2 === 0);
+            return isPastOrToday || !deliveryWeekdays.includes(dayOfWeek);
         },
-        [cycleStartDate],
+        [deliveryWeekdays],
     );
 
     React.useEffect(() => {

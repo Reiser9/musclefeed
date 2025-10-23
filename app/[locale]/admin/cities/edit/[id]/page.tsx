@@ -41,7 +41,7 @@ const AdminCityEdit = () => {
         updateCity(String(id), data, () => router.replace(`/${language}/admin/cities`));
     };
 
-    const { name } = data || {};
+    const { name, code } = data || {};
 
     if (isPending) {
         return <Preloader page />;
@@ -72,6 +72,15 @@ const AdminCityEdit = () => {
                     full
                     title={'Название he'}
                     value={watch('nameHe', name?.he)}
+                />
+
+                <Input
+                    {...register('code')}
+                    error={!!errors.code}
+                    errorMessage={errors.code?.message}
+                    full
+                    title={'Код'}
+                    value={watch('code', code)}
                 />
 
                 <Button full>Сохранить</Button>

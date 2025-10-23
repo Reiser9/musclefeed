@@ -24,12 +24,12 @@ const useAdminSettings = () => {
         }
     };
 
-    const updateCycleDate = async (cycleStartDate: string, successCallback = () => {}) => {
+    const updateWeekDays = async (deliveryWeekdays: number[], successCallback = () => {}) => {
         const response = await request<{ settings: Settings }>({
-            url: `/admin/settings/cycle-start-date`,
+            url: `/admin/settings/delivery-config`,
             method: 'PATCH',
             data: {
-                cycleStartDate,
+                deliveryWeekdays,
             },
             isAuth: true,
         });
@@ -40,6 +40,7 @@ const useAdminSettings = () => {
         }
 
         successCallback();
+        alertNotify('Успешно', 'Данные сохранены');
 
         if ('data' in response) {
             return response.data.settings;
@@ -78,7 +79,7 @@ const useAdminSettings = () => {
 
     return {
         getSettings,
-        updateCycleDate,
+        updateWeekDays,
         updateContacts,
     };
 };

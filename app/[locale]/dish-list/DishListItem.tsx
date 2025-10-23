@@ -13,12 +13,15 @@ type Props = {
 };
 
 const DishListItem: React.FC<Props> = ({ data }) => {
-    const { dishes, menu, total, id } = data || {};
+    const { dishes, menu, total, id, cityCode } = data || {};
 
     return (
         <div className={styles.dishListWrapper}>
             <div className={styles.dishListItem}>
-                <p className={styles.dishListItemNumber}>#{id}</p>
+                <p className={styles.dishListItemNumber}>
+                    #{cityCode && `${cityCode}-`}
+                    {id}
+                </p>
 
                 <div className={styles.dishListItemContent}>
                     <div className={styles.dishListItemLogo}>
@@ -39,7 +42,8 @@ const DishListItem: React.FC<Props> = ({ data }) => {
 
                     <div className={styles.dishListPoints}>
                         {dishes.map((dish, index) => {
-                            const { id, count, name, calories, proteins, fats, carbohydrates, description } = dish || {};
+                            const { id, count, name, calories, proteins, fats, carbohydrates, description } =
+                                dish || {};
 
                             return (
                                 <div key={id} className={styles.dishListPoint}>
@@ -106,7 +110,10 @@ const DishListItem: React.FC<Props> = ({ data }) => {
             </div>
 
             <div className={styles.dishListItem}>
-                <p className={styles.dishListItemNumber}>#{id}</p>
+                <p className={styles.dishListItemNumber}>
+                    #{cityCode && `${cityCode}-`}
+                    {id}
+                </p>
 
                 <div className={styles.dishListItemContent}>
                     <div className={styles.dishListItemLogo}>
@@ -127,7 +134,8 @@ const DishListItem: React.FC<Props> = ({ data }) => {
 
                     <div className={styles.dishListPoints}>
                         {dishes.map((dish, index) => {
-                            const { id, count, name, calories, proteins, fats, carbohydrates, description } = dish || {};
+                            const { id, count, name, calories, proteins, fats, carbohydrates, description } =
+                                dish || {};
 
                             return (
                                 <div key={id} className={styles.dishListPoint}>

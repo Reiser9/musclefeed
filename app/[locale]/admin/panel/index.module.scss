@@ -108,3 +108,23 @@
     color: red;
     background: #ffefef;
 }
+
+.adminWeekDays{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.adminWeekDay{
+    color: var(--main);
+    border: 1px solid var(--main);
+    padding: 1rem 2.4rem;
+    text-transform: uppercase;
+    border-radius: 8px;
+}
+
+.adminWeekDay.active{
+    color: #fff;
+    background: var(--main);
+}

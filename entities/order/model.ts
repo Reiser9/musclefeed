@@ -166,6 +166,7 @@ export type CalendarOrders = Pagination & {
 
 export type OrderDishList = {
     id: number;
+    cityCode: string;
     menu: {
         id: number;
         name: LanguageField;
